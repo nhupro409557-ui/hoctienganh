@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn Tập Tổng Hợp - TOEIC 450</title>
+  <meta name="description" content="Ôn tập tổng hợp toàn bộ từ vựng tiếng Anh TOEIC đã học">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a href="index.html?no_redirect=true" class="back-btn">← Về lộ trình</a>
+    <h1>📖 Ôn Tập Tổng Hợp</h1>
+    <p>Ôn lại toàn bộ từ vựng đã học</p>
+    <div class="subtitle">Chọn bộ lọc → Chọn chế độ → Bắt đầu!</div>
+  </header>
+
+  <div class="container">
+    <!-- Filter Panel -->
+    <div class="filter-panel" id="filterPanel">
+      <div class="filter-group">
+        <span class="filter-label">📌 Giai đoạn</span>
+        <div class="filter-chips" id="phaseFilters">
+          <button class="filter-chip active" data-phase="all" onclick="setPhaseFilter('all', this)">Tất cả</button>
+          <button class="filter-chip" data-phase="1" onclick="setPhaseFilter(1, this)">GĐ 1 (Ngày 1-17)</button>
+          <button class="filter-chip" data-phase="2" onclick="setPhaseFilter(2, this)">GĐ 2 (Ngày 18-37)</button>
+          <button class="filter-chip" data-phase="3" onclick="setPhaseFilter(3, this)">GĐ 3 (Ngày 38-60)</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">📅 Ngày cụ thể</span>
+        <div class="filter-chips" id="dayFilters" style="max-height:120px;overflow-y:auto">
+          <!-- Generated dynamically -->
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">🏷️ Từ loại</span>
+        <div class="filter-chips" id="typeFilters">
+          <button class="filter-chip active" data-type="all" onclick="setTypeFilter('all', this)">Tất cả</button>
+          <!-- Generated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Word Count -->
+    <div class="review-word-count" id="wordCount">Đang tải...</div>
+
+    <!-- Mode Tabs -->
+    <div class="tabs review-mode-tabs">
+      <button class="tab-btn active" onclick="showMode('abcdMode', this)">📝 Trắc nghiệm A/B/C/D</button>
+      <button class="tab-btn" onclick="showMode('flashMode', this)">🃏 Flashcard</button>
+      <button class="tab-btn" onclick="showMode('fillMode', this)">✍️ Điền từ</button>
+    </div>
+
+    <!-- ABCD Mode -->
+    <section id="abcdMode" class="section active">
+      <div class="mode-box">
+        <label><input type="radio" name="reviewAbcdMode" value="vi-en" checked onchange="startReviewABCD()">Việt → Anh</label>
+        <label><input type="radio" name="reviewAbcdMode" value="en-vi" onchange="startReviewABCD()">Anh → Việt</label>
+      </div>
+      <div class="progress"><div id="reviewAbcdProgress" class="progress-bar"></div></div>
+      <div class="abcd-progress-info">
+        <span class="abcd-counter" id="reviewAbcdCounter">Câu 0/0</span>
+        <span class="abcd-score">
+          <span class="score-correct" id="reviewAbcdCorrect">✓ 0</span>
+          <span class="score-wrong" id="reviewAbcdWrong">✗ 0</span>
+        </span>
+      </div>
+      <div class="abcd-single-container" id="reviewAbcdContainer">
+        <div class="empty-state"><div class="icon">📝</div><p>Nhấn "Bắt đầu" để ôn tập</p></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-lg" onclick="startReviewABCD()">🚀 Bắt đầu / Làm lại</button>
+      </div>
+    </section>
+
+    <!-- Flashcard Mode -->
+    <section id="flashMode" class="section">
+      <div class="progress"><div id="reviewFlashProgress" class="progress-bar"></div></div>
+      <div class="flash-counter" id="reviewFlashCounter">0 / 0</div>
+      <div class="flashcard-container">
+        <div class="flashcard">
+          <div id="reviewFlashWord" class="flash-word">—</div>
+          <div id="reviewFlashMeaning" class="flash-meaning">—</div>
+          <div id="reviewFlashInfo" class="flash-info"></div>
+        </div>
+      </div>
+      <div class="btn-group justify-center">
+        <button class="btn btn-success" onclick="showReviewFlashAnswer()">👁️ Hiện nghĩa</button>
+        <button class="btn btn-primary" onclick="nextReviewFlash()">➡️ Từ tiếp</button>
+        <button class="btn btn-secondary" onclick="prevReviewFlash()">⬅️ Từ trước</button>
+        <button class="btn btn-warning" onclick="shuffleReviewFlash()">🔀 Trộn từ</button>
+      </div>
+    </section>
+
+    <!-- Fill Mode -->
+    <section id="fillMode" class="section">
+      <div class="note">💡 Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b>. Từ sai tự động vào kho từ khó!</div>
+      <div class="progress"><div id="reviewFillProgress" class="progress-bar"></div></div>
+      <div class="abcd-progress-info">
+        <span class="abcd-counter" id="reviewFillCounter">Câu 0/0</span>
+        <span class="abcd-score">
+          <span class="score-correct" id="reviewFillCorrectCount">✓ 0</span>
+          <span class="score-wrong" id="reviewFillWrongCount">✗ 0</span>
+        </span>
+      </div>
+      <div class="abcd-single-container" id="reviewFillContainer">
+        <div class="empty-state"><div class="icon">✍️</div><p>Nhấn "Bắt đầu" để ôn tập</p></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-lg" onclick="startReviewFill()">🚀 Bắt đầu / Làm lại</button>
+      </div>
+    </section>
+
+    <!-- Navigation -->
+    <div class="flex justify-between mt-lg" style="padding-bottom:32px">
+      <a href="index.html?no_redirect=true" class="btn btn-secondary">🏠 Về lộ trình</a>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script>
+  // ============================================
+  // REVIEW-ALL PAGE LOGIC
+  // ============================================
+
+  let allWords = [];
+  let filteredWords = [];
+  let selectedPhase = 'all';
+  let selectedDays = [];
+  let selectedType = 'all';
+
+  // ---- INIT ----
+  function init() {
+    if (typeof DAYS_DATA === 'undefined') {
+      document.getElementById('wordCount').textContent = 'Lỗi: Không tìm thấy dữ liệu';
+      return;
+    }
+
+    // Collect all words from all days
+    DAYS_DATA.forEach(d => {
+      if (d.words && d.words.length > 0) {
+        d.words.forEach(w => {
+          allWords.push({ ...w, day: d.day, phase: d.phase, topic: d.topic });
+        });
+      }
+    });
+
+    renderDayFilters();
+    renderTypeFilters();
+    applyFilters();
+    initFlashcards();
+  }
+
+  // ---- FILTERS ----
+  function renderDayFilters() {
+    const container = document.getElementById('dayFilters');
+    const days = DAYS_DATA.filter(d => d.words && d.words.length > 0);
+    container.innerHTML = `
+      <button class="filter-chip active" data-day="all" onclick="toggleDayFilter('all', this)">Tất cả ngày</button>
+      ${days.map(d => `
+        <button class="filter-chip" data-day="${d.day}" onclick="toggleDayFilter(${d.day}, this)">
+          Ngày ${d.day}
+        </button>
+      `).join('')}
+    `;
+  }
+
+  function renderTypeFilters() {
+    const types = [...new Set(allWords.map(w => w.type))].sort();
+    const container = document.getElementById('typeFilters');
+    container.innerHTML = `
+      <button class="filter-chip active" data-type="all" onclick="setTypeFilter('all', this)">Tất cả</button>
+      ${types.map(t => `
+        <button class="filter-chip" data-type="${t}" onclick="setTypeFilter('${t}', this)">${t}</button>
+      `).join('')}
+    `;
+  }
+
+  function setPhaseFilter(phase, btn) {
+    selectedPhase = phase;
+    document.querySelectorAll('#phaseFilters .filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Reset day filter when phase changes
+    selectedDays = [];
+    const dayBtns = document.querySelectorAll('#dayFilters .filter-chip');
+    dayBtns.forEach(b => b.classList.remove('active'));
+    dayBtns[0].classList.add('active'); // "Tất cả ngày"
+
+    applyFilters();
+  }
+
+  function toggleDayFilter(day, btn) {
+    if (day === 'all') {
+      selectedDays = [];
+      document.querySelectorAll('#dayFilters .filter-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    } else {
+      // Deactivate "all" button
+      document.querySelector('#dayFilters .filter-chip[data-day="all"]').classList.remove('active');
+
+      if (selectedDays.includes(day)) {
+        selectedDays = selectedDays.filter(d => d !== day);
+        btn.classList.remove('active');
+        if (selectedDays.length === 0) {
+          document.querySelector('#dayFilters .filter-chip[data-day="all"]').classList.add('active');
+        }
+      } else {
+        selectedDays.push(day);
+        btn.classList.add('active');
+      }
+    }
+    applyFilters();
+  }
+
+  function setTypeFilter(type, btn) {
+    selectedType = type;
+    document.querySelectorAll('#typeFilters .filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    filteredWords = allWords.filter(w => {
+      if (selectedPhase !== 'all' && w.phase !== selectedPhase) return false;
+      if (selectedDays.length > 0 && !selectedDays.includes(w.day)) return false;
+      if (selectedType !== 'all' && w.type !== selectedType) return false;
+      return true;
+    });
+
+    document.getElementById('wordCount').textContent =
+      `📊 ${filteredWords.length} từ vựng được chọn để ôn tập`;
+
+    // Reset flashcards
+    initFlashcards();
+  }
+
+  // ---- SHOW MODE ----
+  function showMode(modeId, btn) {
+    document.querySelectorAll('.review-mode-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.container > .section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(modeId).classList.add('active');
+  }
+
+  // ---- HELPER ----
+  function shuffleArray(a) { return [...a].sort(() => Math.random() - 0.5); }
+  function normalizeText(t) { return t.trim().toLowerCase().replace(/\s+/g, ' '); }
+
+  // ====================================================
+  // MODE 1: ABCD Quiz (one-at-a-time, instant feedback)
+  // ====================================================
+  let reviewAbcdList = [];
+  let reviewAbcdIndex = 0;
+  let reviewAbcdCorrect = 0;
+  let reviewAbcdWrong = [];
+  let reviewAbcdAnswered = false;
+
+  function startReviewABCD() {
+    if (filteredWords.length < 4) {
+      document.getElementById('reviewAbcdContainer').innerHTML =
+        '<div class="empty-state"><div class="icon">⚠️</div><p>Cần ít nhất 4 từ để làm trắc nghiệm. Hãy chọn thêm ngày hoặc giai đoạn.</p></div>';
+      return;
+    }
+
+    const mode = document.querySelector('input[name="reviewAbcdMode"]:checked').value;
+    const pool = shuffleArray(filteredWords);
+    // Take up to 30 random words for quiz
+    const quizWords = pool.slice(0, Math.min(30, pool.length));
+
+    reviewAbcdList = quizWords.map(w => {
+      if (mode === 'vi-en') {
+        const wrong = shuffleArray(filteredWords.filter(x => x.word !== w.word)).slice(0, 3).map(x => x.word);
+        return { ...w, prompt: w.meaning, answer: w.word, options: shuffleArray([w.word, ...wrong]) };
+      } else {
+        const wrong = shuffleArray(filteredWords.filter(x => x.meaning !== w.meaning)).slice(0, 3).map(x => x.meaning);
+        return { ...w, prompt: w.word, answer: w.meaning, options: shuffleArray([w.meaning, ...wrong]) };
+      }
+    });
+
+    reviewAbcdIndex = 0;
+    reviewAbcdCorrect = 0;
+    reviewAbcdWrong = [];
+    reviewAbcdAnswered = false;
+    renderReviewABCD();
+  }
+
+  function renderReviewABCD() {
+    const container = document.getElementById('reviewAbcdContainer');
+    const total = reviewAbcdList.length;
+
+    document.getElementById('reviewAbcdProgress').style.width = ((reviewAbcdIndex) / total * 100) + '%';
+    document.getElementById('reviewAbcdCounter').textContent = `Câu ${Math.min(reviewAbcdIndex + 1, total)}/${total}`;
+    document.getElementById('reviewAbcdCorrect').textContent = `✓ ${reviewAbcdCorrect}`;
+    document.getElementById('reviewAbcdWrong').textContent = `✗ ${reviewAbcdWrong.length}`;
+
+    if (reviewAbcdIndex >= total) {
+      showReviewABCDSummary();
+      return;
+    }
+
+    const w = reviewAbcdList[reviewAbcdIndex];
+    const mode = document.querySelector('input[name="reviewAbcdMode"]:checked').value;
+    reviewAbcdAnswered = false;
+
+    container.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label">${mode === 'vi-en' ? 'Chọn từ tiếng Anh đúng:' : 'Chọn nghĩa tiếng Việt đúng:'}</div>
+          <div class="big-prompt">${w.prompt}</div>
+          <div class="small-hint">${w.type || ''} ${w.day ? '• Ngày ' + w.day : ''}</div>
+          ${w.options.map((op, j) => `
+            <label class="option" id="rOpt${j}" onclick="selectReviewABCD(${j}, '${op.replace(/'/g, "\\\\'")}')"
+              style="cursor:pointer">
+              <input type="radio" name="reviewSingle" value="${op}" style="pointer-events:none">
+              ${String.fromCharCode(65 + j)}. ${op}
+            </label>
+          `).join('')}
+          <div id="reviewFeedbackBanner"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function selectReviewABCD(optIndex, selected) {
+    if (reviewAbcdAnswered) return;
+    reviewAbcdAnswered = true;
+
+    const w = reviewAbcdList[reviewAbcdIndex];
+    const isCorrect = selected === w.answer;
+    const options = document.querySelectorAll('#reviewAbcdContainer .option');
+    const banner = document.getElementById('reviewFeedbackBanner');
+
+    options.forEach((opt, j) => {
+      const val = opt.querySelector('input').value;
+      if (val === w.answer) {
+        opt.classList.add('option-correct');
+      } else if (j === optIndex && !isCorrect) {
+        opt.classList.add('option-wrong');
+      } else {
+        opt.classList.add('option-disabled');
+      }
+    });
+
+    if (isCorrect) {
+      reviewAbcdCorrect++;
+      banner.className = 'abcd-feedback-banner correct';
+      banner.innerHTML = '🎉 Chính xác!';
+    } else {
+      banner.className = 'abcd-feedback-banner wrong';
+      banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b>`;
+      reviewAbcdWrong.push(w);
+      Storage.addDifficultWord(w, w.day || 0);
+    }
+
+    document.getElementById('reviewAbcdCorrect').textContent = `✓ ${reviewAbcdCorrect}`;
+    document.getElementById('reviewAbcdWrong').textContent = `✗ ${reviewAbcdWrong.length}`;
+
+    setTimeout(() => {
+      reviewAbcdIndex++;
+      renderReviewABCD();
+    }, 1200);
+  }
+
+  function showReviewABCDSummary() {
+    const total = reviewAbcdList.length;
+    const pct = Math.round((reviewAbcdCorrect / total) * 100);
+    const container = document.getElementById('reviewAbcdContainer');
+
+    document.getElementById('reviewAbcdProgress').style.width = '100%';
+
+    let emoji = '🎉', msg = 'Tuyệt vời! Bạn giỏi lắm!';
+    if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+    else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt, cần ôn thêm!'; }
+
+    container.innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct">
+            <div class="stat-num">${reviewAbcdCorrect}</div>
+            <div class="stat-lbl">Đúng</div>
+          </div>
+          <div class="quiz-summary-stat wrong">
+            <div class="stat-num">${reviewAbcdWrong.length}</div>
+            <div class="stat-lbl">Sai</div>
+          </div>
+          <div class="quiz-summary-stat total">
+            <div class="stat-num">${total}</div>
+            <div class="stat-lbl">Tổng</div>
+          </div>
+        </div>
+        ${reviewAbcdWrong.length > 0 ? `
+          <div class="quiz-wrong-list">
+            <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
+            ${reviewAbcdWrong.map(w => `
+              <div class="wrong-item">
+                <span class="wrong-word">${w.word}</span>
+                <span class="wrong-meaning">${w.meaning}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  // ====================================================
+  // MODE 2: FLASHCARD
+  // ====================================================
+  let reviewFlashWords = [];
+  let reviewFlashIndex = 0;
+
+  function initFlashcards() {
+    reviewFlashWords = shuffleArray([...filteredWords]);
+    reviewFlashIndex = 0;
+    renderReviewFlash();
+  }
+
+  function renderReviewFlash() {
+    if (reviewFlashWords.length === 0) {
+      document.getElementById('reviewFlashWord').textContent = '—';
+      document.getElementById('reviewFlashMeaning').textContent = 'Chưa có từ';
+      document.getElementById('reviewFlashMeaning').style.display = 'block';
+      document.getElementById('reviewFlashInfo').style.display = 'none';
+      document.getElementById('reviewFlashCounter').textContent = '0 / 0';
+      document.getElementById('reviewFlashProgress').style.width = '0%';
+      return;
+    }
+
+    const w = reviewFlashWords[reviewFlashIndex];
+    document.getElementById('reviewFlashWord').textContent = w.word;
+    document.getElementById('reviewFlashMeaning').textContent = w.meaning;
+    document.getElementById('reviewFlashInfo').innerHTML = `<b>${w.type}</b> — "${w.example}" <span style="color:var(--text-muted);font-size:12px">• Ngày ${w.day}</span>`;
+    document.getElementById('reviewFlashMeaning').style.display = 'none';
+    document.getElementById('reviewFlashInfo').style.display = 'none';
+    document.getElementById('reviewFlashProgress').style.width = ((reviewFlashIndex + 1) / reviewFlashWords.length * 100) + '%';
+    document.getElementById('reviewFlashCounter').textContent = `${reviewFlashIndex + 1} / ${reviewFlashWords.length}`;
+  }
+
+  function showReviewFlashAnswer() {
+    document.getElementById('reviewFlashMeaning').style.display = 'block';
+    document.getElementById('reviewFlashInfo').style.display = 'block';
+  }
+
+  function nextReviewFlash() {
+    if (reviewFlashWords.length === 0) return;
+    reviewFlashIndex = (reviewFlashIndex + 1) % reviewFlashWords.length;
+    renderReviewFlash();
+  }
+
+  function prevReviewFlash() {
+    if (reviewFlashWords.length === 0) return;
+    reviewFlashIndex = (reviewFlashIndex - 1 + reviewFlashWords.length) % reviewFlashWords.length;
+    renderReviewFlash();
+  }
+
+  function shuffleReviewFlash() {
+    reviewFlashWords = shuffleArray(reviewFlashWords);
+    reviewFlashIndex = 0;
+    renderReviewFlash();
+  }
+
+  // ====================================================
+  // MODE 3: FILL-IN (one-at-a-time, instant feedback)
+  // ====================================================
+  let reviewFillList = [];
+  let reviewFillIndex = 0;
+  let reviewFillCorrect = 0;
+  let reviewFillWrong = [];
+  let reviewFillAnswered = false;
+
+  function startReviewFill() {
+    if (filteredWords.length === 0) {
+      document.getElementById('reviewFillContainer').innerHTML =
+        '<div class="empty-state"><div class="icon">⚠️</div><p>Không có từ nào để ôn. Hãy chọn giai đoạn hoặc ngày.</p></div>';
+      return;
+    }
+
+    reviewFillList = shuffleArray([...filteredWords]).slice(0, Math.min(20, filteredWords.length));
+    reviewFillIndex = 0;
+    reviewFillCorrect = 0;
+    reviewFillWrong = [];
+    reviewFillAnswered = false;
+    renderReviewFill();
+  }
+
+  function renderReviewFill() {
+    const container = document.getElementById('reviewFillContainer');
+    const total = reviewFillList.length;
+
+    document.getElementById('reviewFillProgress').style.width = ((reviewFillIndex) / total * 100) + '%';
+    document.getElementById('reviewFillCounter').textContent = `Câu ${Math.min(reviewFillIndex + 1, total)}/${total}`;
+    document.getElementById('reviewFillCorrectCount').textContent = `✓ ${reviewFillCorrect}`;
+    document.getElementById('reviewFillWrongCount').textContent = `✗ ${reviewFillWrong.length}`;
+
+    if (reviewFillIndex >= total) {
+      showReviewFillSummary();
+      return;
+    }
+
+    const w = reviewFillList[reviewFillIndex];
+    reviewFillAnswered = false;
+
+    container.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label">Điền từ tiếng Anh:</div>
+          <div class="big-prompt">${w.meaning}</div>
+          <div class="small-hint">${w.type || ''} ${w.day ? '• Ngày ' + w.day : ''}</div>
+          <input type="text" id="reviewFillInput" placeholder="Điền từ tiếng Anh..." autofocus
+            onkeydown="if(event.key==='Enter') checkReviewFill()">
+          <div style="margin-top:12px">
+            <button class="btn btn-primary" onclick="checkReviewFill()">✅ Kiểm tra</button>
+            <button class="btn btn-secondary btn-sm" onclick="skipReviewFill()">⏭️ Bỏ qua</button>
+          </div>
+          <div id="reviewFillFeedback"></div>
+        </div>
+      </div>
+    `;
+
+    // Auto-focus the input
+    setTimeout(() => {
+      const input = document.getElementById('reviewFillInput');
+      if (input) input.focus();
+    }, 100);
+  }
+
+  function checkReviewFill() {
+    if (reviewFillAnswered) return;
+    reviewFillAnswered = true;
+
+    const w = reviewFillList[reviewFillIndex];
+    const input = document.getElementById('reviewFillInput');
+    const feedback = document.getElementById('reviewFillFeedback');
+    const ans = normalizeText(input.value);
+
+    if (ans === w.word.toLowerCase()) {
+      reviewFillCorrect++;
+      feedback.className = 'abcd-feedback-banner correct';
+      feedback.innerHTML = '🎉 Chính xác!';
+      input.style.borderColor = 'var(--success)';
+    } else {
+      feedback.className = 'abcd-feedback-banner wrong';
+      feedback.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.word}</b>`;
+      input.style.borderColor = 'var(--error)';
+      reviewFillWrong.push(w);
+      Storage.addDifficultWord(w, w.day || 0);
+    }
+
+    input.disabled = true;
+    document.getElementById('reviewFillCorrectCount').textContent = `✓ ${reviewFillCorrect}`;
+    document.getElementById('reviewFillWrongCount').textContent = `✗ ${reviewFillWrong.length}`;
+
+    setTimeout(() => {
+      reviewFillIndex++;
+      renderReviewFill();
+    }, 1200);
+  }
+
+  function skipReviewFill() {
+    if (reviewFillAnswered) return;
+    reviewFillAnswered = true;
+
+    const w = reviewFillList[reviewFillIndex];
+    const feedback = document.getElementById('reviewFillFeedback');
+    feedback.className = 'abcd-feedback-banner wrong';
+    feedback.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b>`;
+    reviewFillWrong.push(w);
+    Storage.addDifficultWord(w, w.day || 0);
+
+    document.getElementById('reviewFillWrongCount').textContent = `✗ ${reviewFillWrong.length}`;
+
+    setTimeout(() => {
+      reviewFillIndex++;
+      renderReviewFill();
+    }, 1200);
+  }
+
+  function showReviewFillSummary() {
+    const total = reviewFillList.length;
+    const pct = Math.round((reviewFillCorrect / total) * 100);
+    const container = document.getElementById('reviewFillContainer');
+
+    document.getElementById('reviewFillProgress').style.width = '100%';
+
+    let emoji = '🎉', msg = 'Tuyệt vời! Bạn giỏi lắm!';
+    if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+    else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt, cần ôn thêm!'; }
+
+    container.innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct">
+            <div class="stat-num">${reviewFillCorrect}</div>
+            <div class="stat-lbl">Đúng</div>
+          </div>
+          <div class="quiz-summary-stat wrong">
+            <div class="stat-num">${reviewFillWrong.length}</div>
+            <div class="stat-lbl">Sai</div>
+          </div>
+          <div class="quiz-summary-stat total">
+            <div class="stat-num">${total}</div>
+            <div class="stat-lbl">Tổng</div>
+          </div>
+        </div>
+        ${reviewFillWrong.length > 0 ? `
+          <div class="quiz-wrong-list">
+            <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
+            ${reviewFillWrong.map(w => `
+              <div class="wrong-item">
+                <span class="wrong-word">${w.word}</span>
+                <span class="wrong-meaning">${w.meaning}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  // Initialize
+  init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Học 25 từ vựng tiếng Anh</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937}header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;padding:28px 16px;text-align:center}header h1{margin:0 0 8px;font-size:28px}header p{margin:0;opacity:.95}.container{max-width:1080px;margin:22px auto;padding:0 16px}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.tab-btn{border:0;padding:11px 16px;border-radius:999px;background:white;cursor:pointer;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.08)}.tab-btn.active{background:#2563eb;color:white}.section{display:none;background:white;padding:20px;border-radius:18px;box-shadow:0 4px 18px rgba(0,0,0,.08);margin-bottom:18px}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}.card{border:1px solid #e5e7eb;border-radius:16px;padding:14px;background:#fbfdff;transition:.2s}.card:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.08)}.word{font-size:22px;font-weight:800;color:#2563eb;margin-bottom:6px}.type{display:inline-block;background:#eef2ff;color:#4338ca;padding:4px 8px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:8px}.meaning{font-size:16px;margin-top:8px}.example{margin-top:10px;font-size:14px;color:#4b5563;font-style:italic}.question{border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin:12px 0;background:#fbfdff}input,select{width:100%;padding:10px;margin-top:8px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}.btn{border:0;background:#2563eb;color:white;padding:11px 16px;border-radius:12px;cursor:pointer;font-weight:700;margin:8px 6px 8px 0}.btn.secondary{background:#6b7280}.btn.green{background:#16a34a}.result{margin-top:12px;padding:14px;border-radius:12px;background:#eef2ff;font-weight:700;line-height:1.6}.correct{color:#15803d;font-weight:800}.wrong{color:#dc2626;font-weight:800}.flashcard{text-align:center;padding:35px 18px;min-height:240px;display:flex;flex-direction:column;justify-content:center;align-items:center}.flash-word{font-size:42px;font-weight:900;color:#2563eb;margin-bottom:16px}.flash-meaning{font-size:24px;color:#111827;margin-bottom:8px;display:none}.flash-info{color:#4b5563;font-size:16px;display:none}.progress{background:#e5e7eb;border-radius:999px;height:14px;overflow:hidden;margin:12px 0 18px}.progress-bar{height:100%;width:0;background:#2563eb;transition:.3s}.note{background:#fff7ed;border:1px solid #fed7aa;padding:12px 14px;border-radius:12px;margin-bottom:16px;color:#7c2d12}.big-prompt{font-size:20px;font-weight:800;color:#111827;margin-top:6px}.small-hint{font-size:14px;color:#6b7280;margin-top:6px}.option{display:block;border:1px solid #d1d5db;border-radius:12px;padding:10px 12px;margin:8px 0;background:white;cursor:pointer}.option:hover{background:#f3f4f6}.option input{width:auto;margin:0 8px 0 0}.mode-box{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.mode-box label{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:9px 12px;cursor:pointer}.mode-box input{width:auto;margin:0 6px 0 0}
+  </style>
+</head>
+<body>
+<header><h1>Học 25 từ vựng tiếng Anh</h1><p>Chủ đề: Công ty, văn phòng, công việc và dự án</p></header>
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('list',this)">1. Danh sách từ</button>
+    <button class="tab-btn" onclick="showTab('flash',this)">2. Flashcard</button>
+    <button class="tab-btn" onclick="showTab('viToEn',this)">3. Việt → Anh</button>
+    <button class="tab-btn" onclick="showTab('enToVi',this)">4. Anh → Việt</button>
+    <button class="tab-btn" onclick="showTab('abcd',this)">5. A/B/C/D</button>
+    <button class="tab-btn" onclick="showTab('typeQuiz',this)">6. Từ loại</button>
+  </div>
+  <section id="list" class="section active"><div class="note">Mẹo học: đọc từ tiếng Anh → nhớ nghĩa tiếng Việt → xem từ loại → đọc ví dụ.</div><div id="wordGrid" class="grid"></div></section>
+  <section id="flash" class="section"><div class="progress"><div id="progressBar" class="progress-bar"></div></div><div class="flashcard"><div id="flashWord" class="flash-word"></div><div id="flashMeaning" class="flash-meaning"></div><div id="flashInfo" class="flash-info"></div></div><button class="btn green" onclick="showAnswer()">Hiện nghĩa</button><button class="btn" onclick="nextCard()">Từ tiếp theo</button><button class="btn secondary" onclick="shuffleCards()">Trộn từ</button></section>
+  <section id="viToEn" class="section"><div class="note">Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b>.</div><div id="viToEnQuestions"></div><button class="btn" onclick="checkViToEn()">Kiểm tra Việt → Anh</button><button class="btn secondary" onclick="resetViToEn()">Làm lại</button><button class="btn green" onclick="randomViToEn()">Trộn câu</button><div id="viToEnResult" class="result" style="display:none"></div></section>
+  <section id="enToVi" class="section"><div class="note">Hiện <b>từ tiếng Anh</b>, bạn điền <b>nghĩa tiếng Việt</b>.</div><div id="enToViQuestions"></div><button class="btn" onclick="checkEnToVi()">Kiểm tra Anh → Việt</button><button class="btn secondary" onclick="resetEnToVi()">Làm lại</button><button class="btn green" onclick="randomEnToVi()">Trộn câu</button><div id="enToViResult" class="result" style="display:none"></div></section>
+  <section id="abcd" class="section"><div class="note">Chọn đáp án đúng A/B/C/D. Có 2 kiểu: <b>Việt → Anh</b> hoặc <b>Anh → Việt</b>.</div><div class="mode-box"><label><input type="radio" name="abcdMode" value="vi-en" checked onchange="randomABCD()">Việt → Anh</label><label><input type="radio" name="abcdMode" value="en-vi" onchange="randomABCD()">Anh → Việt</label></div><div id="abcdQuestions"></div><button class="btn" onclick="checkABCD()">Kiểm tra A/B/C/D</button><button class="btn secondary" onclick="resetABCD()">Làm lại</button><button class="btn green" onclick="randomABCD()">Trộn câu & đáp án</button><div id="abcdResult" class="result" style="display:none"></div></section>
+  <section id="typeQuiz" class="section"><div class="note">Chọn từ loại đúng. Noun = danh từ, Verb = động từ, Noun / Verb = vừa danh từ vừa động từ.</div><div id="typeQuestions"></div><button class="btn" onclick="checkType()">Kiểm tra từ loại</button><button class="btn secondary" onclick="resetType()">Làm lại</button><div id="typeResult" class="result" style="display:none"></div></section>
+</div>
+<script>
+const words=[
+{word:'company',meaning:'công ty',type:'noun',example:'I work for a big company.',viAnswers:['công ty']},
+{word:'office',meaning:'văn phòng',type:'noun',example:'She is in the office.',viAnswers:['văn phòng']},
+{word:'employee',meaning:'nhân viên',type:'noun',example:'He is a new employee.',viAnswers:['nhân viên']},
+{word:'manager',meaning:'quản lý',type:'noun',example:'My manager is helpful.',viAnswers:['quản lý','người quản lý']},
+{word:'staff',meaning:'nhân sự / nhân viên',type:'noun',example:'The staff are friendly.',viAnswers:['nhân sự','nhân viên']},
+{word:'meeting',meaning:'cuộc họp',type:'noun',example:'We have a meeting at 9 a.m.',viAnswers:['cuộc họp','họp']},
+{word:'report',meaning:'báo cáo',type:'noun / verb',example:'I need to write a report.',viAnswers:['báo cáo']},
+{word:'document',meaning:'tài liệu',type:'noun / verb',example:'Please send me the document.',viAnswers:['tài liệu']},
+{word:'schedule',meaning:'lịch trình',type:'noun / verb',example:'Check your schedule.',viAnswers:['lịch trình','lịch']},
+{word:'department',meaning:'phòng ban',type:'noun',example:'She works in the sales department.',viAnswers:['phòng ban']},
+{word:'customer',meaning:'khách hàng',type:'noun',example:'The customer needs help.',viAnswers:['khách hàng']},
+{word:'client',meaning:'khách hàng / đối tác',type:'noun',example:'We have a meeting with a client.',viAnswers:['khách hàng','đối tác']},
+{word:'project',meaning:'dự án',type:'noun',example:'This project is important.',viAnswers:['dự án']},
+{word:'task',meaning:'nhiệm vụ',type:'noun',example:'I have many tasks today.',viAnswers:['nhiệm vụ']},
+{word:'deadline',meaning:'hạn chót',type:'noun',example:'The deadline is Friday.',viAnswers:['hạn chót']},
+{word:'email',meaning:'thư điện tử',type:'noun / verb',example:'I will send you an email.',viAnswers:['thư điện tử','email']},
+{word:'message',meaning:'tin nhắn',type:'noun / verb',example:'She sent me a message.',viAnswers:['tin nhắn']},
+{word:'call',meaning:'cuộc gọi / gọi điện',type:'noun / verb',example:'I have a call with my manager.',viAnswers:['cuộc gọi','gọi điện']},
+{word:'position',meaning:'vị trí / chức vụ',type:'noun',example:'He applied for this position.',viAnswers:['vị trí','chức vụ']},
+{word:'job',meaning:'công việc',type:'noun',example:'I need a new job.',viAnswers:['công việc','việc làm']},
+{word:'work',meaning:'làm việc / công việc',type:'noun / verb',example:'I work from Monday to Friday.',viAnswers:['làm việc','công việc']},
+{word:'team',meaning:'đội nhóm',type:'noun',example:'Our team is very strong.',viAnswers:['đội nhóm','nhóm']},
+{word:'plan',meaning:'kế hoạch',type:'noun / verb',example:'We need a good plan.',viAnswers:['kế hoạch']},
+{word:'problem',meaning:'vấn đề',type:'noun',example:'There is a problem with the system.',viAnswers:['vấn đề']},
+{word:'solution',meaning:'giải pháp',type:'noun',example:'We found a solution.',viAnswers:['giải pháp']}
+];
+let flashIndex=0,flashWords=[...words],viToEnList=[...words],enToViList=[...words],abcdList=[];
+function normalizeText(t){return t.trim().toLowerCase().replace(/\s+/g,' ')}
+function shuffleArray(a){return [...a].sort(()=>Math.random()-.5)}
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active')}
+function renderList(){wordGrid.innerHTML=words.map(w=>`<div class="card"><div class="word">${w.word}</div><div class="type">${w.type}</div><div class="meaning">${w.meaning}</div><div class="example">${w.example}</div></div>`).join('')}
+function renderFlash(){const w=flashWords[flashIndex];flashWord.textContent=w.word;flashMeaning.textContent=w.meaning;flashInfo.textContent=`${w.type} — ${w.example}`;flashMeaning.style.display='none';flashInfo.style.display='none';progressBar.style.width=((flashIndex+1)/flashWords.length*100)+'%'}
+function showAnswer(){flashMeaning.style.display='block';flashInfo.style.display='block'}
+function nextCard(){flashIndex=(flashIndex+1)%flashWords.length;renderFlash()}
+function shuffleCards(){flashWords=shuffleArray(flashWords);flashIndex=0;renderFlash()}
+function renderViToEn(){viToEnQuestions.innerHTML=viToEnList.map((w,i)=>`<div class="question"><b>Câu ${i+1}:</b> Nghĩa tiếng Việt là:<div class="big-prompt">${w.meaning}</div><div class="small-hint">Từ loại: ${w.type}</div><input id="viToEn${i}" placeholder="Điền từ tiếng Anh"><div id="viToEnFeedback${i}"></div></div>`).join('')}
+function checkViToEn(){let s=0;viToEnList.forEach((w,i)=>{const ans=normalizeText(document.getElementById(`viToEn${i}`).value),fb=document.getElementById(`viToEnFeedback${i}`);if(ans===w.word){s++;fb.innerHTML='<span class="correct">Đúng!</span>'}else fb.innerHTML=`<span class="wrong">Sai.</span> Đáp án đúng: <b>${w.word}</b>`});viToEnResult.style.display='block';viToEnResult.innerHTML=`Bạn đúng ${s}/${viToEnList.length} câu.`}
+function resetViToEn(){viToEnList.forEach((w,i)=>{document.getElementById(`viToEn${i}`).value='';document.getElementById(`viToEnFeedback${i}`).innerHTML=''});viToEnResult.style.display='none'}
+function randomViToEn(){viToEnList=shuffleArray(viToEnList);renderViToEn();viToEnResult.style.display='none'}
+function renderEnToVi(){enToViQuestions.innerHTML=enToViList.map((w,i)=>`<div class="question"><b>Câu ${i+1}:</b> Từ tiếng Anh là:<div class="big-prompt">${w.word}</div><div class="small-hint">Từ loại: ${w.type}</div><input id="enToVi${i}" placeholder="Điền nghĩa tiếng Việt"><div id="enToViFeedback${i}"></div></div>`).join('')}
+function checkEnToVi(){let s=0;enToViList.forEach((w,i)=>{const ans=normalizeText(document.getElementById(`enToVi${i}`).value),fb=document.getElementById(`enToViFeedback${i}`),ok=w.viAnswers.some(v=>normalizeText(v)===ans);if(ok){s++;fb.innerHTML='<span class="correct">Đúng!</span>'}else fb.innerHTML=`<span class="wrong">Sai.</span> Đáp án gợi ý: <b>${w.meaning}</b>`});enToViResult.style.display='block';enToViResult.innerHTML=`Bạn đúng ${s}/${enToViList.length} câu.`}
+function resetEnToVi(){enToViList.forEach((w,i)=>{document.getElementById(`enToVi${i}`).value='';document.getElementById(`enToViFeedback${i}`).innerHTML=''});enToViResult.style.display='none'}
+function randomEnToVi(){enToViList=shuffleArray(enToViList);renderEnToVi();enToViResult.style.display='none'}
+function getMode(){return document.querySelector('input[name="abcdMode"]:checked').value}
+function buildABCD(){const mode=getMode();abcdList=words.map(w=>{if(mode==='vi-en'){const wrong=shuffleArray(words.filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.word);return {...w,prompt:w.meaning,answer:w.word,options:shuffleArray([w.word,...wrong])}}else{const wrong=shuffleArray(words.filter(x=>x.meaning!==w.meaning)).slice(0,3).map(x=>x.meaning);return {...w,prompt:w.word,answer:w.meaning,options:shuffleArray([w.meaning,...wrong])}}})}
+function renderABCD(){const mode=getMode();abcdQuestions.innerHTML=abcdList.map((w,i)=>`<div class="question"><b>Câu ${i+1}:</b> ${mode==='vi-en'?'Chọn từ tiếng Anh đúng với nghĩa:':'Chọn nghĩa tiếng Việt đúng của từ:'}<div class="big-prompt">${w.prompt}</div>${w.options.map((op,j)=>`<label class="option"><input type="radio" name="abcd${i}" value="${op}"> ${String.fromCharCode(65+j)}. ${op}</label>`).join('')}<div id="abcdFeedback${i}"></div></div>`).join('')}
+function checkABCD(){let s=0;abcdList.forEach((w,i)=>{const selected=document.querySelector(`input[name="abcd${i}"]:checked`),fb=document.getElementById(`abcdFeedback${i}`);if(selected&&selected.value===w.answer){s++;fb.innerHTML='<span class="correct">Đúng!</span>'}else{const your=selected?selected.value:'chưa chọn';fb.innerHTML=`<span class="wrong">Sai.</span> Bạn chọn: <b>${your}</b>. Đáp án đúng: <b>${w.answer}</b>`}});abcdResult.style.display='block';abcdResult.innerHTML=`Bạn đúng ${s}/${abcdList.length} câu.`}
+function resetABCD(){abcdList.forEach((w,i)=>{document.querySelectorAll(`input[name="abcd${i}"]`).forEach(r=>r.checked=false);document.getElementById(`abcdFeedback${i}`).innerHTML=''});abcdResult.style.display='none'}
+function randomABCD(){buildABCD();abcdList=shuffleArray(abcdList);renderABCD();abcdResult.style.display='none'}
+function renderType(){typeQuestions.innerHTML=words.map((w,i)=>`<div class="question"><b>${i+1}. ${w.word}</b> — ${w.meaning}<select id="type${i}"><option value="">-- Chọn từ loại --</option><option value="noun">noun</option><option value="verb">verb</option><option value="noun / verb">noun / verb</option></select><div id="typeFeedback${i}"></div></div>`).join('')}
+function checkType(){let s=0;words.forEach((w,i)=>{const ans=document.getElementById(`type${i}`).value,fb=document.getElementById(`typeFeedback${i}`);if(ans===w.type){s++;fb.innerHTML='<span class="correct">Đúng!</span>'}else fb.innerHTML=`<span class="wrong">Sai.</span> Đáp án đúng: <b>${w.type}</b>`});typeResult.style.display='block';typeResult.innerHTML=`Bạn đúng ${s}/${words.length} câu.`}
+function resetType(){words.forEach((w,i)=>{document.getElementById(`type${i}`).value='';document.getElementById(`typeFeedback${i}`).innerHTML=''});typeResult.style.display='none'}
+renderList();renderFlash();renderViToEn();renderEnToVi();randomABCD();renderType();
+</script>
+</body>
+</html>

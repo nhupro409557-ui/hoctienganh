@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Học Từ Vựng - Ngày</title>
+  <meta name="description" content="Học từ vựng tiếng Anh TOEIC theo lộ trình 60 ngày">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header" id="pageHeader">
+    <a href="index.html?no_redirect=true" class="back-btn">← Về lộ trình</a>
+    <h1 id="dayTitle">Ngày 1</h1>
+    <p id="dayTopic">Đang tải...</p>
+    <div class="subtitle" id="dayPhase"></div>
+  </header>
+
+  <div class="container">
+    <!-- GATE SYSTEM -->
+    <div id="gateContainer" class="gate-container" style="display:none">
+      <div class="gate-steps" id="gateSteps"></div>
+      <div id="gateContent" class="gate-content"></div>
+    </div>
+
+    <!-- GRAMMAR SECTION -->
+    <div id="grammarSection" class="grammar-box" style="display:none">
+      <div class="grammar-title" id="grammarTitle"></div>
+      <div class="grammar-structure" id="grammarStructure"></div>
+      <div class="grammar-explanation" id="grammarExplanation"></div>
+      <ul class="grammar-examples" id="grammarExamples"></ul>
+      
+      <!-- Exceptions Section -->
+      <div id="grammarExceptionsContainer" class="grammar-alert grammar-alert-danger" style="display:none">
+        <div class="grammar-alert-title">⚠️ Trường hợp ngoại lệ / Bất quy tắc:</div>
+        <ul class="grammar-alert-list" id="grammarExceptions"></ul>
+      </div>
+      
+      <!-- Notes Section -->
+      <div id="grammarNotesContainer" class="grammar-alert grammar-alert-info" style="display:none">
+        <div class="grammar-alert-title">📌 Chú ý quan trọng / Lưu ý bẫy thi:</div>
+        <ul class="grammar-alert-list" id="grammarNotes"></ul>
+      </div>
+
+      <div class="grammar-tip" id="grammarTip" style="display:none"></div>
+    </div>
+
+    <!-- LEARNING TABS -->
+    <div id="learningSection" style="display:none">
+      <div class="tabs" id="mainTabs">
+        <button class="tab-btn active" onclick="showTab('list',this)">📚 Danh sách từ</button>
+        <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcard</button>
+        <button class="tab-btn" onclick="showTab('viToEn',this)">🇻🇳→🇬🇧 Việt→Anh</button>
+        <button class="tab-btn" onclick="showTab('enToVi',this)">🇬🇧→🇻🇳 Anh→Việt</button>
+        <button class="tab-btn" onclick="showTab('abcd',this)">📝 A/B/C/D</button>
+        <button class="tab-btn" onclick="showTab('typeQuiz',this)">🏷️ Từ loại</button>
+        <button class="tab-btn" id="grammarQuizTabBtn" onclick="showTab('grammarQuiz',this)" style="display:none">✍️ Trắc nghiệm Ngữ pháp</button>
+      </div>
+
+      <!-- Tab 1: Word List -->
+      <section id="list" class="section active">
+        <div class="note">💡 <b>Mẹo:</b> Đọc TO từ tiếng Anh → nhớ nghĩa tiếng Việt → xem từ loại → đọc ví dụ. Nhấn 🔊 để nghe phát âm. Nhấn ❤️ để đánh dấu từ khó.</div>
+        <div id="wordGrid" class="word-grid"></div>
+      </section>
+
+      <!-- Tab 2: Flashcard -->
+      <section id="flash" class="section">
+        <div class="note" style="text-align:center;font-size:12px;color:var(--text-muted);background:transparent;border:none;padding:4px">⌨️ Phím tắt: <b>Space</b> = Hiện nghĩa &nbsp; <b>→</b> = Từ tiếp &nbsp; <b>←</b> = Từ trước &nbsp; <b>S</b> = Trộn &nbsp; <b>R</b> = Phát âm</div>
+        <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+        <div class="flash-counter" id="flashCounter"></div>
+        <div class="flashcard-container">
+          <div class="flashcard">
+            <button class="speak-btn speak-btn-lg" onclick="speakWord(flashWords[flashIndex].word)" title="Phát âm">🔊</button>
+            <div id="flashWord" class="flash-word"></div>
+            <div id="flashMeaning" class="flash-meaning"></div>
+            <div id="flashInfo" class="flash-info"></div>
+          </div>
+        </div>
+        <div class="btn-group justify-center">
+          <button class="btn btn-success" onclick="showAnswer()">👁️ Hiện nghĩa</button>
+          <button class="btn btn-primary" onclick="nextCard()">➡️ Từ tiếp</button>
+          <button class="btn btn-secondary" onclick="prevCard()">⬅️ Từ trước</button>
+          <button class="btn btn-warning" onclick="shuffleCards()">🔀 Trộn từ</button>
+          <button class="btn btn-danger btn-sm" onclick="markFlashDifficult()">🔥 Đánh dấu khó</button>
+        </div>
+      </section>
+
+      <!-- Tab 3: Vietnamese to English (one-at-a-time) -->
+      <section id="viToEn" class="section">
+        <div class="note">💡 Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b> — kết quả hiện ngay! Từ sai tự động vào kho từ khó.</div>
+        <div class="progress"><div id="viToEnProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="viToEnCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="viToEnScoreOk">✓ 0</span>
+            <span class="score-wrong" id="viToEnScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="viToEnContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startViToEn()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 4: English to Vietnamese (one-at-a-time) -->
+      <section id="enToVi" class="section">
+        <div class="note">💡 Hiện <b>từ tiếng Anh</b>, bạn điền <b>nghĩa tiếng Việt</b> — kết quả hiện ngay! Từ sai tự động vào kho từ khó.</div>
+        <div class="progress"><div id="enToViProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="enToViCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="enToViScoreOk">✓ 0</span>
+            <span class="score-wrong" id="enToViScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="enToViContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startEnToVi()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 5: ABCD Quiz -->
+      <section id="abcd" class="section">
+        <div class="note">💡 Chọn đáp án đúng — kết quả hiện ngay! Từ sai tự động vào kho từ khó.</div>
+        <div class="mode-box">
+          <label><input type="radio" name="abcdMode" value="vi-en" checked onchange="restartABCD()">Việt → Anh</label>
+          <label><input type="radio" name="abcdMode" value="en-vi" onchange="restartABCD()">Anh → Việt</label>
+        </div>
+        <div class="progress"><div id="abcdProgressBar" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="abcdCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="abcdScoreCorrect">✓ 0</span>
+            <span class="score-wrong" id="abcdScoreWrong">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="abcdContainer"></div>
+        <div class="btn-group" id="abcdBtnGroup">
+          <button class="btn btn-success" onclick="restartABCD()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 6: Type Quiz (one-at-a-time) -->
+      <section id="typeQuiz" class="section">
+        <div class="note">💡 Chọn từ loại đúng — kết quả hiện ngay! <b>noun</b> = danh từ, <b>verb</b> = động từ, <b>adjective</b> = tính từ, <b>adverb</b> = trạng từ.</div>
+        <div class="progress"><div id="typeProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="typeCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="typeScoreOk">✓ 0</span>
+            <span class="score-wrong" id="typeScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="typeContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startType()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 7: Grammar Quiz (one-at-a-time) -->
+      <section id="grammarQuiz" class="section">
+        <div class="note">💡 <b>Bài tập Ngữ pháp (50 câu)</b>: Chọn đáp án đúng cho câu hỏi ngữ pháp liên quan đến bài học hôm nay. Kết quả hiển thị ngay lập tức!</div>
+        <div class="progress"><div id="grammarQuizProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="grammarQuizCounter">Câu 1/50</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="grammarQuizScoreOk">✓ 0</span>
+            <span class="score-wrong" id="grammarQuizScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="grammarQuizContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startGrammarQuiz()">🔀 Làm lại từ đầu</button>
+        </div>
+      </section>
+
+      <!-- Complete Day Button -->
+      <div class="text-center mt-lg">
+        <button class="btn btn-success btn-lg" onclick="completeDay()" id="completeDayBtn">
+          ✅ Hoàn thành ngày học
+        </button>
+        <p class="text-muted mt-sm" style="font-size:13px">Nhấn khi bạn đã hoàn thành ít nhất 3 tab bài tập</p>
+      </div>
+    </div>
+
+    <!-- Review Day Content -->
+    <div id="reviewDaySection" style="display:none">
+      <div class="note warning">
+        📝 <b>Ngày ôn tập!</b> Hôm nay không có từ mới. Hãy ôn lại tất cả từ đã học ở các ngày trước.
+      </div>
+      <div id="reviewDayContent"></div>
+      <div class="text-center mt-lg">
+        <button class="btn btn-success btn-lg" onclick="completeDay()">✅ Hoàn thành ôn tập</button>
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <div class="phase-section mt-lg" id="checklistSection">
+      <div class="section-title"><span class="icon">✅</span> Checklist Cuối Ngày</div>
+      <div class="glass-card">
+        <ul class="checklist" id="checklistBox"></ul>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex justify-between mt-lg" style="padding-bottom:32px">
+      <button class="btn btn-secondary" id="prevDayBtn" onclick="goToDay(-1)">← Ngày trước</button>
+      <a href="index.html?no_redirect=true" class="btn btn-secondary">🏠 Lộ trình</a>
+      <button class="btn btn-primary" id="nextDayBtn" onclick="goToDay(1)">Ngày sau →</button>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="grammar_questions.js"></script>
+  <script>
+  // ============================================
+  // LEARN PAGE LOGIC
+  // ============================================
+
+  let currentDay = 1;
+  let dayData = null;
+  let words = [];
+
+  // Quiz state
+  let flashIndex = 0, flashWords = [];
+  let viToEnList = [], enToViList = [], abcdList = [];
+
+  // Grammar quiz state
+  let grammarQuizList = [];
+  let grammarQuizIdx = 0;
+  let grammarQuizOk = 0;
+  let grammarQuizWrong = 0;
+  let grammarQuizDone = false;
+
+  // ---- INIT ----
+  function init() {
+    const params = new URLSearchParams(window.location.search);
+    currentDay = parseInt(params.get('day')) || 1;
+
+    if (typeof DAYS_DATA === 'undefined') {
+      document.getElementById('dayTopic').textContent = 'Lỗi: Không tìm thấy dữ liệu';
+      return;
+    }
+
+    dayData = DAYS_DATA.find(d => d.day === currentDay);
+    if (!dayData) {
+      document.getElementById('dayTopic').textContent = 'Không tìm thấy dữ liệu ngày ' + currentDay;
+      return;
+    }
+
+    words = dayData.words || [];
+    document.title = `Ngày ${currentDay} - ${dayData.topic}`;
+    document.getElementById('dayTitle').textContent = `Ngày ${currentDay}`;
+    document.getElementById('dayTopic').textContent = dayData.topic;
+    document.getElementById('dayPhase').textContent = `Giai đoạn ${dayData.phase} • ${dayData.topicEn || ''}`;
+
+    // Mark day as started
+    Storage.setDayStarted(currentDay);
+
+    // Navigation buttons
+    document.getElementById('prevDayBtn').style.display = currentDay > 1 ? '' : 'none';
+    document.getElementById('nextDayBtn').style.display = currentDay < 60 ? '' : 'none';
+
+    // Check if completed
+    if (Storage.isDayCompleted(currentDay)) {
+      document.getElementById('completeDayBtn').textContent = '✅ Đã hoàn thành';
+      document.getElementById('completeDayBtn').classList.remove('btn-success');
+      document.getElementById('completeDayBtn').classList.add('btn-secondary');
+    }
+
+    // Render grammar
+    renderGrammar();
+
+    // Render checklist
+    renderChecklist();
+
+    // Handle review day
+    if (dayData.isReview) {
+      handleReviewDay();
+      return;
+    }
+
+    // Check gates
+    checkGates();
+  }
+
+  // ---- GATES ----
+  function checkGates() {
+    const needsDiff = Storage.needsDifficultReview(currentDay);
+    const needsPrev = Storage.needsPreviousDayReview(currentDay);
+
+    if (!needsDiff && !needsPrev) {
+      // Gates passed - show learning section
+      showLearning();
+      return;
+    }
+
+    // Show gate system
+    document.getElementById('gateContainer').style.display = 'block';
+    document.getElementById('learningSection').style.display = 'none';
+
+    renderGateSteps(needsDiff, needsPrev);
+
+    if (needsDiff) {
+      renderDifficultGate();
+    } else if (needsPrev) {
+      renderPreviousDayGate();
+    }
+  }
+
+  function renderGateSteps(needsDiff, needsPrev) {
+    const diffDone = !needsDiff;
+    const prevDone = !needsPrev;
+    const steps = [];
+
+    if (Storage.getDifficultWords().length > 0 || !diffDone) {
+      steps.push(`
+        <div class="gate-step ${!diffDone ? 'active' : 'completed'}">
+          <span class="step-icon">${diffDone ? '✅' : '🔥'}</span>
+          <span class="step-label">Ôn từ khó</span>
+        </div>
+      `);
+    }
+
+    if (currentDay > 1) {
+      steps.push(`
+        <div class="gate-step ${diffDone && !prevDone ? 'active' : prevDone ? 'completed' : ''}">
+          <span class="step-icon">${prevDone ? '✅' : '📖'}</span>
+          <span class="step-label">Ôn ngày trước</span>
+        </div>
+      `);
+    }
+
+    steps.push(`
+      <div class="gate-step ${diffDone && prevDone ? 'active' : ''}">
+        <span class="step-icon">${diffDone && prevDone ? '🎉' : '🔒'}</span>
+        <span class="step-label">Học từ mới</span>
+      </div>
+    `);
+
+    document.getElementById('gateSteps').innerHTML = steps.join('');
+  }
+
+  // ---- DIFFICULT GATE ----
+  function renderDifficultGate() {
+    const diffWords = Storage.getDifficultWords();
+    const content = document.getElementById('gateContent');
+
+    content.innerHTML = `
+      <div class="gate-title">🔥 Ôn Từ Khó Thuộc</div>
+      <div class="gate-desc">Bạn có ${diffWords.length} từ khó. Phải đạt ≥80% mới được học từ mới!</div>
+      <div class="gate-quiz" id="gateQuiz">
+        ${diffWords.map((w, i) => `
+          <div class="question">
+            <div class="question-label">Câu ${i + 1}/${diffWords.length}</div>
+            <div class="big-prompt">${w.meaning}</div>
+            <div class="small-hint">${w.type} • Ngày ${w.day}</div>
+            <input type="text" id="gateQ${i}" placeholder="Điền từ tiếng Anh">
+            <div id="gateFb${i}" class="feedback"></div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-lg" onclick="checkDifficultGate()">✅ Kiểm tra</button>
+      </div>
+      <div id="gateResult" style="display:none"></div>
+    `;
+  }
+
+  function checkDifficultGate() {
+    const diffWords = Storage.getDifficultWords();
+    let score = 0;
+
+    diffWords.forEach((w, i) => {
+      const input = document.getElementById(`gateQ${i}`);
+      const fb = document.getElementById(`gateFb${i}`);
+      const ans = input.value.trim().toLowerCase();
+
+      if (ans === w.word.toLowerCase()) {
+        score++;
+        fb.className = 'feedback correct';
+        fb.textContent = '✓ Đúng!';
+        Storage.updateDifficultWordStats(w.word, true);
+      } else {
+        fb.className = 'feedback wrong';
+        fb.innerHTML = `✗ Sai. Đáp án: <b>${w.word}</b>`;
+        Storage.updateDifficultWordStats(w.word, false);
+      }
+    });
+
+    const pct = Math.round((score / diffWords.length) * 100);
+    const result = document.getElementById('gateResult');
+    result.style.display = 'block';
+
+    if (pct >= 80) {
+      result.className = 'gate-result pass';
+      result.innerHTML = `🎉 Tuyệt vời! ${score}/${diffWords.length} (${pct}%) — Đã vượt qua!`;
+      Storage.setDifficultReviewDone(currentDay);
+      setTimeout(() => checkGates(), 1500);
+    } else {
+      result.className = 'gate-result fail';
+      result.innerHTML = `😤 ${score}/${diffWords.length} (${pct}%) — Cần đạt 80%. <button class="btn btn-warning btn-sm mt-sm" onclick="renderDifficultGate()">🔄 Làm lại</button>`;
+    }
+  }
+
+  // ---- PREVIOUS DAY GATE ----
+  function renderPreviousDayGate() {
+    const prevWords = Storage.getPreviousDayWords(currentDay);
+    if (prevWords.length === 0) {
+      Storage.setPreviousDayReviewDone(currentDay);
+      checkGates();
+      return;
+    }
+
+    // Pick random 10 words (or fewer)
+    const quizWords = shuffleArray([...prevWords]).slice(0, Math.min(10, prevWords.length));
+    const content = document.getElementById('gateContent');
+
+    content.innerHTML = `
+      <div class="gate-title">📖 Ôn Nhanh Ngày Trước</div>
+      <div class="gate-desc">Trả lời ${quizWords.length} câu hỏi từ ngày trước. Phải đạt ≥70%!</div>
+      <div class="gate-quiz" id="prevGateQuiz">
+        ${quizWords.map((w, i) => `
+          <div class="question">
+            <div class="question-label">Câu ${i + 1}/${quizWords.length}</div>
+            <div class="big-prompt">${w.meaning}</div>
+            <div class="small-hint">${w.type}</div>
+            <input type="text" id="prevQ${i}" placeholder="Điền từ tiếng Anh" data-answer="${w.word}">
+            <div id="prevFb${i}" class="feedback"></div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-lg" onclick="checkPreviousGate(${quizWords.length})">✅ Kiểm tra</button>
+      </div>
+      <div id="prevGateResult" style="display:none"></div>
+    `;
+  }
+
+  function checkPreviousGate(count) {
+    let score = 0;
+    for (let i = 0; i < count; i++) {
+      const input = document.getElementById(`prevQ${i}`);
+      const fb = document.getElementById(`prevFb${i}`);
+      const ans = input.value.trim().toLowerCase();
+      const correct = input.dataset.answer.toLowerCase();
+
+      if (ans === correct) {
+        score++;
+        fb.className = 'feedback correct';
+        fb.textContent = '✓ Đúng!';
+      } else {
+        fb.className = 'feedback wrong';
+        fb.innerHTML = `✗ Sai. Đáp án: <b>${input.dataset.answer}</b>`;
+      }
+    }
+
+    const pct = Math.round((score / count) * 100);
+    const result = document.getElementById('prevGateResult');
+    result.style.display = 'block';
+
+    if (pct >= 70) {
+      result.className = 'gate-result pass';
+      result.innerHTML = `🎉 Tốt lắm! ${score}/${count} (${pct}%) — Đã vượt qua!`;
+      Storage.setPreviousDayReviewDone(currentDay);
+      setTimeout(() => checkGates(), 1500);
+    } else {
+      result.className = 'gate-result fail';
+      result.innerHTML = `😤 ${score}/${count} (${pct}%) — Cần đạt 70%. <button class="btn btn-warning btn-sm mt-sm" onclick="renderPreviousDayGate()">🔄 Làm lại</button>`;
+    }
+  }
+
+  // ---- SHOW LEARNING ----
+  function showLearning() {
+    document.getElementById('gateContainer').style.display = 'none';
+    document.getElementById('learningSection').style.display = 'block';
+    document.getElementById('grammarSection').style.display = '';
+
+    if (words.length === 0) {
+      document.getElementById('learningSection').innerHTML = `
+        <div class="empty-state"><div class="icon">📝</div><p>Ngày ôn tập - không có từ mới</p></div>
+      `;
+      return;
+    }
+
+    renderList();
+    flashWords = [...words];
+    flashIndex = 0;
+    renderFlash();
+    startViToEn();
+    startEnToVi();
+    randomABCD();
+    startType();
+
+    // Show/hide grammar quiz tab button based on whether grammar exists
+    const gQuizTabBtn = document.getElementById('grammarQuizTabBtn');
+    if (dayData.grammar && dayData.grammar.title && !dayData.isReview) {
+      gQuizTabBtn.style.display = '';
+      startGrammarQuiz();
+    } else {
+      gQuizTabBtn.style.display = 'none';
+    }
+  }
+
+  // ---- GRAMMAR ----
+  function renderGrammar() {
+    if (!dayData.grammar || !dayData.grammar.title) {
+      document.getElementById('grammarSection').style.display = 'none';
+      return;
+    }
+
+    const g = dayData.grammar;
+    document.getElementById('grammarSection').style.display = '';
+    document.getElementById('grammarTitle').textContent = '📐 ' + g.title;
+    document.getElementById('grammarStructure').textContent = g.structure || '';
+    document.getElementById('grammarStructure').style.display = g.structure ? '' : 'none';
+    document.getElementById('grammarExplanation').innerHTML = (g.explanation || '').replace(/\n/g, '<br>');
+    document.getElementById('grammarExamples').innerHTML = (g.examples || []).map(e => `<li>${e}</li>`).join('');
+
+    // Render exceptions
+    const excContainer = document.getElementById('grammarExceptionsContainer');
+    const excList = document.getElementById('grammarExceptions');
+    if (g.exceptions && g.exceptions.length > 0) {
+      excContainer.style.display = '';
+      excList.innerHTML = g.exceptions.map(e => `<li>${e}</li>`).join('');
+    } else {
+      excContainer.style.display = 'none';
+    }
+
+    // Render notes
+    const notesContainer = document.getElementById('grammarNotesContainer');
+    const notesList = document.getElementById('grammarNotes');
+    if (g.notes && g.notes.length > 0) {
+      notesContainer.style.display = '';
+      notesList.innerHTML = g.notes.map(n => `<li>${n}</li>`).join('');
+    } else {
+      notesContainer.style.display = 'none';
+    }
+
+    if (g.tips) {
+      document.getElementById('grammarTip').style.display = '';
+      document.getElementById('grammarTip').textContent = g.tips;
+    } else {
+      document.getElementById('grammarTip').style.display = 'none';
+    }
+  }
+
+  // ---- REVIEW DAY ----
+  function handleReviewDay() {
+    document.getElementById('learningSection').style.display = 'none';
+    document.getElementById('gateContainer').style.display = 'none';
+    document.getElementById('reviewDaySection').style.display = 'block';
+
+    const reviewDays = dayData.reviewDays || [];
+    if (typeof DAYS_DATA === 'undefined' || reviewDays.length === 0) return;
+
+    // Gather words from review days
+    let allReviewWords = [];
+    reviewDays.forEach(d => {
+      const rd = DAYS_DATA.find(x => x.day === d);
+      if (rd && rd.words) allReviewWords = allReviewWords.concat(rd.words);
+    });
+
+    if (allReviewWords.length === 0) {
+      document.getElementById('reviewDayContent').innerHTML = '<div class="empty-state"><p>Không có từ để ôn</p></div>';
+      return;
+    }
+
+    // Create a mini quiz with shuffled words
+    const quizWords = shuffleArray(allReviewWords).slice(0, Math.min(30, allReviewWords.length));
+
+    document.getElementById('reviewDayContent').innerHTML = `
+      <div class="section-title"><span class="icon">📝</span> Ôn Tập ${allReviewWords.length} Từ (${quizWords.length} câu random)</div>
+      <div class="glass-card">
+        ${quizWords.map((w, i) => `
+          <div class="question">
+            <div class="question-label">Câu ${i + 1}/${quizWords.length}</div>
+            <div class="big-prompt">${w.meaning}</div>
+            <div class="small-hint">${w.type}</div>
+            <input type="text" id="reviewQ${i}" placeholder="Điền từ tiếng Anh" data-answer="${w.word}" data-word='${JSON.stringify(w)}'>
+            <div id="reviewFb${i}" class="feedback"></div>
+          </div>
+        `).join('')}
+        <div class="btn-group">
+          <button class="btn btn-primary btn-lg" onclick="checkReviewDay(${quizWords.length})">✅ Kiểm tra</button>
+          <button class="btn btn-secondary" onclick="handleReviewDay()">🔀 Trộn lại</button>
+        </div>
+        <div id="reviewResult" class="result" style="display:none"></div>
+      </div>
+    `;
+  }
+
+  function checkReviewDay(count) {
+    let score = 0;
+    for (let i = 0; i < count; i++) {
+      const input = document.getElementById(`reviewQ${i}`);
+      const fb = document.getElementById(`reviewFb${i}`);
+      const ans = input.value.trim().toLowerCase();
+      const correct = input.dataset.answer.toLowerCase();
+
+      if (ans === correct) {
+        score++;
+        fb.className = 'feedback correct';
+        fb.textContent = '✓ Đúng!';
+      } else {
+        fb.className = 'feedback wrong';
+        fb.innerHTML = `✗ Sai. Đáp án: <b>${input.dataset.answer}</b>`;
+        // Add to difficult words
+        try {
+          const wordObj = JSON.parse(input.dataset.word);
+          Storage.addDifficultWord(wordObj, dayData.day);
+        } catch(e) {}
+      }
+    }
+
+    const pct = Math.round((score / count) * 100);
+    const result = document.getElementById('reviewResult');
+    result.style.display = 'block';
+    result.innerHTML = `Bạn đúng <b>${score}/${count}</b> (${pct}%). ${pct >= 80 ? '🎉 Tuyệt vời!' : '💪 Cần ôn thêm!'}`;
+    Storage.saveQuizResult(currentDay, 'review', score, count);
+  }
+
+  // ---- HELPER FUNCTIONS ----
+  function normalizeText(t) { return t.trim().toLowerCase().replace(/\s+/g, ' '); }
+  function shuffleArray(a) { return [...a].sort(() => Math.random() - 0.5); }
+
+  function showTab(id, btn) {
+    document.querySelectorAll('#learningSection .section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('#mainTabs .tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    Storage.addTabVisited(currentDay, id);
+  }
+
+  // ---- TEXT-TO-SPEECH ----
+  function speakWord(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      utter.rate = 0.85;
+      utter.pitch = 1;
+      window.speechSynthesis.speak(utter);
+    }
+  }
+
+  // ---- TAB 1: WORD LIST ----
+  function renderList() {
+    document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
+      const isDiff = Storage.isDifficultWord(w.word);
+      return `
+        <div class="word-card animate-fadeInUp" style="animation-delay:${i * 30}ms">
+          <button class="mark-difficult ${isDiff ? 'marked' : ''}" onclick="toggleDifficult(this, ${i})" title="Đánh dấu từ khó">
+            ${isDiff ? '🔥' : '❤️'}
+          </button>
+          <button class="speak-btn" onclick="speakWord('${w.word}')" title="Phát âm">🔊</button>
+          <div class="word">${w.word}</div>
+          <div class="type-badge">${w.type}</div>
+          <div class="meaning">${w.meaning}</div>
+          <div class="example">"${w.example}"</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleDifficult(btn, index) {
+    const w = words[index];
+    if (Storage.isDifficultWord(w.word)) {
+      Storage.removeDifficultWord(w.word);
+      btn.classList.remove('marked');
+      btn.innerHTML = '❤️';
+    } else {
+      Storage.addDifficultWord(w, currentDay);
+      btn.classList.add('marked');
+      btn.innerHTML = '🔥';
+      btn.style.animation = 'none';
+      btn.offsetHeight;
+      btn.style.animation = 'heartBeat 0.4s ease';
+    }
+  }
+
+  // ---- TAB 2: FLASHCARD ----
+  function renderFlash() {
+    if (flashWords.length === 0) return;
+    const w = flashWords[flashIndex];
+    document.getElementById('flashWord').textContent = w.word;
+    document.getElementById('flashMeaning').textContent = w.meaning;
+    document.getElementById('flashInfo').innerHTML = `<b>${w.type}</b> — "${w.example}"`;
+    document.getElementById('flashMeaning').style.display = 'none';
+    document.getElementById('flashInfo').style.display = 'none';
+    document.getElementById('progressBar').style.width = ((flashIndex + 1) / flashWords.length * 100) + '%';
+    document.getElementById('flashCounter').textContent = `${flashIndex + 1} / ${flashWords.length}`;
+  }
+
+  function showAnswer() {
+    document.getElementById('flashMeaning').style.display = 'block';
+    document.getElementById('flashInfo').style.display = 'block';
+  }
+
+  function nextCard() {
+    flashIndex = (flashIndex + 1) % flashWords.length;
+    renderFlash();
+  }
+
+  function prevCard() {
+    flashIndex = (flashIndex - 1 + flashWords.length) % flashWords.length;
+    renderFlash();
+  }
+
+  function shuffleCards() {
+    flashWords = shuffleArray(flashWords);
+    flashIndex = 0;
+    renderFlash();
+  }
+
+  function markFlashDifficult() {
+    const w = flashWords[flashIndex];
+    if (!Storage.isDifficultWord(w.word)) {
+      Storage.addDifficultWord(w, currentDay);
+      alert(`🔥 "${w.word}" đã được thêm vào kho từ khó!`);
+    } else {
+      alert(`"${w.word}" đã có trong kho từ khó rồi.`);
+    }
+  }
+
+  // ---- TAB 3: VIETNAMESE -> ENGLISH (one-at-a-time) ----
+  let viToEnIdx = 0, viToEnOk = 0, viToEnBad = [], viToEnDone = false;
+
+  function startViToEn() {
+    viToEnList = shuffleArray([...words]);
+    viToEnIdx = 0; viToEnOk = 0; viToEnBad = []; viToEnDone = false;
+    renderViToEnSingle();
+  }
+
+  function renderViToEnSingle() {
+    const c = document.getElementById('viToEnContainer');
+    const t = viToEnList.length;
+    document.getElementById('viToEnProgress').style.width = (viToEnIdx / t * 100) + '%';
+    document.getElementById('viToEnCounter').textContent = `Câu ${Math.min(viToEnIdx+1,t)}/${t}`;
+    document.getElementById('viToEnScoreOk').textContent = `✓ ${viToEnOk}`;
+    document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
+    if (viToEnIdx >= t) { showFillSummary(c, 'viToEnProgress', viToEnOk, viToEnBad, t, 'viToEn'); return; }
+    const w = viToEnList[viToEnIdx];
+    viToEnDone = false;
+    c.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label">Điền từ tiếng Anh:</div>
+          <div class="big-prompt">${w.meaning}</div>
+          <div class="small-hint">${w.type}</div>
+          <input type="text" id="viToEnInput" placeholder="Điền từ tiếng Anh..." autofocus
+            onkeydown="if(event.key==='Enter') checkViToEnSingle()">
+          <div style="margin-top:12px">
+            <button class="btn btn-primary" onclick="checkViToEnSingle()">✅ Kiểm tra</button>
+            <button class="btn btn-secondary btn-sm" onclick="skipViToEn()">⏭️ Bỏ qua</button>
+          </div>
+          <div id="viToEnFb"></div>
+        </div>
+      </div>`;
+    setTimeout(() => { const inp = document.getElementById('viToEnInput'); if(inp) inp.focus(); }, 100);
+  }
+
+  function checkViToEnSingle() {
+    if (viToEnDone) return;
+    viToEnDone = true;
+    const w = viToEnList[viToEnIdx];
+    const inp = document.getElementById('viToEnInput');
+    const fb = document.getElementById('viToEnFb');
+    const ans = normalizeText(inp.value);
+    if (ans === w.word.toLowerCase()) {
+      viToEnOk++;
+      fb.className = 'abcd-feedback-banner correct';
+      fb.innerHTML = '🎉 Chính xác!';
+      inp.style.borderColor = 'var(--success)';
+    } else {
+      fb.className = 'abcd-feedback-banner wrong';
+      fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.word}</b>`;
+      inp.style.borderColor = 'var(--error)';
+      viToEnBad.push(w);
+      Storage.addDifficultWord(w, currentDay);
+    }
+    inp.disabled = true;
+    document.getElementById('viToEnScoreOk').textContent = `✓ ${viToEnOk}`;
+    document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
+    setTimeout(() => { viToEnIdx++; renderViToEnSingle(); }, 1200);
+  }
+
+  function skipViToEn() {
+    if (viToEnDone) return;
+    viToEnDone = true;
+    const w = viToEnList[viToEnIdx];
+    const fb = document.getElementById('viToEnFb');
+    fb.className = 'abcd-feedback-banner wrong';
+    fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b>`;
+    viToEnBad.push(w);
+    Storage.addDifficultWord(w, currentDay);
+    document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
+    setTimeout(() => { viToEnIdx++; renderViToEnSingle(); }, 1200);
+  }
+
+  // Backward-compatible aliases
+  function renderViToEn() { startViToEn(); }
+  function randomViToEn() { startViToEn(); }
+
+  // ---- TAB 4: ENGLISH -> VIETNAMESE (one-at-a-time) ----
+  let enToViIdx = 0, enToViOk = 0, enToViBad = [], enToViDone = false;
+
+  function startEnToVi() {
+    enToViList = shuffleArray([...words]);
+    enToViIdx = 0; enToViOk = 0; enToViBad = []; enToViDone = false;
+    renderEnToViSingle();
+  }
+
+  function renderEnToViSingle() {
+    const c = document.getElementById('enToViContainer');
+    const t = enToViList.length;
+    document.getElementById('enToViProgress').style.width = (enToViIdx / t * 100) + '%';
+    document.getElementById('enToViCounter').textContent = `Câu ${Math.min(enToViIdx+1,t)}/${t}`;
+    document.getElementById('enToViScoreOk').textContent = `✓ ${enToViOk}`;
+    document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
+    if (enToViIdx >= t) { showFillSummary(c, 'enToViProgress', enToViOk, enToViBad, t, 'enToVi'); return; }
+    const w = enToViList[enToViIdx];
+    enToViDone = false;
+    c.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label">Điền nghĩa tiếng Việt:</div>
+          <div class="big-prompt">${w.word} <button class="speak-btn" onclick="speakWord('${w.word}')" style="font-size:20px;vertical-align:middle">🔊</button></div>
+          <div class="small-hint">${w.type}</div>
+          <input type="text" id="enToViInput" placeholder="Điền nghĩa tiếng Việt..." autofocus
+            onkeydown="if(event.key==='Enter') checkEnToViSingle()">
+          <div style="margin-top:12px">
+            <button class="btn btn-primary" onclick="checkEnToViSingle()">✅ Kiểm tra</button>
+            <button class="btn btn-secondary btn-sm" onclick="skipEnToVi()">⏭️ Bỏ qua</button>
+          </div>
+          <div id="enToViFb"></div>
+        </div>
+      </div>`;
+    setTimeout(() => { const inp = document.getElementById('enToViInput'); if(inp) inp.focus(); }, 100);
+  }
+
+  function checkEnToViSingle() {
+    if (enToViDone) return;
+    enToViDone = true;
+    const w = enToViList[enToViIdx];
+    const inp = document.getElementById('enToViInput');
+    const fb = document.getElementById('enToViFb');
+    const ans = normalizeText(inp.value);
+    const ok = w.viAnswers.some(v => normalizeText(v) === ans);
+    if (ok) {
+      enToViOk++;
+      fb.className = 'abcd-feedback-banner correct';
+      fb.innerHTML = '🎉 Chính xác!';
+      inp.style.borderColor = 'var(--success)';
+    } else {
+      fb.className = 'abcd-feedback-banner wrong';
+      fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.meaning}</b>`;
+      inp.style.borderColor = 'var(--error)';
+      enToViBad.push(w);
+      Storage.addDifficultWord(w, currentDay);
+    }
+    inp.disabled = true;
+    document.getElementById('enToViScoreOk').textContent = `✓ ${enToViOk}`;
+    document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
+    setTimeout(() => { enToViIdx++; renderEnToViSingle(); }, 1200);
+  }
+
+  function skipEnToVi() {
+    if (enToViDone) return;
+    enToViDone = true;
+    const w = enToViList[enToViIdx];
+    const fb = document.getElementById('enToViFb');
+    fb.className = 'abcd-feedback-banner wrong';
+    fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.meaning}</b>`;
+    enToViBad.push(w);
+    Storage.addDifficultWord(w, currentDay);
+    document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
+    setTimeout(() => { enToViIdx++; renderEnToViSingle(); }, 1200);
+  }
+
+  // Backward-compatible aliases
+  function renderEnToVi() { startEnToVi(); }
+  function randomEnToVi() { startEnToVi(); }
+
+  // ---- TAB 7: GRAMMAR QUIZ (50 questions, one-at-a-time) ----
+  function startGrammarQuiz() {
+    if (typeof GrammarQuiz !== 'undefined') {
+      grammarQuizList = GrammarQuiz.generate(currentDay, 50);
+    } else {
+      grammarQuizList = [];
+    }
+    grammarQuizIdx = 0;
+    grammarQuizOk = 0;
+    grammarQuizWrong = 0;
+    grammarQuizDone = false;
+    renderGrammarQuizSingle();
+  }
+
+  function renderGrammarQuizSingle() {
+    const c = document.getElementById('grammarQuizContainer');
+    if (!c) return;
+    const t = grammarQuizList.length;
+    if (t === 0) {
+      c.innerHTML = '<div class="empty-state"><p>Không có bài tập ngữ pháp cho ngày hôm nay.</p></div>';
+      return;
+    }
+    document.getElementById('grammarQuizProgress').style.width = (grammarQuizIdx / t * 100) + '%';
+    document.getElementById('grammarQuizCounter').textContent = `Câu ${Math.min(grammarQuizIdx + 1, t)}/${t}`;
+    document.getElementById('grammarQuizScoreOk').textContent = `✓ ${grammarQuizOk}`;
+    document.getElementById('grammarQuizScoreNo').textContent = `✗ ${grammarQuizWrong}`;
+
+    if (grammarQuizIdx >= t) {
+      showGrammarQuizSummary();
+      return;
+    }
+
+    const q = grammarQuizList[grammarQuizIdx];
+    grammarQuizDone = false;
+
+    c.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label" style="color:var(--text-secondary);font-size:13px;margin-bottom:8px">Chủ đề: ${dayData.grammar.title}</div>
+          <div class="big-prompt" style="font-size:18px;margin:16px 0;line-height:1.6">${q.question}</div>
+          <div class="abcd-options" style="margin-top:16px">
+            ${q.options.map((opt, i) => `
+              <div class="option" id="gOpt${i}" onclick="checkGrammarQuizAnswer(${i})">
+                <b>${String.fromCharCode(65 + i)}.</b> &nbsp; ${opt}
+              </div>
+            `).join('')}
+          </div>
+          <div id="grammarQuizFb" style="margin-top:16px"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function checkGrammarQuizAnswer(selectedIdx) {
+    if (grammarQuizDone) return;
+    grammarQuizDone = true;
+
+    const q = grammarQuizList[grammarQuizIdx];
+    const fb = document.getElementById('grammarQuizFb');
+    const isCorrect = (selectedIdx === q.answerIdx);
+
+    // Highlight options using CSS classes
+    for (let i = 0; i < q.options.length; i++) {
+      const el = document.getElementById(`gOpt${i}`);
+      if (!el) continue;
+      if (i === q.answerIdx) {
+        el.classList.add('option-correct');
+      } else if (i === selectedIdx) {
+        el.classList.add('option-wrong');
+      } else {
+        el.classList.add('option-disabled');
+      }
+    }
+
+    if (isCorrect) {
+      grammarQuizOk++;
+      fb.className = 'abcd-feedback-banner correct';
+      fb.innerHTML = `🎉 <b>Chính xác!</b><br><div style="font-size:13px;margin-top:6px;font-weight:normal;line-height:1.5">${q.explanation}</div>`;
+    } else {
+      grammarQuizWrong++;
+      fb.className = 'abcd-feedback-banner wrong';
+      fb.innerHTML = `❌ <b>Chưa đúng!</b> Đáp án đúng là <b>${String.fromCharCode(65 + q.answerIdx)}. ${q.options[q.answerIdx]}</b>.<br><div style="font-size:13px;margin-top:6px;font-weight:normal;line-height:1.5">${q.explanation}</div>`;
+    }
+
+    document.getElementById('grammarQuizScoreOk').textContent = `✓ ${grammarQuizOk}`;
+    document.getElementById('grammarQuizScoreNo').textContent = `✗ ${grammarQuizWrong}`;
+
+    fb.innerHTML += `
+      <div style="margin-top:16px;text-align:right">
+        <button class="btn btn-primary" onclick="nextGrammarQuestion()">Câu tiếp theo ⏭️</button>
+      </div>
+    `;
+  }
+
+  function nextGrammarQuestion() {
+    grammarQuizIdx++;
+    renderGrammarQuizSingle();
+  }
+
+  function showGrammarQuizSummary() {
+    const c = document.getElementById('grammarQuizContainer');
+    const pct = Math.round((grammarQuizOk / grammarQuizList.length) * 100);
+    let emoji = '🏆', msg = 'Tuyệt vời! Bạn đã hoàn thành xuất sắc bài tập ngữ pháp.';
+    if (pct < 50) { emoji = '📚'; msg = 'Cần đọc lại lý thuyết và làm lại bài tập để nắm chắc ngữ pháp.'; }
+    else if (pct < 80) { emoji = '💪'; msg = 'Kết quả khá tốt, hãy phát huy thêm nhé!'; }
+
+    c.innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct"><div class="stat-num">${grammarQuizOk}</div><div class="stat-lbl">Đúng</div></div>
+          <div class="quiz-summary-stat wrong"><div class="stat-num">${grammarQuizWrong}</div><div class="stat-lbl">Sai</div></div>
+          <div class="quiz-summary-stat total"><div class="stat-num">${grammarQuizList.length}</div><div class="stat-lbl">Tổng số câu</div></div>
+        </div>
+        <div style="margin-top:24px">
+          <button class="btn btn-success" onclick="startGrammarQuiz()">🔄 Làm lại từ đầu</button>
+        </div>
+      </div>
+    `;
+    Storage.saveQuizResult(currentDay, 'grammar', grammarQuizOk, grammarQuizList.length);
+  }
+
+  // ---- SHARED: Fill quiz summary ----
+  function showFillSummary(container, progressId, correct, wrongList, total, quizType) {
+    document.getElementById(progressId).style.width = '100%';
+    const pct = Math.round((correct / total) * 100);
+    let emoji = '🎉', msg = 'Tuyệt vời! Bạn giỏi lắm!';
+    if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+    else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt, cần ôn thêm!'; }
+    container.innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct"><div class="stat-num">${correct}</div><div class="stat-lbl">Đúng</div></div>
+          <div class="quiz-summary-stat wrong"><div class="stat-num">${wrongList.length}</div><div class="stat-lbl">Sai</div></div>
+          <div class="quiz-summary-stat total"><div class="stat-num">${total}</div><div class="stat-lbl">Tổng</div></div>
+        </div>
+        ${wrongList.length > 0 ? `
+          <div class="quiz-wrong-list">
+            <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
+            ${wrongList.map(w => `<div class="wrong-item"><span class="wrong-word">${w.word}</span><span class="wrong-meaning">${w.meaning}</span></div>`).join('')}
+          </div>` : ''}
+      </div>`;
+    Storage.saveQuizResult(currentDay, quizType, correct, total);
+  }
+
+  // ---- TAB 5: ABCD (One-at-a-time with instant feedback) ----
+  let abcdIndex = 0;
+  let abcdCorrect = 0;
+  let abcdWrongWords = [];
+  let abcdAnswered = false;
+
+  function getMode() { return document.querySelector('input[name="abcdMode"]:checked').value; }
+
+  function buildABCD() {
+    const mode = getMode();
+    abcdList = words.map(w => {
+      if (mode === 'vi-en') {
+        const wrong = shuffleArray(words.filter(x => x.word !== w.word)).slice(0, 3).map(x => x.word);
+        return { ...w, prompt: w.meaning, answer: w.word, options: shuffleArray([w.word, ...wrong]) };
+      } else {
+        const wrong = shuffleArray(words.filter(x => x.meaning !== w.meaning)).slice(0, 3).map(x => x.meaning);
+        return { ...w, prompt: w.word, answer: w.meaning, options: shuffleArray([w.meaning, ...wrong]) };
+      }
+    });
+  }
+
+  function restartABCD() {
+    buildABCD();
+    abcdList = shuffleArray(abcdList);
+    abcdIndex = 0;
+    abcdCorrect = 0;
+    abcdWrongWords = [];
+    abcdAnswered = false;
+    renderABCDSingle();
+  }
+
+  function renderABCDSingle() {
+    const container = document.getElementById('abcdContainer');
+    const total = abcdList.length;
+
+    // Update progress
+    document.getElementById('abcdProgressBar').style.width = ((abcdIndex) / total * 100) + '%';
+    document.getElementById('abcdCounter').textContent = `Câu ${Math.min(abcdIndex + 1, total)}/${total}`;
+    document.getElementById('abcdScoreCorrect').textContent = `✓ ${abcdCorrect}`;
+    document.getElementById('abcdScoreWrong').textContent = `✗ ${abcdWrongWords.length}`;
+
+    // Check if quiz is done
+    if (abcdIndex >= total) {
+      showABCDSummary();
+      return;
+    }
+
+    const w = abcdList[abcdIndex];
+    const mode = getMode();
+    abcdAnswered = false;
+
+    container.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label">${mode === 'vi-en' ? 'Chọn từ tiếng Anh đúng:' : 'Chọn nghĩa tiếng Việt đúng:'}</div>
+          <div class="big-prompt">${w.prompt}</div>
+          <div class="small-hint">${w.type || ''}</div>
+          ${w.options.map((op, j) => `
+            <label class="option" id="abcdOpt${j}" onclick="selectABCDOption(${j}, '${op.replace(/'/g, "\\'")}')"
+              style="cursor:pointer">
+              <input type="radio" name="abcdSingle" value="${op}" style="pointer-events:none">
+              ${String.fromCharCode(65 + j)}. ${op}
+            </label>
+          `).join('')}
+          <div id="abcdFeedbackBanner"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function selectABCDOption(optIndex, selected) {
+    if (abcdAnswered) return;
+    abcdAnswered = true;
+
+    const w = abcdList[abcdIndex];
+    const isCorrect = selected === w.answer;
+    const options = document.querySelectorAll('#abcdContainer .option');
+    const banner = document.getElementById('abcdFeedbackBanner');
+
+    // Highlight all options
+    options.forEach((opt, j) => {
+      const val = opt.querySelector('input').value;
+      if (val === w.answer) {
+        opt.classList.add('option-correct');
+      } else if (j === optIndex && !isCorrect) {
+        opt.classList.add('option-wrong');
+      } else {
+        opt.classList.add('option-disabled');
+      }
+    });
+
+    // Show feedback banner
+    if (isCorrect) {
+      abcdCorrect++;
+      banner.className = 'abcd-feedback-banner correct';
+      banner.innerHTML = '🎉 Chính xác!';
+    } else {
+      banner.className = 'abcd-feedback-banner wrong';
+      banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b>`;
+      abcdWrongWords.push(w);
+      Storage.addDifficultWord(w, currentDay);
+    }
+
+    // Update score display
+    document.getElementById('abcdScoreCorrect').textContent = `✓ ${abcdCorrect}`;
+    document.getElementById('abcdScoreWrong').textContent = `✗ ${abcdWrongWords.length}`;
+
+    // Auto advance after delay
+    setTimeout(() => {
+      abcdIndex++;
+      renderABCDSingle();
+    }, 1200);
+  }
+
+  function showABCDSummary() {
+    const total = abcdList.length;
+    const pct = Math.round((abcdCorrect / total) * 100);
+    const container = document.getElementById('abcdContainer');
+
+    document.getElementById('abcdProgressBar').style.width = '100%';
+
+    let emoji = '🎉';
+    let msg = 'Tuyệt vời! Bạn giỏi lắm!';
+    if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+    else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt, cần ôn thêm!'; }
+
+    container.innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct">
+            <div class="stat-num">${abcdCorrect}</div>
+            <div class="stat-lbl">Đúng</div>
+          </div>
+          <div class="quiz-summary-stat wrong">
+            <div class="stat-num">${abcdWrongWords.length}</div>
+            <div class="stat-lbl">Sai</div>
+          </div>
+          <div class="quiz-summary-stat total">
+            <div class="stat-num">${total}</div>
+            <div class="stat-lbl">Tổng</div>
+          </div>
+        </div>
+        ${abcdWrongWords.length > 0 ? `
+          <div class="quiz-wrong-list">
+            <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
+            ${abcdWrongWords.map(w => `
+              <div class="wrong-item">
+                <span class="wrong-word">${w.word}</span>
+                <span class="wrong-meaning">${w.meaning}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+
+    Storage.saveQuizResult(currentDay, 'abcd', abcdCorrect, total);
+  }
+
+  // Keep backward-compatible function names
+  function randomABCD() { restartABCD(); }
+
+  // ---- TAB 6: TYPE QUIZ (one-at-a-time with buttons) ----
+  let typeList = [], typeIdx = 0, typeOk = 0, typeBad = [], typeAnswered = false;
+
+  function startType() {
+    typeList = shuffleArray([...words]);
+    typeIdx = 0; typeOk = 0; typeBad = []; typeAnswered = false;
+    renderTypeSingle();
+  }
+
+  function renderTypeSingle() {
+    const c = document.getElementById('typeContainer');
+    const t = typeList.length;
+    document.getElementById('typeProgress').style.width = (typeIdx / t * 100) + '%';
+    document.getElementById('typeCounter').textContent = `Câu ${Math.min(typeIdx+1,t)}/${t}`;
+    document.getElementById('typeScoreOk').textContent = `✓ ${typeOk}`;
+    document.getElementById('typeScoreNo').textContent = `✗ ${typeBad.length}`;
+    if (typeIdx >= t) { showTypeSummary(); return; }
+    const w = typeList[typeIdx];
+    const allTypes = [...new Set(words.map(x => x.type))];
+    typeAnswered = false;
+    c.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label">Chọn từ loại đúng:</div>
+          <div class="big-prompt">${w.word} <button class="speak-btn" onclick="speakWord('${w.word}')" style="font-size:20px;vertical-align:middle">🔊</button></div>
+          <div class="small-hint">${w.meaning}</div>
+          ${allTypes.map((tp, j) => `
+            <label class="option" id="typeOpt${j}" onclick="selectTypeOption(${j}, '${tp.replace(/'/g, "\\'")}')"
+              style="cursor:pointer">
+              <input type="radio" name="typeSingle" value="${tp}" style="pointer-events:none">
+              ${tp}
+            </label>
+          `).join('')}
+          <div id="typeFeedbackBanner"></div>
+        </div>
+      </div>`;
+  }
+
+  function selectTypeOption(optIdx, selected) {
+    if (typeAnswered) return;
+    typeAnswered = true;
+    const w = typeList[typeIdx];
+    const isCorrect = selected === w.type;
+    const options = document.querySelectorAll('#typeContainer .option');
+    const banner = document.getElementById('typeFeedbackBanner');
+    options.forEach((opt, j) => {
+      const val = opt.querySelector('input').value;
+      if (val === w.type) opt.classList.add('option-correct');
+      else if (j === optIdx && !isCorrect) opt.classList.add('option-wrong');
+      else opt.classList.add('option-disabled');
+    });
+    if (isCorrect) {
+      typeOk++;
+      banner.className = 'abcd-feedback-banner correct';
+      banner.innerHTML = '🎉 Chính xác!';
+    } else {
+      banner.className = 'abcd-feedback-banner wrong';
+      banner.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.type}</b>`;
+      typeBad.push(w);
+    }
+    document.getElementById('typeScoreOk').textContent = `✓ ${typeOk}`;
+    document.getElementById('typeScoreNo').textContent = `✗ ${typeBad.length}`;
+    setTimeout(() => { typeIdx++; renderTypeSingle(); }, 1200);
+  }
+
+  function showTypeSummary() {
+    document.getElementById('typeProgress').style.width = '100%';
+    const t = typeList.length, pct = Math.round((typeOk / t) * 100);
+    let emoji = '🎉', msg = 'Tuyệt vời!';
+    if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+    else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt!'; }
+    document.getElementById('typeContainer').innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct"><div class="stat-num">${typeOk}</div><div class="stat-lbl">Đúng</div></div>
+          <div class="quiz-summary-stat wrong"><div class="stat-num">${typeBad.length}</div><div class="stat-lbl">Sai</div></div>
+          <div class="quiz-summary-stat total"><div class="stat-num">${t}</div><div class="stat-lbl">Tổng</div></div>
+        </div>
+        ${typeBad.length > 0 ? `<div class="quiz-wrong-list"><div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ sai:</div>${typeBad.map(w => `<div class="wrong-item"><span class="wrong-word">${w.word}</span><span class="wrong-meaning">${w.type}</span></div>`).join('')}</div>` : ''}
+      </div>`;
+    Storage.saveQuizResult(currentDay, 'type', typeOk, t);
+  }
+
+  // Backward-compatible
+  function renderType() { startType(); }
+
+  // ---- CHECKLIST ----
+  function renderChecklist() {
+    const items = [
+      { id: 'vocab', label: `Học ${words.length || '~25'} từ vựng mới` },
+      { id: 'grammar', label: `Học ngữ pháp: ${dayData.grammar ? dayData.grammar.title : 'ôn tập'}` }
+    ];
+
+    if (dayData.grammar && dayData.grammar.title && !dayData.isReview) {
+      items.push({ id: 'grammarQuiz', label: 'Làm bài tập trắc nghiệm Ngữ pháp (50 câu)' });
+    }
+
+    items.push(
+      { id: 'listen', label: 'Nghe 10-20 câu TOEIC ngắn' },
+      { id: 'viToEn', label: 'Làm bài Việt → Anh' },
+      { id: 'enToVi', label: 'Làm bài Anh → Việt' },
+      { id: 'abcd', label: 'Làm bài trắc nghiệm A/B/C/D' },
+      { id: 'review', label: 'Ôn lại từ cũ + ghi 5 từ khó nhất' },
+      { id: 'note', label: 'Ghi chép cuối ngày' }
+    );
+
+    const saved = Storage.getChecklist(currentDay);
+    document.getElementById('checklistBox').innerHTML = items.map(item => `
+      <li>
+        <input type="checkbox" id="ck_${item.id}" ${saved[item.id] ? 'checked' : ''} onchange="Storage.toggleChecklistItem(${currentDay}, '${item.id}')">
+        <label for="ck_${item.id}" class="${saved[item.id] ? 'checked' : ''}">${item.label}</label>
+      </li>
+    `).join('');
+  }
+
+  // ---- COMPLETE DAY ----
+  function completeDay() {
+    if (Storage.isDayCompleted(currentDay)) {
+      alert('Bạn đã hoàn thành ngày này rồi! 🎉');
+      return;
+    }
+
+    const progress = Storage.getDayProgress(currentDay);
+    if (!dayData.isReview && progress.tabsVisited.length < 2) {
+      if (!confirm('⚠️ Bạn mới làm ' + progress.tabsVisited.length + ' tab. Bạn có chắc muốn hoàn thành ngày này?')) {
+        return;
+      }
+    }
+
+    Storage.setDayCompleted(currentDay);
+    const btn = document.getElementById('completeDayBtn');
+    btn.textContent = '✅ Đã hoàn thành!';
+    btn.classList.remove('btn-success');
+    btn.classList.add('btn-secondary');
+    btn.style.animation = 'pulse 0.5s ease';
+
+    // Confetti effect
+    showConfetti();
+
+    if (currentDay < 60) {
+      setTimeout(() => {
+        if (confirm('🎉 Tuyệt vời! Chuyển sang ngày ' + (currentDay + 1) + '?')) {
+          window.location.href = `learn.html?day=${currentDay + 1}`;
+        }
+      }, 1500);
+    }
+  }
+
+  function showConfetti() {
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: ${30 + Math.random() * 40}%;
+        font-size: ${16 + Math.random() * 20}px;
+        animation: confetti ${0.8 + Math.random() * 1}s ease forwards;
+        pointer-events: none;
+        z-index: 9999;
+      `;
+      el.textContent = ['🎉', '⭐', '🔥', '💪', '🎯', '✨'][Math.floor(Math.random() * 6)];
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }
+  }
+
+  // ---- NAVIGATION ----
+  function goToDay(offset) {
+    const newDay = currentDay + offset;
+    if (newDay >= 1 && newDay <= 60) {
+      window.location.href = `learn.html?day=${newDay}`;
+    }
+  }
+
+  // ---- KEYBOARD SHORTCUTS ----
+  document.addEventListener('keydown', (e) => {
+    // Only handle when flashcard tab is active
+    const flashSection = document.getElementById('flash');
+    if (!flashSection || !flashSection.classList.contains('active')) return;
+    // Don't handle when typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+
+    switch(e.key) {
+      case ' ':
+        e.preventDefault();
+        showAnswer();
+        break;
+      case 'ArrowRight':
+      case 'n':
+      case 'N':
+        e.preventDefault();
+        nextCard();
+        break;
+      case 'ArrowLeft':
+      case 'p':
+      case 'P':
+        e.preventDefault();
+        prevCard();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        shuffleCards();
+        break;
+      case 'r':
+      case 'R':
+        e.preventDefault();
+        if (flashWords.length > 0) speakWord(flashWords[flashIndex].word);
+        break;
+    }
+  });
+
+  // Initialize
+  init();
+  </script>
+</body>
+</html>

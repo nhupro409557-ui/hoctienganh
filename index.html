@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lộ Trình Học Tiếng Anh 60 Ngày - TOEIC 450</title>
+  <meta name="description" content="Hệ thống học tiếng Anh TOEIC 450 trong 60 ngày với kho từ khó, ôn tập bắt buộc, và lộ trình chi tiết">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>🎯 Lộ Trình TOEIC 450</h1>
+    <p>60 Ngày Chinh Phục Tiếng Anh</p>
+    <div class="subtitle">Học ít - Lặp lại nhiều - Không bỏ ngày nào</div>
+  </header>
+
+  <div class="container">
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- Review All Button -->
+    <div class="text-center mb-lg" style="padding:8px 0 16px">
+      <a href="review-all.html" class="btn btn-primary btn-lg" style="font-size:17px;padding:16px 36px;border-radius:var(--radius);text-decoration:none">
+        📖 Ôn Tất Cả Từ Vựng Đã Học
+      </a>
+      <p class="text-muted mt-sm" style="font-size:13px">Ôn tập tổng hợp toàn bộ từ vựng từ mọi ngày</p>
+    </div>
+
+    <!-- Difficult Words Section -->
+    <div id="difficultSection" class="difficult-section" style="display:none">
+      <div class="section-title">
+        <span class="icon">🔥</span>
+        Kho Từ Khó Thuộc
+        <span class="count" id="difficultCount">0</span>
+        <button class="btn btn-warning btn-sm" onclick="openDifficultReview()" style="margin-left:auto">Ôn ngay</button>
+      </div>
+      <div class="difficult-grid" id="difficultGrid"></div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase-section" id="phase1">
+      <div class="phase-header" onclick="togglePhase(1)">
+        <span class="phase-badge">GĐ 1</span>
+        <span class="phase-title">Vừa Code Vừa Xây Nền (17 ngày)</span>
+        <span class="phase-progress" id="phase1Progress">0/17</span>
+        <span id="phase1Arrow">▼</span>
+      </div>
+      <div class="day-grid" id="phase1Grid"></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-section" id="phase2">
+      <div class="phase-header" onclick="togglePhase(2)">
+        <span class="phase-badge phase-2">GĐ 2</span>
+        <span class="phase-title">Viết Báo Cáo + Tăng Tốc (20 ngày)</span>
+        <span class="phase-progress" id="phase2Progress">0/20</span>
+        <span id="phase2Arrow">▼</span>
+      </div>
+      <div class="day-grid" id="phase2Grid" style="display:none"></div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-section" id="phase3">
+      <div class="phase-header" onclick="togglePhase(3)">
+        <span class="phase-badge phase-3">GĐ 3</span>
+        <span class="phase-title">Luyện Thi 450 (23 ngày)</span>
+        <span class="phase-progress" id="phase3Progress">0/23</span>
+        <span id="phase3Arrow">▼</span>
+      </div>
+      <div class="day-grid" id="phase3Grid" style="display:none"></div>
+    </div>
+
+    <!-- Schedule Quick View -->
+    <div class="phase-section">
+      <div class="section-title"><span class="icon">📋</span> Thời Gian Biểu Mẫu</div>
+      <div class="schedule-box" id="scheduleBox">
+        <div class="schedule-item"><span class="schedule-time">07:30 - 08:00</span><span class="schedule-task">☀️ Ôn 30 từ vựng cũ (đọc to, che nghĩa)</span></div>
+        <div class="schedule-item"><span class="schedule-time">08:00 - 11:30</span><span class="schedule-task">💻 Code đồ án / Viết báo cáo</span></div>
+        <div class="schedule-item"><span class="schedule-time">13:30 - 17:30</span><span class="schedule-task">💻 Code đồ án / Viết báo cáo</span></div>
+        <div class="schedule-item"><span class="schedule-time">19:30 - 20:15</span><span class="schedule-task">📖 Học từ vựng mới + Ngữ pháp</span></div>
+        <div class="schedule-item"><span class="schedule-time">20:15 - 21:00</span><span class="schedule-task">🎧 Nghe + Đọc TOEIC ngắn</span></div>
+        <div class="schedule-item"><span class="schedule-time">21:00 - 21:30</span><span class="schedule-task">🐍 Học Python cơ bản</span></div>
+        <div class="schedule-item"><span class="schedule-time">21:30 - 22:00</span><span class="schedule-task">📝 Ôn từ mới + Ghi chép cuối ngày</span></div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="phase-section">
+      <div class="section-title"><span class="icon">💡</span> Phương Pháp Cho Người Khó Nhớ</div>
+      <div class="glass-card">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px">
+          <div class="note">
+            <b>📖 Học bằng 5 lần gặp</b><br>
+            Ngày học → Sau 1 ngày → Sau 3 ngày → Sau 7 ngày → Sau 14 ngày
+          </div>
+          <div class="note warning">
+            <b>📝 Vở 3 cột</b><br>
+            Từ | Nghĩa | Câu ví dụ → Che nghĩa rồi tự nhớ
+          </div>
+          <div class="note success">
+            <b>🗣️ Đọc to</b><br>
+            Phải phát ra tiếng! Đọc nhỏ cũng được, nhưng đừng chỉ nhìn bằng mắt
+          </div>
+          <div class="note">
+            <b>🎯 Không học lan man</b><br>
+            Chỉ 1 nguồn từ vựng + 1 playlist ngữ pháp + 1 nguồn đề
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-lg" style="padding:32px 0">
+      <p class="text-muted" style="font-size:14px">
+        "Bạn không dở. Bạn chỉ cần học đúng cách." 💪
+      </p>
+      <p class="text-muted mt-sm" style="font-size:12px">
+        Mỗi ngày đều đặn, 60 ngày sau bạn sẽ khác 🚀
+      </p>
+      <button class="btn btn-danger btn-sm mt-md" onclick="confirmReset()" style="opacity:0.5">
+        🔄 Reset toàn bộ dữ liệu
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal for difficult words review -->
+  <div class="modal-overlay" id="diffModal">
+    <div class="modal" style="max-width:600px">
+      <h2>🔥 Ôn Từ Khó Thuộc</h2>
+      <p style="margin-bottom: 16px;">Trả lời đúng để xóa từ khỏi kho từ khó (cần đúng 3 lần)</p>
+      
+      <!-- Progress and counters -->
+      <div id="diffProgressContainer" style="display:none">
+        <div class="progress"><div id="diffProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info" style="margin-top:8px; margin-bottom:16px">
+          <span class="abcd-counter" id="diffCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="diffScoreOk">✓ 0</span>
+            <span class="score-wrong" id="diffScoreNo">✗ 0</span>
+          </span>
+        </div>
+      </div>
+
+      <div id="diffModalContent"></div>
+      <div id="diffModalResult" style="display:none" class="mt-md"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script>
+  // ============================================
+  // INDEX PAGE LOGIC
+  // ============================================
+
+  function init() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('no_redirect') !== 'true') {
+      const currentDay = Storage.getCurrentDay();
+      window.location.href = `learn.html?day=${currentDay}`;
+      return;
+    }
+
+    renderStats();
+    renderDifficultWords();
+    renderPhases();
+  }
+
+  // ---- STATS ----
+  function renderStats() {
+    const stats = Storage.getStats();
+    const streak = Storage.getStreakData();
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">${stats.totalWordsLearned}</div>
+        <div class="stat-label">Từ đã học</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value">${stats.difficultWordsCount}</div>
+        <div class="stat-label">Từ khó thuộc</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value">${stats.daysCompleted}/60</div>
+        <div class="stat-label">Ngày hoàn thành</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value">${streak.current}</div>
+        <div class="stat-label">Streak hiện tại</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">${streak.best}</div>
+        <div class="stat-label">Streak kỷ lục</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value">${stats.progressPercent}%</div>
+        <div class="stat-label">Tiến độ</div>
+      </div>
+    `;
+  }
+
+  // ---- DIFFICULT WORDS ----
+  function renderDifficultWords() {
+    const words = Storage.getDifficultWords();
+    const section = document.getElementById('difficultSection');
+    const grid = document.getElementById('difficultGrid');
+    const count = document.getElementById('difficultCount');
+
+    if (words.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    count.textContent = words.length;
+    grid.innerHTML = words.map(w => `
+      <div class="difficult-card">
+        <div class="difficult-word">${w.word}</div>
+        <div class="difficult-meaning">${w.meaning}</div>
+        <div class="difficult-day">Ngày ${w.day} • Ôn: ${w.reviewCount || 0} lần • Đúng: ${w.correctCount || 0}/3</div>
+      </div>
+    `).join('');
+  }
+
+  // ---- PHASES ----
+  function renderPhases() {
+    if (typeof DAYS_DATA === 'undefined') {
+      document.getElementById('phase1Grid').innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>Đang tải dữ liệu...</p></div>';
+      return;
+    }
+
+    const phases = [
+      { id: 1, start: 1, end: 17, gridId: 'phase1Grid', progressId: 'phase1Progress' },
+      { id: 2, start: 18, end: 37, gridId: 'phase2Grid', progressId: 'phase2Progress' },
+      { id: 3, start: 38, end: 60, gridId: 'phase3Grid', progressId: 'phase3Progress' }
+    ];
+
+    phases.forEach(phase => {
+      const days = DAYS_DATA.filter(d => d.day >= phase.start && d.day <= phase.end);
+      const completed = days.filter(d => Storage.isDayCompleted(d.day)).length;
+      const total = phase.end - phase.start + 1;
+
+      document.getElementById(phase.progressId).textContent = `${completed}/${total}`;
+
+      const grid = document.getElementById(phase.gridId);
+      grid.innerHTML = days.map(d => {
+        const isCompleted = Storage.isDayCompleted(d.day);
+        const isCurrent = Storage.getCurrentDay() === d.day;
+        const isAccessible = Storage.isDayAccessible(d.day);
+        const wordCount = (d.words || []).length;
+
+        let cls = 'day-card';
+        if (isCompleted) cls += ' completed';
+        else if (isCurrent) cls += ' current';
+        else if (!isAccessible) cls += ' locked';
+        if (d.isReview) cls += ' review';
+
+        const href = isAccessible ? `learn.html?day=${d.day}` : '#';
+
+        return `
+          <a class="${cls}" href="${href}" ${!isAccessible ? 'onclick="return false"' : ''}>
+            <div class="day-number">Ngày ${d.day}</div>
+            <div class="day-topic">${d.topic}</div>
+            <div class="day-meta">
+              ${d.isReview ? '<span>📝 Ôn tập</span>' : `<span>📚 ${wordCount} từ</span>`}
+              ${isCompleted ? '<span>✅</span>' : isCurrent ? '<span>👉 Hiện tại</span>' : !isAccessible ? '<span>🔒</span>' : ''}
+            </div>
+          </a>
+        `;
+      }).join('');
+    });
+  }
+
+  // ---- TOGGLE PHASE ----
+  const phaseStates = { 1: true, 2: false, 3: false };
+  function togglePhase(phase) {
+    phaseStates[phase] = !phaseStates[phase];
+    const grid = document.getElementById(`phase${phase}Grid`);
+    const arrow = document.getElementById(`phase${phase}Arrow`);
+    grid.style.display = phaseStates[phase] ? 'grid' : 'none';
+    arrow.textContent = phaseStates[phase] ? '▲' : '▼';
+  }
+
+  // ---- DIFFICULT REVIEW MODAL ----
+  let diffReviewWords = [];
+  let diffIdx = 0;
+  let diffOk = 0;
+  let diffBad = [];
+  let diffDone = false;
+
+  function shuffleArray(a) {
+    return [...a].sort(() => Math.random() - 0.5);
+  }
+
+  function openDifficultReview() {
+    diffReviewWords = shuffleArray(Storage.getDifficultWords());
+    if (diffReviewWords.length === 0) return;
+
+    diffIdx = 0;
+    diffOk = 0;
+    diffBad = [];
+    diffDone = false;
+
+    document.getElementById('diffProgressContainer').style.display = 'block';
+    document.getElementById('diffProgress').style.width = '0%';
+    document.getElementById('diffCounter').textContent = `Câu 1/${diffReviewWords.length}`;
+    document.getElementById('diffScoreOk').textContent = `✓ 0`;
+    document.getElementById('diffScoreNo').textContent = `✗ 0`;
+
+    document.getElementById('diffModal').classList.add('show');
+    renderDiffQuestionSingle();
+  }
+
+  function renderDiffQuestionSingle() {
+    const c = document.getElementById('diffModalContent');
+    const t = diffReviewWords.length;
+
+    // Update progress bar and counters
+    document.getElementById('diffProgress').style.width = (diffIdx / t * 100) + '%';
+    document.getElementById('diffCounter').textContent = `Câu ${Math.min(diffIdx + 1, t)}/${t}`;
+    document.getElementById('diffScoreOk').textContent = `✓ ${diffOk}`;
+    document.getElementById('diffScoreNo').textContent = `✗ ${diffBad.length}`;
+
+    if (diffIdx >= t) {
+      showDiffSummary();
+      return;
+    }
+
+    const w = diffReviewWords[diffIdx];
+    diffDone = false;
+
+    c.innerHTML = `
+      <div class="abcd-single-question">
+        <div class="question">
+          <div class="question-label" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Điền từ tiếng Anh:</div>
+          <div class="big-prompt">${w.meaning}</div>
+          <div class="small-hint">${w.type} • Ngày ${w.day}</div>
+          <input type="text" id="diffInput" placeholder="Điền từ tiếng Anh..." autofocus
+            onkeydown="if(event.key==='Enter') checkDiffSingle()" autocomplete="off"
+            style="width: 100%; padding: 12px; border-radius: var(--radius); border: 1px solid var(--border); background: rgba(15, 23, 42, 0.3); color: var(--text); font-size: 16px; font-family: var(--font); margin-bottom: 12px;">
+          <div class="btn-group" style="margin-top: 12px; display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="checkDiffSingle()">✅ Kiểm tra</button>
+            <button class="btn btn-secondary btn-sm" onclick="skipDiffSingle()">⏭️ Bỏ qua</button>
+            <button class="btn btn-secondary btn-sm" onclick="closeDiffModal()" style="margin-left: auto;">Đóng</button>
+          </div>
+          <div id="diffFb"></div>
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => {
+      const inp = document.getElementById('diffInput');
+      if (inp) inp.focus();
+    }, 100);
+  }
+
+  function checkDiffSingle() {
+    if (diffDone) return;
+    diffDone = true;
+
+    const w = diffReviewWords[diffIdx];
+    const inp = document.getElementById('diffInput');
+    const fb = document.getElementById('diffFb');
+    const ans = inp.value.trim().toLowerCase();
+
+    if (ans === w.word.toLowerCase()) {
+      diffOk++;
+      fb.className = 'abcd-feedback-banner correct';
+      fb.innerHTML = '🎉 Chính xác!';
+      inp.style.borderColor = 'var(--success)';
+      Storage.updateDifficultWordStats(w.word, true);
+    } else {
+      fb.className = 'abcd-feedback-banner wrong';
+      fb.innerHTML = `❌ Chưa chính xác! Đáp án: <b>${w.word}</b>`;
+      inp.style.borderColor = 'var(--error)';
+      diffBad.push(w);
+      Storage.updateDifficultWordStats(w.word, false);
+    }
+
+    inp.disabled = true;
+    document.getElementById('diffScoreOk').textContent = `✓ ${diffOk}`;
+    document.getElementById('diffScoreNo').textContent = `✗ ${diffBad.length}`;
+
+    // Refresh homepage behind modal dynamically
+    renderDifficultWords();
+    renderStats();
+
+    setTimeout(() => {
+      diffIdx++;
+      renderDiffQuestionSingle();
+    }, 1500);
+  }
+
+  function skipDiffSingle() {
+    if (diffDone) return;
+    diffDone = true;
+
+    const w = diffReviewWords[diffIdx];
+    const inp = document.getElementById('diffInput');
+    const fb = document.getElementById('diffFb');
+
+    fb.className = 'abcd-feedback-banner wrong';
+    fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b>`;
+    if (inp) {
+      inp.style.borderColor = 'var(--error)';
+      inp.disabled = true;
+    }
+    diffBad.push(w);
+    Storage.updateDifficultWordStats(w.word, false);
+
+    document.getElementById('diffScoreNo').textContent = `✗ ${diffBad.length}`;
+
+    // Refresh homepage behind modal dynamically
+    renderDifficultWords();
+    renderStats();
+
+    setTimeout(() => {
+      diffIdx++;
+      renderDiffQuestionSingle();
+    }, 1500);
+  }
+
+  function showDiffSummary() {
+    document.getElementById('diffProgressContainer').style.display = 'none';
+    const c = document.getElementById('diffModalContent');
+    const t = diffReviewWords.length;
+    const pct = Math.round((diffOk / t) * 100);
+
+    let emoji = '🎉';
+    let msg = 'Tuyệt vời! Bạn đã hoàn thành phần ôn tập từ khó.';
+    if (pct < 50) {
+      emoji = '😤';
+      msg = 'Cần cố gắng hơn để nhớ các từ này!';
+    } else if (pct < 80) {
+      emoji = '💪';
+      msg = 'Khá tốt, hãy tiếp tục ôn tập nhé!';
+    }
+
+    c.innerHTML = `
+      <div class="quiz-summary">
+        <div style="font-size:48px">${emoji}</div>
+        <div class="quiz-summary-score">${pct}%</div>
+        <div class="quiz-summary-label">${msg}</div>
+        <div class="quiz-summary-stats">
+          <div class="quiz-summary-stat correct"><div class="stat-num">${diffOk}</div><div class="stat-lbl">Đúng</div></div>
+          <div class="quiz-summary-stat wrong"><div class="stat-num">${diffBad.length}</div><div class="stat-lbl">Sai</div></div>
+          <div class="quiz-summary-stat total"><div class="stat-num">${t}</div><div class="stat-lbl">Tổng</div></div>
+        </div>
+        ${diffBad.length > 0 ? `
+          <div class="quiz-wrong-list" style="max-height: 150px; overflow-y: auto; margin-bottom: 20px;">
+            <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Các từ trả lời sai:</div>
+            ${diffBad.map(w => `
+              <div class="wrong-item">
+                <span class="wrong-word">${w.word}</span>
+                <span class="wrong-meaning">${w.meaning}</span>
+              </div>
+            `).join('')}
+          </div>` : ''}
+        <div style="margin-top:24px">
+          <button class="btn btn-primary" onclick="closeDiffModal()">Đóng</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeDiffModal() {
+    document.getElementById('diffModal').classList.remove('show');
+    // Final double check to sync stats
+    renderDifficultWords();
+    renderStats();
+  }
+
+  // ---- RESET ----
+  function confirmReset() {
+    if (confirm('⚠️ Bạn có chắc muốn xóa toàn bộ dữ liệu học tập? Hành động này không thể hoàn tác!')) {
+      if (confirm('⚠️ Xác nhận lần cuối: XÓA TẤT CẢ dữ liệu?')) {
+        Storage.resetAll();
+        location.reload();
+      }
+    }
+  }
+
+  // Initialize
+  init();
+  </script>
+</body>
+</html>
