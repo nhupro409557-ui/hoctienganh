@@ -39,8 +39,15 @@ const Storage = {
         day: day,
         addedAt: new Date().toISOString(),
         reviewCount: 0,
-        correctCount: 0
+        correctCount: 0,
+        box: 1, // SRS Box (1-5)
+        nextReview: new Date().toISOString() // Due immediately when added
       });
+      localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
+    } else {
+      // If it already exists, reset box and make it due immediately
+      exists.box = 1;
+      exists.nextReview = new Date().toISOString();
       localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
     }
     return words;
@@ -62,15 +69,46 @@ const Storage = {
     const w = words.find(x => x.word === word);
     if (w) {
       w.reviewCount = (w.reviewCount || 0) + 1;
-      if (isCorrect) w.correctCount = (w.correctCount || 0) + 1;
-      // Auto-remove if answered correctly 3 times in a row
-      if (w.correctCount >= 3) {
-        this.removeDifficultWord(word);
-        return true; // removed
+      if (!w.box) w.box = 1;
+
+      if (isCorrect) {
+        w.correctCount = (w.correctCount || 0) + 1;
+        w.box += 1;
+
+        if (w.box > 5) {
+          // Graduated! Remove from difficult list
+          this.removeDifficultWord(word);
+          return true; // graduated
+        }
+
+        // Set next review interval based on new box
+        const now = new Date();
+        let intervalMs = 0;
+        switch (w.box) {
+          case 2:
+            intervalMs = 24 * 60 * 60 * 1000; // 1 day
+            break;
+          case 3:
+            intervalMs = 3 * 24 * 60 * 60 * 1000; // 3 days
+            break;
+          case 4:
+            intervalMs = 7 * 24 * 60 * 60 * 1000; // 7 days
+            break;
+          case 5:
+            intervalMs = 14 * 24 * 60 * 60 * 1000; // 14 days
+            break;
+          default:
+            intervalMs = 12 * 60 * 60 * 1000; // 12 hours
+        }
+        w.nextReview = new Date(now.getTime() + intervalMs).toISOString();
+      } else {
+        // Demote back to Box 1 and make due immediately
+        w.box = 1;
+        w.nextReview = new Date().toISOString();
       }
       localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
     }
-    return false;
+    return false; // not graduated
   },
 
   // ============================================
@@ -146,9 +184,9 @@ const Storage = {
 
   isGatePassed(day) {
     const status = this.getReviewStatus(day);
-    const difficultWords = this.getDifficultWords();
-    // Gate 1: difficult words review (only if there are difficult words)
-    const gate1 = difficultWords.length === 0 || status.difficultReviewDone;
+    const dueWords = this.getDifficultWords().filter(w => !w.nextReview || new Date(w.nextReview) <= new Date());
+    // Gate 1: difficult words review (only if there are due difficult words)
+    const gate1 = dueWords.length === 0 || status.difficultReviewDone;
     // Gate 2: previous day review (only if day > 1 and previous day has been started)
     const gate2 = day <= 1 || status.previousDayReviewDone || !this.isDayStarted(day - 1);
     return gate1 && gate2;
@@ -156,8 +194,8 @@ const Storage = {
 
   needsDifficultReview(day) {
     const status = this.getReviewStatus(day);
-    const difficultWords = this.getDifficultWords();
-    return difficultWords.length > 0 && !status.difficultReviewDone;
+    const dueWords = this.getDifficultWords().filter(w => !w.nextReview || new Date(w.nextReview) <= new Date());
+    return dueWords.length > 0 && !status.difficultReviewDone;
   },
 
   needsPreviousDayReview(day) {

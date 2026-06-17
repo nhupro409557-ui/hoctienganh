@@ -28,13 +28,24 @@
 
     <!-- Difficult Words Section -->
     <div id="difficultSection" class="difficult-section" style="display:none">
-      <div class="section-title">
+      <div class="section-title" style="margin-bottom:12px;">
         <span class="icon">🔥</span>
-        Kho Từ Khó Thuộc
-        <span class="count" id="difficultCount">0</span>
-        <button class="btn btn-warning btn-sm" onclick="openDifficultReview()" style="margin-left:auto">Ôn ngay</button>
+        Kho Từ Khó Thuộc (Leitner SRS)
+        <button class="btn btn-warning btn-sm" id="diffStartBtn" onclick="openDifficultReview()" style="margin-left:auto">Ôn ngay</button>
       </div>
-      <div class="difficult-grid" id="difficultGrid"></div>
+
+      <!-- Tabs for SRS -->
+      <div class="tabs" style="margin-bottom:16px; background:rgba(15, 23, 42, 0.3); padding:4px; border-radius:var(--radius); display:flex; gap:8px;">
+        <button class="tab-btn active" id="tabDueBtn" onclick="switchDiffTab('due')" style="flex:1;">
+          Cần ôn ngay (<span id="dueCount">0</span>)
+        </button>
+        <button class="tab-btn" id="tabPendingBtn" onclick="switchDiffTab('pending')" style="flex:1;">
+          Đang ghi nhớ (<span id="pendingCount">0</span>)
+        </button>
+      </div>
+
+      <div id="difficultDueGrid" class="difficult-grid"></div>
+      <div id="difficultPendingGrid" class="difficult-grid" style="display:none;"></div>
     </div>
 
     <!-- Phase 1 -->
@@ -163,7 +174,18 @@
 
     renderStats();
     renderDifficultWords();
-    renderPhases();
+  }
+
+  // ---- TTS SPEAK ----
+  function speakWord(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      utter.rate = 0.85;
+      utter.pitch = 1;
+      window.speechSynthesis.speak(utter);
+    }
   }
 
   // ---- STATS ----
@@ -204,27 +226,151 @@
     `;
   }
 
-  // ---- DIFFICULT WORDS ----
+  // ---- DIFFICULT WORDS (Leitner SRS) ----
+  let countdownTimer = null;
+  let activeDiffTab = 'due';
+
+  function switchDiffTab(tab) {
+    activeDiffTab = tab;
+    document.getElementById('tabDueBtn').classList.toggle('active', tab === 'due');
+    document.getElementById('tabPendingBtn').classList.toggle('active', tab === 'pending');
+    document.getElementById('difficultDueGrid').style.display = tab === 'due' ? 'grid' : 'none';
+    document.getElementById('difficultPendingGrid').style.display = tab === 'pending' ? 'grid' : 'none';
+  }
+
+  function startSRSCountdown() {
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    function updateCountdowns() {
+      const els = document.querySelectorAll('.srs-countdown');
+      const now = new Date().getTime();
+      let hasDueChanged = false;
+
+      els.forEach(el => {
+        const targetStr = el.dataset.time;
+        if (!targetStr) return;
+
+        const target = new Date(targetStr).getTime();
+        const diff = target - now;
+
+        if (diff <= 0) {
+          el.textContent = 'Đến hạn ôn tập!';
+          el.style.color = 'var(--error)';
+          hasDueChanged = true;
+        } else {
+          const hours = Math.floor(diff / (60 * 60 * 1000));
+          const mins = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
+          const secs = Math.floor((diff % (60 * 1000)) / 1000);
+
+          if (hours > 24) {
+            const days = Math.floor(hours / 24);
+            el.textContent = `Ôn lại sau: ${days} ngày ${hours % 24} giờ`;
+          } else if (hours > 0) {
+            el.textContent = `Ôn lại sau: ${hours}h ${mins}m`;
+          } else if (mins > 0) {
+            el.textContent = `Ôn lại sau: ${mins}m ${secs}s`;
+          } else {
+            el.textContent = `Ôn lại sau: ${secs}s`;
+          }
+        }
+      });
+
+      // Dynamically refresh the tabs if a countdown expires and the word becomes due
+      if (hasDueChanged) {
+        clearInterval(countdownTimer);
+        renderDifficultWords();
+      }
+    }
+
+    updateCountdowns();
+    countdownTimer = setInterval(updateCountdowns, 1000);
+  }
+
   function renderDifficultWords() {
     const words = Storage.getDifficultWords();
     const section = document.getElementById('difficultSection');
-    const grid = document.getElementById('difficultGrid');
-    const count = document.getElementById('difficultCount');
+    const dueGrid = document.getElementById('difficultDueGrid');
+    const pendingGrid = document.getElementById('difficultPendingGrid');
 
     if (words.length === 0) {
       section.style.display = 'none';
+      if (countdownTimer) clearInterval(countdownTimer);
       return;
     }
 
     section.style.display = 'block';
-    count.textContent = words.length;
-    grid.innerHTML = words.map(w => `
-      <div class="difficult-card">
-        <div class="difficult-word">${w.word}</div>
-        <div class="difficult-meaning">${w.meaning}</div>
-        <div class="difficult-day">Ngày ${w.day} • Ôn: ${w.reviewCount || 0} lần • Đúng: ${w.correctCount || 0}/3</div>
-      </div>
-    `).join('');
+
+    const now = new Date();
+    const dueWords = words.filter(w => !w.nextReview || new Date(w.nextReview) <= now);
+    const pendingWords = words.filter(w => w.nextReview && new Date(w.nextReview) > now);
+
+    document.getElementById('dueCount').textContent = dueWords.length;
+    document.getElementById('pendingCount').textContent = pendingWords.length;
+
+    // Control "Ôn ngay" button state
+    const startBtn = document.getElementById('diffStartBtn');
+    if (dueWords.length === 0) {
+      startBtn.disabled = true;
+      startBtn.className = 'btn btn-secondary btn-sm';
+      startBtn.textContent = 'Đã hoàn thành';
+      startBtn.style.cursor = 'not-allowed';
+      startBtn.style.opacity = '0.5';
+    } else {
+      startBtn.disabled = false;
+      startBtn.className = 'btn btn-warning btn-sm';
+      startBtn.textContent = 'Ôn ngay';
+      startBtn.style.cursor = 'pointer';
+      startBtn.style.opacity = '1';
+    }
+
+    // Render Due Grid
+    if (dueWords.length === 0) {
+      dueGrid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1; padding: 24px;">
+          <div class="icon" style="font-size:32px;">✅</div>
+          <p style="font-size:14px; margin-top:8px;">Tất cả từ khó đã được ôn tập! Hãy xem tab "Đang ghi nhớ" hoặc quay lại sau.</p>
+        </div>
+      `;
+    } else {
+      dueGrid.innerHTML = dueWords.map(w => `
+        <div class="difficult-card" style="position:relative;">
+          <button class="speak-btn" onclick="speakWord('${w.word}')" title="Phát âm" style="top:10px;right:10px;position:absolute;">🔊</button>
+          <div class="difficult-word">${w.word} <span style="font-size:13px; font-weight:normal; color:var(--text-muted); margin-left:6px;">${w.ipa || ''}</span></div>
+          <div class="difficult-meaning">${w.meaning}</div>
+          <div class="difficult-day" style="display:flex; justify-content:space-between; margin-top:8px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">Ngày ${w.day}</span>
+            <span class="badge badge-warning" style="text-transform:none; font-size:11px; padding:3px 8px; border-radius:10px;">Hộp ${w.box || 1} • Chờ ôn</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Pending Grid
+    if (pendingWords.length === 0) {
+      pendingGrid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1; padding: 24px;">
+          <div class="icon" style="font-size:32px;">💡</div>
+          <p style="font-size:14px; margin-top:8px;">Không có từ nào đang chờ ôn tập.</p>
+        </div>
+      `;
+    } else {
+      pendingGrid.innerHTML = pendingWords.map(w => `
+        <div class="difficult-card" style="position:relative; opacity:0.85;">
+          <button class="speak-btn" onclick="speakWord('${w.word}')" title="Phát âm" style="top:10px;right:10px;position:absolute;">🔊</button>
+          <div class="difficult-word">${w.word} <span style="font-size:13px; font-weight:normal; color:var(--text-muted); margin-left:6px;">${w.ipa || ''}</span></div>
+          <div class="difficult-meaning">${w.meaning}</div>
+          <div class="difficult-day" style="display:flex; justify-content:space-between; margin-top:8px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:6px;">
+            <span style="font-size:12px; color:var(--text-secondary);">Ngày ${w.day}</span>
+            <span class="badge badge-success" style="text-transform:none; font-size:11px; padding:3px 8px; border-radius:10px; background:var(--success-bg); color:var(--success); border:1px solid var(--success-border);">Hộp ${w.box || 1} • Đã ôn</span>
+          </div>
+          <div class="srs-countdown" data-time="${w.nextReview}" style="font-size:11px; color:var(--success); font-weight:700; margin-top:6px; text-align:right;">
+            Ôn lại sau: --
+          </div>
+        </div>
+      `).join('');
+    }
+
+    startSRSCountdown();
   }
 
   // ---- PHASES ----
@@ -298,7 +444,8 @@
   }
 
   function openDifficultReview() {
-    diffReviewWords = shuffleArray(Storage.getDifficultWords());
+    const now = new Date();
+    diffReviewWords = shuffleArray(Storage.getDifficultWords().filter(w => !w.nextReview || new Date(w.nextReview) <= now));
     if (diffReviewWords.length === 0) return;
 
     diffIdx = 0;
@@ -371,18 +518,20 @@
     if (ans === w.word.toLowerCase()) {
       diffOk++;
       fb.className = 'abcd-feedback-banner correct';
-      fb.innerHTML = '🎉 Chính xác!';
+      fb.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
       inp.style.borderColor = 'var(--success)';
       Storage.updateDifficultWordStats(w.word, true);
     } else {
       fb.className = 'abcd-feedback-banner wrong';
-      fb.innerHTML = `❌ Chưa chính xác! Đáp án: <b>${w.word}</b>`;
+      fb.innerHTML = `❌ Chưa chính xác! Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
       inp.style.borderColor = 'var(--error)';
       diffBad.push(w);
       Storage.updateDifficultWordStats(w.word, false);
     }
 
     inp.disabled = true;
+    speakWord(w.word);
+
     document.getElementById('diffScoreOk').textContent = `✓ ${diffOk}`;
     document.getElementById('diffScoreNo').textContent = `✗ ${diffBad.length}`;
 
@@ -405,13 +554,15 @@
     const fb = document.getElementById('diffFb');
 
     fb.className = 'abcd-feedback-banner wrong';
-    fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b>`;
+    fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
     if (inp) {
       inp.style.borderColor = 'var(--error)';
       inp.disabled = true;
     }
     diffBad.push(w);
     Storage.updateDifficultWordStats(w.word, false);
+
+    speakWord(w.word);
 
     document.getElementById('diffScoreNo').textContent = `✗ ${diffBad.length}`;
 

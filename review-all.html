@@ -80,6 +80,7 @@
       <div class="flash-counter" id="reviewFlashCounter">0 / 0</div>
       <div class="flashcard-container">
         <div class="flashcard">
+          <button class="speak-btn speak-btn-lg" onclick="speakWord(reviewFlashWords[reviewFlashIndex].word)" title="Phát âm">🔊</button>
           <div id="reviewFlashWord" class="flash-word">—</div>
           <div id="reviewFlashMeaning" class="flash-meaning">—</div>
           <div id="reviewFlashInfo" class="flash-info"></div>
@@ -249,6 +250,18 @@
   function shuffleArray(a) { return [...a].sort(() => Math.random() - 0.5); }
   function normalizeText(t) { return t.trim().toLowerCase().replace(/\s+/g, ' '); }
 
+  // TTS speak helper
+  function speakWord(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      utter.rate = 0.85;
+      utter.pitch = 1;
+      window.speechSynthesis.speak(utter);
+    }
+  }
+
   // ====================================================
   // MODE 1: ABCD Quiz (one-at-a-time, instant feedback)
   // ====================================================
@@ -305,15 +318,20 @@
     const mode = document.querySelector('input[name="reviewAbcdMode"]:checked').value;
     reviewAbcdAnswered = false;
 
+    const isEnVi = (mode === 'en-vi');
+    const promptHtml = isEnVi 
+      ? `${w.prompt} <span style="font-size:16px; font-weight:normal; color:var(--text-muted); margin-left:8px;">${w.ipa || ''}</span> <button class="speak-btn" onclick="speakWord('${w.prompt}')" style="position:static;font-size:18px;vertical-align:middle;margin-left:4px;display:inline-block;opacity:0.75;">🔊</button>` 
+      : w.prompt;
+
     container.innerHTML = `
       <div class="abcd-single-question">
         <div class="question">
           <div class="question-label">${mode === 'vi-en' ? 'Chọn từ tiếng Anh đúng:' : 'Chọn nghĩa tiếng Việt đúng:'}</div>
-          <div class="big-prompt">${w.prompt}</div>
+          <div class="big-prompt">${promptHtml}</div>
           <div class="small-hint">${w.type || ''} ${w.day ? '• Ngày ' + w.day : ''}</div>
           ${w.options.map((op, j) => `
             <label class="option" id="rOpt${j}" onclick="selectReviewABCD(${j}, '${op.replace(/'/g, "\\\\'")}')"
-              style="cursor:pointer">
+               style="cursor:pointer">
               <input type="radio" name="reviewSingle" value="${op}" style="pointer-events:none">
               ${String.fromCharCode(65 + j)}. ${op}
             </label>
@@ -322,6 +340,9 @@
         </div>
       </div>
     `;
+    if (isEnVi) {
+      speakWord(w.prompt);
+    }
   }
 
   function selectReviewABCD(optIndex, selected) {
@@ -347,13 +368,14 @@
     if (isCorrect) {
       reviewAbcdCorrect++;
       banner.className = 'abcd-feedback-banner correct';
-      banner.innerHTML = '🎉 Chính xác!';
+      banner.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
     } else {
       banner.className = 'abcd-feedback-banner wrong';
-      banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b>`;
+      banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
       reviewAbcdWrong.push(w);
       Storage.addDifficultWord(w, w.day || 0);
     }
+    speakWord(w.word);
 
     document.getElementById('reviewAbcdCorrect').textContent = `✓ ${reviewAbcdCorrect}`;
     document.getElementById('reviewAbcdWrong').textContent = `✗ ${reviewAbcdWrong.length}`;
@@ -361,7 +383,7 @@
     setTimeout(() => {
       reviewAbcdIndex++;
       renderReviewABCD();
-    }, 1200);
+    }, 1500);
   }
 
   function showReviewABCDSummary() {
@@ -433,7 +455,7 @@
     }
 
     const w = reviewFlashWords[reviewFlashIndex];
-    document.getElementById('reviewFlashWord').textContent = w.word;
+    document.getElementById('reviewFlashWord').innerHTML = `${w.word} <div style="font-size:18px; font-weight:normal; color:var(--text-muted); margin-top:8px;">${w.ipa || ''}</div>`;
     document.getElementById('reviewFlashMeaning').textContent = w.meaning;
     document.getElementById('reviewFlashInfo').innerHTML = `<b>${w.type}</b> — "${w.example}" <span style="color:var(--text-muted);font-size:12px">• Ngày ${w.day}</span>`;
     document.getElementById('reviewFlashMeaning').style.display = 'none';
@@ -542,24 +564,25 @@
     if (ans === w.word.toLowerCase()) {
       reviewFillCorrect++;
       feedback.className = 'abcd-feedback-banner correct';
-      feedback.innerHTML = '🎉 Chính xác!';
+      feedback.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       input.style.borderColor = 'var(--success)';
     } else {
       feedback.className = 'abcd-feedback-banner wrong';
-      feedback.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.word}</b>`;
+      feedback.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       input.style.borderColor = 'var(--error)';
       reviewFillWrong.push(w);
       Storage.addDifficultWord(w, w.day || 0);
     }
 
     input.disabled = true;
+    speakWord(w.word);
     document.getElementById('reviewFillCorrectCount').textContent = `✓ ${reviewFillCorrect}`;
     document.getElementById('reviewFillWrongCount').textContent = `✗ ${reviewFillWrong.length}`;
 
     setTimeout(() => {
       reviewFillIndex++;
       renderReviewFill();
-    }, 1200);
+    }, 1500);
   }
 
   function skipReviewFill() {
@@ -569,16 +592,17 @@
     const w = reviewFillList[reviewFillIndex];
     const feedback = document.getElementById('reviewFillFeedback');
     feedback.className = 'abcd-feedback-banner wrong';
-    feedback.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b>`;
+    feedback.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
     reviewFillWrong.push(w);
     Storage.addDifficultWord(w, w.day || 0);
 
+    speakWord(w.word);
     document.getElementById('reviewFillWrongCount').textContent = `✗ ${reviewFillWrong.length}`;
 
     setTimeout(() => {
       reviewFillIndex++;
       renderReviewFill();
-    }, 1200);
+    }, 1500);
   }
 
   function showReviewFillSummary() {

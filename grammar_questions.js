@@ -7,8 +7,17 @@
 const GrammarQuiz = {
   // Từ vựng nền để thay thế ngẫu nhiên
   VOCAB: {
-    singSubjects: ["The manager", "The director", "The supervisor", "The coordinator", "The receptionist", "The assistant", "The technician", "The representative"],
-    plurSubjects: ["The managers", "The directors", "The employees", "The workers", "The coordinators", "The assistants", "The representatives"],
+    singSubjects: [
+      "The manager", "The director", "The supervisor", "The coordinator", "The receptionist", 
+      "The assistant", "The technician", "The representative", "The accountant", "The secretary", 
+      "The executive", "The engineer", "The inspector", "The consultant", "The designer", 
+      "The specialist", "The administrator", "The operator", "The analyst", "The advisor"
+    ],
+    plurSubjects: [
+      "The managers", "The directors", "The employees", "The workers", "The coordinators", 
+      "The assistants", "The representatives", "The accountants", "The engineers", "The consultants", 
+      "The technicians", "The designers", "The analysts", "The specialists", "The administrators"
+    ],
     singPronouns: ["He", "She", "It"],
     plurPronouns: ["We", "They", "You"],
     verbs: [
@@ -18,11 +27,25 @@ const GrammarQuiz = {
       { base: "finish", singular: "finishes", plural: "finish", past: "finished", ing: "finishing", to: "to finish", object: "the task", objectPlur: "the tasks" },
       { base: "sign", singular: "signs", plural: "sign", past: "signed", ing: "signing", to: "to sign", object: "the contract", objectPlur: "the contracts" },
       { base: "review", singular: "reviews", plural: "review", past: "reviewed", ing: "reviewing", to: "to review", object: "the plan", objectPlur: "the plans" },
-      { base: "update", singular: "updates", plural: "update", past: "updated", ing: "updating", to: "to update", object: "the schedule", objectPlur: "the schedules" }
+      { base: "update", singular: "updates", plural: "update", past: "updated", ing: "updating", to: "to update", object: "the schedule", objectPlur: "the schedules" },
+      { base: "submit", singular: "submits", plural: "submit", past: "submitted", ing: "submitting", to: "to submit", object: "the proposal", objectPlur: "the proposals" },
+      { base: "analyze", singular: "analyzes", plural: "analyze", past: "analyzed", ing: "analyzing", to: "to analyze", object: "the data", objectPlur: "the data" },
+      { base: "inspect", singular: "inspects", plural: "inspect", past: "inspected", ing: "inspecting", to: "to inspect", object: "the facility", objectPlur: "the facilities" },
+      { base: "organize", singular: "organizes", plural: "organize", past: "organized", ing: "organizing", to: "to organize", object: "the meeting", objectPlur: "the meetings" },
+      { base: "discuss", singular: "discusses", plural: "discuss", past: "discussed", ing: "discussing", to: "to discuss", object: "the project", objectPlur: "the projects" },
+      { base: "deliver", singular: "delivers", plural: "deliver", past: "delivered", ing: "delivering", to: "to deliver", object: "the package", objectPlur: "the packages" },
+      { base: "present", singular: "presents", plural: "present", past: "presented", ing: "presenting", to: "to present", object: "the slides", objectPlur: "the slides" }
     ],
-    places: ["in the office", "at the station", "in the building", "at the airport", "in the warehouse", "in the conference room"],
-    times: ["every morning", "every day", "on Mondays", "this week", "at 9 AM"],
-    names: ["John", "Mary", "David", "Sarah", "Alex", "Emily", "Michael"]
+    places: [
+      "in the office", "at the station", "in the building", "at the airport", "in the warehouse", 
+      "in the conference room", "at the headquarters", "in the laboratory", "at the front desk", 
+      "in the main hall", "at the workshop", "in the branch office"
+    ],
+    times: [
+      "every morning", "every day", "on Mondays", "this week", "at 9 AM", 
+      "every afternoon", "on weekdays", "every month", "each Friday", "regularly"
+    ],
+    names: ["John", "Mary", "David", "Sarah", "Alex", "Emily", "Michael", "Robert", "Jessica", "Daniel", "Laura", "James"]
   },
 
   // Templates của 33 ngày học lý thuyết ngữ pháp
@@ -1125,8 +1148,8 @@ const GrammarQuiz = {
       if (attempts < 800 && usedQuestions.has(questionText)) continue;
       usedQuestions.add(questionText);
 
-      // Thay thế trong giải thích
-      let explanation = t.exp
+      // Thay thế trong giải thích cốt lõi
+      let coreExplanation = t.exp
         .replace(/{subject}/g, subject)
         .replace(/{pronoun}/g, pronoun)
         .replace(/{place}/g, place)
@@ -1141,19 +1164,8 @@ const GrammarQuiz = {
         .replace(/{verb_ing}/g, verb.ing)
         .replace(/{verb_to}/g, verb.to);
 
-      // Xây dựng options và đáp án
-      let options = [...t.opts];
-      let answerIdx = t.ans;
-
-      // Điều chỉnh đáp án nếu chọn chủ ngữ số nhiều và template có cấu trúc phân biệt số ít/nhiều
-      if (isPlural) {
-        if (t.hasOwnProperty('ansPlur')) {
-          answerIdx = t.ansPlur;
-        }
-      }
-
-      // Thay thế các token trong options
-      options = options.map(opt => 
+      // Xây dựng options và xác định đáp án đúng trước khi trộn
+      let originalOptions = t.opts.map(opt => 
         opt.replace(/{subject}/g, subject)
            .replace(/{pronoun}/g, pronoun)
            .replace(/{place}/g, place)
@@ -1169,11 +1181,94 @@ const GrammarQuiz = {
            .replace(/{verb_to}/g, verb.to)
       );
 
+      let correctOptionIdx = t.ans;
+      if (isPlural && t.hasOwnProperty('ansPlur')) {
+        correctOptionIdx = t.ansPlur;
+      }
+      const correctOptionText = originalOptions[correctOptionIdx];
+
+      // Trộn ngẫu nhiên options A, B, C, D
+      const shuffledOptions = [...originalOptions];
+      for (let i = shuffledOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+      }
+      const newAnswerIdx = shuffledOptions.indexOf(correctOptionText);
+
+      // Sinh giải thích chi tiết cho từng phương án để tránh giải thích hời hợt
+      const optionExplanations = shuffledOptions.map(opt => {
+        let label = `<b>${opt}</b>`;
+        if (opt === correctOptionText) {
+          return `${label}: ĐÚNG. Phù hợp nhất với cấu trúc ngữ pháp và ý nghĩa của câu.`;
+        }
+
+        // 1. Phân tích lỗi chia động từ
+        const hasVerbTokens = t.opts.some(o => o.includes('{verb_') || ['go', 'goes', 'going', 'to go', 'study', 'studies', 'have', 'has', 'leave', 'left', 'sign', 'signed'].includes(o));
+        if (hasVerbTokens) {
+          const origIdx = originalOptions.indexOf(opt);
+          if (origIdx !== -1) {
+            const origOpt = t.opts[origIdx];
+            if (origOpt === '{verb_ing}' || opt.endsWith('ing')) {
+              return `${label}: SAI. Dạng V-ing không thể đóng vai trò làm động từ chia thì chính trong câu khi đứng một mình (thiếu động từ 'to be').`;
+            }
+            if (origOpt === '{verb_to}' || opt.startsWith('to ')) {
+              return `${label}: SAI. Động từ nguyên mẫu có 'to' (to-infinitive) chỉ dùng để chỉ mục đích, không chia thì làm động từ chính của mệnh đề.`;
+            }
+            if (origOpt === '{verb_singular}' || opt.endsWith('s') || opt.endsWith('es')) {
+              if (['goes', 'studies', 'has', 'works', 'checks', 'prepares', 'finishes', 'signs', 'reviews', 'updates', 'submits', 'analyzes', 'inspects', 'discusses', 'delivers'].includes(opt)) {
+                return `${label}: SAI. Đây là dạng động từ chia số ít (V-s/es), không hòa hợp với chủ ngữ số nhiều.`;
+              }
+            }
+            if (origOpt === '{verb_plural}' || origOpt === '{verb_base}' || ['go', 'study', 'have', 'work', 'check', 'prepare', 'finish', 'sign', 'review', 'update', 'submit', 'analyze', 'inspect', 'discuss', 'deliver'].includes(opt)) {
+              return `${label}: SAI. Đây là dạng động từ nguyên mẫu/chia số nhiều, không hòa hợp với chủ ngữ số ít.`;
+            }
+            if (origOpt === '{verb_past}' || ['left', 'prepared', 'finished', 'signed', 'reviewed', 'updated', 'submitted', 'analyzed', 'inspected', 'discussed', 'delivered'].includes(opt)) {
+              return `${label}: SAI. Thì quá khứ đơn không thích hợp với dấu hiệu thời gian thói quen/lịch trình hiện tại của câu.`;
+            }
+          }
+        }
+
+        // 2. Phân tích lỗi đại từ (Pronoun)
+        const pronLower = opt.toLowerCase();
+        if (["he", "she", "it", "they", "we", "i", "you"].includes(pronLower)) {
+          return `${label}: SAI. Đây là Đại từ nhân xưng chủ ngữ (Subject Pronoun), chỉ đứng đầu câu làm chủ ngữ chứ không thể đứng ở vị trí tân ngữ hay tính từ sở hữu.`;
+        }
+        if (["him", "her", "them", "us", "me"].includes(pronLower)) {
+          return `${label}: SAI. Đây là Đại từ nhân xưng tân ngữ (Object Pronoun), chỉ làm tân ngữ đứng sau động từ/giới từ.`;
+        }
+        if (["his", "her", "their", "our", "my", "your"].includes(pronLower)) {
+          return `${label}: SAI. Đây là Tính từ sở hữu (Possessive Adjective), bắt buộc phải có một danh từ đứng ngay sau để bổ nghĩa.`;
+        }
+        if (["himself", "herself", "themselves", "ourselves", "myself", "yourself"].includes(pronLower)) {
+          return `${label}: SAI. Đại từ phản thân (Reflexive Pronoun) chỉ dùng để nhấn mạnh hoặc khi chủ ngữ và tân ngữ là cùng một đối tượng.`;
+        }
+
+        // 3. Phân tích lỗi Tính từ (Adjective) & Trạng từ (Adverb)
+        if (opt.endsWith('ly')) {
+          return `${label}: SAI. Đây là Trạng từ (Adverb), không thể đứng sau động từ liên kết (linking verb) hoặc bổ nghĩa trực tiếp cho danh từ.`;
+        }
+        if (opt.endsWith('ed')) {
+          return `${label}: SAI. Tính từ đuôi -ed dùng để chỉ trạng thái cảm xúc của con người khi bị tác động, không dùng cho sự vật/việc.`;
+        }
+        if (opt.endsWith('ing')) {
+          return `${label}: SAI. Tính từ đuôi -ing dùng để chỉ tính chất đặc điểm của vật/việc, không dùng cho cảm xúc của người.`;
+        }
+
+        return `${label}: SAI. Phương án này không đáp ứng sự hòa hợp chủ-vị hoặc cấu trúc từ loại cần thiết của câu.`;
+      });
+
+      // Tạo giải thích chuyên sâu (Tutor-style)
+      let detailedExplanation = `
+        💡 <b>Nguyên lý ngữ pháp:</b> ${coreExplanation}<br><br>
+        🔍 <b>Phân tích chi tiết các đáp án:</b><br>
+        ${optionExplanations.map((expLine, idx) => `${String.fromCharCode(65 + idx)}. ${expLine}`).join('<br>')}
+      `;
+
       quiz.push({
         question: questionText,
-        options: options,
-        answerIdx: answerIdx,
-        explanation: explanation
+        options: shuffledOptions,
+        answerIdx: newAnswerIdx,
+        explanation: detailedExplanation
       });
     }
 
