@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Học Từ Vựng Theo Chủ Đề</title>
+  <meta name="description" content="Học từ vựng tiếng Anh theo chủ đề công việc, giao tiếp, kinh doanh, tài chính, công nghệ với đầy đủ bài tập và flashcard">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Custom styles for topic selector */
+    .topics-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 10px;
+      animation: fadeInUp 0.5s ease;
+    }
+    .topic-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--accent-gradient);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .topic-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-accent);
+      box-shadow: var(--shadow-lg), var(--shadow-accent);
+    }
+    .topic-card:hover::before {
+      opacity: 1;
+    }
+    .topic-card-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+      display: inline-block;
+      transition: var(--transition);
+    }
+    .topic-card:hover .topic-card-icon {
+      transform: scale(1.15) rotate(5deg);
+    }
+    .topic-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .topic-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      flex-grow: 1;
+      line-height: 1.5;
+    }
+    .topic-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .topic-card-badge {
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--accent-hover);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .topic-card-action {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-hover);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .topic-card-action::after {
+      content: '→';
+      transition: var(--transition);
+    }
+    .topic-card:hover .topic-card-action::after {
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="pageHeader">
+    <a href="index.html?no_redirect=true" class="back-btn">← Về lộ trình</a>
+    <h1 id="pageTitle">🎯 Từ Vựng Theo Chủ Đề</h1>
+    <p id="pageDesc">Học từ vựng tập trung theo các nhóm chủ đề thông dụng</p>
+    <div class="subtitle" id="pageSub">Lựa chọn chủ đề bên dưới để bắt đầu ôn luyện</div>
+  </header>
+
+  <div class="container">
+    <!-- TOPICS SELECTION SCREEN -->
+    <div id="topicsSelectorSection">
+      <div class="topics-selector-grid" id="topicsGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- LEARNING SECTION (HIDDEN BY DEFAULT) -->
+    <div id="learningSection" style="display:none">
+      <button class="btn btn-secondary" onclick="backToSelector()" style="margin-bottom:20px; font-size:13px; padding:8px 16px;">
+        ⬅️ Chọn chủ đề khác
+      </button>
+
+      <div class="tabs" id="mainTabs">
+        <button class="tab-btn active" onclick="showTab('list',this)">📚 Danh sách từ</button>
+        <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcard</button>
+        <button class="tab-btn" onclick="showTab('viToEn',this)">🇻🇳→🇬🇧 Việt→Anh</button>
+        <button class="tab-btn" onclick="showTab('enToVi',this)">🇬🇧→🇻🇳 Anh→Việt</button>
+        <button class="tab-btn" onclick="showTab('abcd',this)">📝 A/B/C/D</button>
+        <button class="tab-btn" onclick="showTab('typeQuiz',this)">🏷️ Từ loại</button>
+      </div>
+
+      <!-- Tab 1: Word List -->
+      <section id="list" class="section active">
+        <div class="note">💡 <b>Mẹo:</b> Đọc TO từ tiếng Anh → nhớ nghĩa tiếng Việt → xem từ loại → đọc ví dụ. Nhấn 🔊 để nghe phát âm. Nhấn ❤️ để đánh dấu từ khó.</div>
+        <div id="wordGrid" class="word-grid"></div>
+      </section>
+
+      <!-- Tab 2: Flashcard -->
+      <section id="flash" class="section">
+        <div class="note" style="text-align:center;font-size:12px;color:var(--text-muted);background:transparent;border:none;padding:4px">⌨️ Phím tắt: <b>Space</b> = Hiện nghĩa &nbsp; <b>→</b> = Từ tiếp &nbsp; <b>←</b> = Từ trước &nbsp; <b>S</b> = Trộn &nbsp; <b>R</b> = Phát âm</div>
+        <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+        <div class="flash-counter" id="flashCounter"></div>
+        <div class="flashcard-container">
+          <div class="flashcard">
+            <button class="speak-btn speak-btn-lg" onclick="speakWord(flashWords[flashIndex].word)" title="Phát âm">🔊</button>
+            <div id="flashWord" class="flash-word"></div>
+            <div id="flashMeaning" class="flash-meaning"></div>
+            <div id="flashInfo" class="flash-info"></div>
+          </div>
+        </div>
+        <div class="btn-group justify-center">
+          <button class="btn btn-success" onclick="showAnswer()">👁️ Hiện nghĩa</button>
+          <button class="btn btn-primary" onclick="nextCard()">➡️ Từ tiếp</button>
+          <button class="btn btn-secondary" onclick="prevCard()">⬅️ Từ trước</button>
+          <button class="btn btn-warning" onclick="shuffleCards()">🔀 Trộn từ</button>
+          <button class="btn btn-danger btn-sm" onclick="markFlashDifficult()">🔥 Đánh dấu khó</button>
+        </div>
+      </section>
+
+      <!-- Tab 3: Vietnamese to English (one-at-a-time) -->
+      <section id="viToEn" class="section">
+        <div class="note">💡 Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b> — kết quả hiện ngay! Từ sai tự động vào kho từ khó.</div>
+        <div class="progress"><div id="viToEnProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="viToEnCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="viToEnScoreOk">✓ 0</span>
+            <span class="score-wrong" id="viToEnScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="viToEnContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startViToEn()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 4: English to Vietnamese (one-at-a-time) -->
+      <section id="enToVi" class="section">
+        <div class="note">💡 Hiện <b>từ tiếng Anh</b>, bạn điền <b>nghĩa tiếng Việt</b> — kết quả hiện ngay! Từ sai tự động vào kho từ khó.</div>
+        <div class="progress"><div id="enToViProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="enToViCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="enToViScoreOk">✓ 0</span>
+            <span class="score-wrong" id="enToViScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="enToViContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startEnToVi()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 5: ABCD Quiz -->
+      <section id="abcd" class="section">
+        <div class="note">💡 Chọn đáp án đúng — kết quả hiện ngay! Từ sai tự động vào kho từ khó.</div>
+        <div class="mode-box">
+          <label><input type="radio" name="abcdMode" value="vi-en" checked onchange="restartABCD()">Việt → Anh</label>
+          <label><input type="radio" name="abcdMode" value="en-vi" onchange="restartABCD()">Anh → Việt</label>
+        </div>
+        <div class="progress"><div id="abcdProgressBar" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="abcdCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="abcdScoreCorrect">✓ 0</span>
+            <span class="score-wrong" id="abcdScoreWrong">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="abcdContainer"></div>
+        <div class="btn-group" id="abcdBtnGroup">
+          <button class="btn btn-success" onclick="restartABCD()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+
+      <!-- Tab 6: Type Quiz (one-at-a-time) -->
+      <section id="typeQuiz" class="section">
+        <div class="note">💡 Chọn từ loại đúng — kết quả hiện ngay! <b>noun</b> = danh từ, <b>verb</b> = động từ, <b>adjective</b> = tính từ, <b>adverb</b> = trạng từ.</div>
+        <div class="progress"><div id="typeProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="typeCounter">Câu 1/1</span>
+          <span class="abcd-score">
+            <span class="score-correct" id="typeScoreOk">✓ 0</span>
+            <span class="score-wrong" id="typeScoreNo">✗ 0</span>
+          </span>
+        </div>
+        <div class="abcd-single-container" id="typeContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startType()">🔀 Trộn & Làm lại</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="topics_data.js"></script>
+  <script>
+    // ============================================
+    // TOPICS PAGE LOGIC
+    // ============================================
+
+    let currentTopic = '';
+    let words = [];
+
+    // Quiz states
+    let flashIndex = 0, flashWords = [];
+    let viToEnList = [], enToViList = [], abcdList = [], typeList = [];
+
+    // Category mapping icons and descriptions
+    const categoryMetadata = {
+      "Động từ thường": {
+        icon: "📝",
+        desc: "Các động từ thường thông dụng chia theo các chủ đề: công việc, giao tiếp, bán hàng, tài chính, cải thiện và công nghệ."
+      },
+      "Động từ khuyết thiếu": {
+        icon: "🌟",
+        desc: "Các động từ khuyết thiếu chỉ khả năng, sự cho phép, nghĩa vụ, lời khuyên và dự đoán."
+      },
+      "Động từ nối": {
+        icon: "🔗",
+        desc: "Các động từ nối liên kết chủ ngữ với tính từ hoặc danh từ chỉ trạng thái."
+      },
+      "Động từ trạng thái": {
+        icon: "🧠",
+        desc: "Các động từ trạng thái chỉ cảm xúc, nhận thức, sở hữu, giác quan, vẻ ngoài và đo lường.<br><strong style='color:#ef4444; background:rgba(239,68,68,0.1); padding:2px 6px; border-radius:4px; display:inline-block; margin-top:6px;'>⚠️ Lưu ý: Động từ trạng thái không dùng cho các thì tiếp diễn.</strong>"
+      },
+      "Động từ + To-V": {
+        icon: "➡️",
+        desc: "Các động từ theo sau bởi To-Infinitive (To + Động từ nguyên mẫu) như agree, decide, refuse, plan, v.v."
+      },
+      "Động từ + V-ing": {
+        icon: "🔄",
+        desc: "Các động từ theo sau bởi danh động từ (V-ing) như avoid, enjoy, keep, suggest, v.v."
+      },
+      "Động từ + V nguyên mẫu": {
+        icon: "⚡",
+        desc: "Các động từ khuyết thiếu theo sau bởi động từ nguyên mẫu không 'to' (Bare Infinitive) như can, must, should, will, v.v."
+      },
+      "Đại từ bất định": {
+        icon: "🔮",
+        desc: "Các đại từ bất định & Lượng từ (someone, each, other, few, many...).<br><strong style='color:#3b82f6; background:rgba(59,130,246,0.1); padding:2px 6px; border-radius:4px; display:inline-block; margin-top:6px;'>⚠️ Ngữ pháp: Chú ý sự hòa hợp giữa đại từ/lượng từ với danh từ đi kèm và cách chia động từ số ít/nhiều.</strong>"
+      },
+      "Trạng từ chỉ mức độ": {
+        icon: "📈",
+        desc: "Các trạng từ chỉ mức độ (Degree Adverbs) bổ nghĩa cho động từ, tính từ hoặc trạng từ khác.<br><strong style='color:#10b981; background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px; display:inline-block; margin-top:6px;'>⚠️ Ngữ pháp: Thường đứng trước tính từ (Adj) hoặc trạng từ (Adv) mà nó bổ nghĩa.</strong>"
+      },
+      "Trạng từ chỉ tần suất": {
+        icon: "⏰",
+        desc: "Các trạng từ chỉ tần suất (Frequency Adverbs) thể hiện mức độ lặp lại của một hành động (luôn luôn, thường xuyên, hiếm khi, không bao giờ)."
+      },
+      "Trạng từ chỉ cách thức": {
+        icon: "🎭",
+        desc: "Các trạng từ chỉ cách thức (Adverbs of Manner) diễn tả cách thức hành động xảy ra, thường trả lời cho câu hỏi How (như thế nào)."
+      },
+      "Trạng từ chỉ thời gian": {
+        icon: "📅",
+        desc: "Các trạng từ chỉ thời gian (Adverbs of Time) cho biết khi nào hành động xảy ra, trả lời cho câu hỏi When (khi nào)."
+      },
+      "Trạng từ chỉ nơi chốn": {
+        icon: "📍",
+        desc: "Các trạng từ chỉ nơi chốn (Adverbs of Place) cho biết hành động xảy ra ở đâu, trả lời cho câu hỏi Where (ở đâu)."
+      },
+      "Giới từ chỉ thời gian": {
+        icon: "🕰️",
+        desc: "Các giới từ chỉ thời gian (at, on, in, during...) dùng để xác định thời điểm xảy ra hành động."
+      },
+      "Giới từ chỉ nơi chốn": {
+        icon: "🗺️",
+        desc: "Các giới từ chỉ nơi chốn (in, on, at, under, behind...) dùng để xác định vị trí của người hoặc vật."
+      },
+      "Giới từ chỉ chuyển động": {
+        icon: "🏃",
+        desc: "Các giới từ chỉ chuyển động (to, from, into, through...) dùng để mô tả chuyển động hoặc hướng đi."
+      },
+      "Giới từ chỉ phương tiện": {
+        icon: "⚙️",
+        desc: "Các giới từ chỉ phương tiện, cách thức (by, with, through, via, using...) dùng để mô tả phương tiện hoặc công cụ thực hiện."
+      },
+      "Giới từ chỉ nguyên nhân, mục đích": {
+        icon: "🎯",
+        desc: "Các giới từ/cụm giới từ chỉ nguyên nhân, mục đích (because of, due to, in order to, so as to...) giải thích lý do hoặc mục tiêu của hành động."
+      },
+      "Giới từ chỉ quan hệ": {
+        icon: "🤝",
+        desc: "Các giới từ chỉ quan hệ (of, with, between, among, like, against...) mô tả mối liên hệ, sự tương đồng hoặc đối lập giữa các đối tượng."
+      },
+      "Động từ + Đại từ phản thân": {
+        icon: "👤",
+        desc: "Các động từ thường đi kèm với đại từ phản thân (introduce oneself, enjoy oneself, protect oneself...) mô tả hành động tác động ngược lại chính chủ thể."
+      },
+      "Thì Hiện tại đơn (Present Simple)": {
+        icon: "📅",
+        desc: "Dấu hiệu nhận biết thì Hiện tại đơn: các trạng từ chỉ tần suất (always, usually...) và cụm thời gian (every day, once a week...)."
+      },
+      "Thì Hiện tại tiếp diễn (Present Continuous)": {
+        icon: "⏳",
+        desc: "Dấu hiệu nhận biết thì Hiện tại tiếp diễn: các trạng từ chỉ thời gian hiện tại (now, right now, at present...) và từ gây chú ý (look, listen!)."
+      },
+      "Thì Hiện tại hoàn thành (Present Perfect)": {
+        icon: "✅",
+        desc: "Dấu hiệu nhận biết thì Hiện tại hoàn thành: các trạng từ/giới từ chỉ thời gian kéo dài (for, since, already, yet, just, recently...)."
+      },
+      "Thì Hiện tại hoàn thành tiếp diễn (Present Perfect Continuous)": {
+        icon: "🔄",
+        desc: "Dấu hiệu nhận biết thì Hiện tại hoàn thành tiếp diễn: các từ nhấn mạnh tính liên tục của hành động kéo dài (for, since, all day, recently...)."
+      },
+      "Thì Quá khứ đơn (Past Simple)": {
+        icon: "🕰️",
+        desc: "Dấu hiệu nhận biết thì Quá khứ đơn: các từ chỉ thời gian đã qua hoàn toàn trong quá khứ (yesterday, ago, last night/week/year...)."
+      },
+      "Thì Quá khứ tiếp diễn (Past Continuous)": {
+        icon: "📽️",
+        desc: "Dấu hiệu nhận biết thì Quá khứ tiếp diễn: các từ nối và mốc thời gian cụ thể trong quá khứ (while, when, as, at that time...)."
+      },
+      "Thì Quá khứ hoàn thành (Past Perfect)": {
+        icon: "⏮️",
+        desc: "Dấu hiệu nhận biết thì Quá khứ hoàn thành: các liên từ chỉ thứ tự hành động xảy ra trước hành động khác trong quá khứ (before, after, by the time...)."
+      },
+      "Thì Quá khứ hoàn thành tiếp diễn (Past Perfect Continuous)": {
+        icon: "⏪",
+        desc: "Dấu hiệu nhận biết thì Quá khứ hoàn thành tiếp diễn: nhấn mạnh hành động xảy ra liên tục kéo dài trước một thời điểm quá khứ (for, since, until...)."
+      },
+      "Thì Tương lai đơn (Future Simple)": {
+        icon: "🚀",
+        desc: "Dấu hiệu nhận biết thì Tương lai đơn: các từ chỉ thời điểm hoặc dự định tương lai (tomorrow, next week, soon, in the future...)."
+      },
+      "Thì Tương lai tiếp diễn (Future Continuous)": {
+        icon: "🛸",
+        desc: "Dấu hiệu nhận biết thì Tương lai tiếp diễn: thời điểm cụ thể đang xảy ra hành động trong tương lai (at this time tomorrow, at 8 p.m. tomorrow...)."
+      },
+      "Thì Tương lai hoàn thành (Future Perfect)": {
+        icon: "🏆",
+        desc: "Dấu hiệu nhận biết thì Tương lai hoàn thành: hành động sẽ hoàn thành trước một thời điểm tương lai (by, by then, by next week, by the time...)."
+      },
+      "Thì Tương lai hoàn thành tiếp diễn (Future Perfect Continuous)": {
+        icon: "🏅",
+        desc: "Dấu hiệu nhận biết thì Tương lai hoàn thành tiếp diễn: hành động kéo dài liên tục trước một thời điểm tương lai (for, since, by the time...)."
+      },
+      "Động từ bất quy tắc": {
+        icon: "📚",
+        desc: "Bảng động từ bất quy tắc thông dụng (V1 → V2 → V3) cực kỳ phổ biến trong đề thi TOEIC từ 550 đến 650+."
+      },
+      "Động từ dạng bị động": {
+        icon: "🛡️",
+        desc: "Các động từ thường gặp ở dạng bị động (be approved, be completed, be scheduled...) mô tả hành động được/bị thực hiện lên chủ thể."
+      }
+    };
+
+    // ---- INIT ----
+    function init() {
+      if (typeof TOPICS_DATA === 'undefined') {
+        alert('Lỗi: Không tìm thấy dữ liệu chủ đề.');
+        return;
+      }
+      renderTopicSelector();
+    }
+
+    // ---- RENDER SELECTOR ----
+    function renderTopicSelector() {
+      const grid = document.getElementById('topicsGrid');
+      const categories = Object.keys(TOPICS_DATA);
+
+      grid.innerHTML = categories.map(cat => {
+        const meta = categoryMetadata[cat] || { icon: "📚", desc: "Chủ đề từ vựng tổng hợp." };
+        const wordCount = TOPICS_DATA[cat].length;
+        const sampleWords = TOPICS_DATA[cat].slice(0, 5).map(w => w.word).join(', ') + '...';
+
+        return `
+          <div class="topic-card" onclick="selectTopic('${cat}')">
+            <span class="topic-card-icon">${meta.icon}</span>
+            <div class="topic-card-title">${cat}</div>
+            <div class="topic-card-desc">${meta.desc}</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px; font-style:italic;">
+              Từ ví dụ: ${sampleWords}
+            </div>
+            <div class="topic-card-meta">
+              <span class="topic-card-badge">${wordCount} từ vựng</span>
+              <span class="topic-card-action">Học ngay</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ---- SELECT TOPIC ----
+    function selectTopic(catName) {
+      currentTopic = catName;
+      words = TOPICS_DATA[catName] || [];
+
+      // Update header
+      document.getElementById('pageTitle').textContent = categoryMetadata[catName].icon + ' ' + catName;
+      document.getElementById('pageDesc').innerHTML = categoryMetadata[catName].desc;
+      document.getElementById('pageSub').textContent = `Đang học chủ đề: ${catName} • ${words.length} từ vựng`;
+
+      // Hide selector, show learning
+      document.getElementById('topicsSelectorSection').style.display = 'none';
+      document.getElementById('learningSection').style.display = 'block';
+
+      // Start learning module
+      showLearning();
+    }
+
+    // ---- BACK TO SELECTOR ----
+    function backToSelector() {
+      currentTopic = '';
+      words = [];
+
+      // Restore header
+      document.getElementById('pageTitle').textContent = "🎯 Từ Vựng Theo Chủ Đề";
+      document.getElementById('pageDesc').innerHTML = "Học từ vựng tập trung theo các nhóm chủ đề thông dụng";
+      document.getElementById('pageSub').textContent = "Lựa chọn chủ đề bên dưới để bắt đầu ôn luyện";
+
+      // Hide learning, show selector
+      document.getElementById('learningSection').style.display = 'none';
+      document.getElementById('topicsSelectorSection').style.display = 'block';
+
+      // Cancel any ongoing speaking
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    // ---- SHOW LEARNING TABS ----
+    function showLearning() {
+      // Show default tab (Word List)
+      const listTabBtn = document.querySelector('#mainTabs .tab-btn:first-child');
+      showTab('list', listTabBtn);
+
+      renderList();
+      flashWords = [...words];
+      flashIndex = 0;
+      renderFlash();
+      startViToEn();
+      startEnToVi();
+      randomABCD();
+      startType();
+    }
+
+    // ---- TEXT-TO-SPEECH ----
+    function speakWord(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        let cleanText = text.replace(/→/g, ', ').replace(/\//g, ' or ');
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        utter.lang = 'en-US';
+        utter.rate = 0.85;
+        utter.pitch = 1;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    // ---- TAB MANAGEMENT ----
+    function showTab(id, btn) {
+      document.querySelectorAll('#learningSection .section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('#mainTabs .tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // ---- HELPERS ----
+    function shuffleArray(a) { return [...a].sort(() => Math.random() - 0.5); }
+    function normalizeText(t) { return t.trim().toLowerCase().replace(/\s+/g, ' '); }
+
+    // ============================================
+    // TAB 1: WORD LIST
+    // ============================================
+    function renderList() {
+      document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
+        const isDiff = Storage.isDifficultWord(w.word);
+        return `
+          <div class="word-card animate-fadeInUp" style="animation-delay:${i * 20}ms">
+            <button class="mark-difficult ${isDiff ? 'marked' : ''}" onclick="toggleDifficult(this, ${i})" title="Đánh dấu từ khó">
+              ${isDiff ? '🔥' : '❤️'}
+            </button>
+            <button class="speak-btn" onclick="speakWord('${w.word}')" title="Phát âm">🔊</button>
+            <div class="word">${w.word} <span class="ipa" style="font-size:13px; font-weight:normal; color:var(--text-muted); margin-left:6px;">${w.ipa || ''}</span></div>
+            <div class="type-badge">${w.type}</div>
+            <div class="meaning">${w.meaning}</div>
+            <div class="example">"${w.example}"</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleDifficult(btn, index) {
+      const w = words[index];
+      if (Storage.isDifficultWord(w.word)) {
+        Storage.removeDifficultWord(w.word);
+        btn.classList.remove('marked');
+        btn.innerHTML = '❤️';
+      } else {
+        Storage.addDifficultWord(w, currentTopic);
+        btn.classList.add('marked');
+        btn.innerHTML = '🔥';
+        btn.style.animation = 'none';
+        btn.offsetHeight; // trigger reflow
+        btn.style.animation = 'heartBeat 0.4s ease';
+      }
+    }
+
+    // ============================================
+    // TAB 2: FLASHCARD
+    // ============================================
+    function renderFlash() {
+      if (flashWords.length === 0) return;
+      const w = flashWords[flashIndex];
+      document.getElementById('flashWord').innerHTML = `${w.word} <div style="font-size:18px; font-weight:normal; color:var(--text-muted); margin-top:8px;">${w.ipa || ''}</div>`;
+      document.getElementById('flashMeaning').textContent = w.meaning;
+      document.getElementById('flashInfo').innerHTML = `<b>${w.type}</b> — "${w.example}"`;
+      document.getElementById('flashMeaning').style.display = 'none';
+      document.getElementById('flashInfo').style.display = 'none';
+      document.getElementById('progressBar').style.width = ((flashIndex + 1) / flashWords.length * 100) + '%';
+      document.getElementById('flashCounter').textContent = `${flashIndex + 1} / ${flashWords.length}`;
+    }
+
+    // Space / click to reveal flashcard answer
+    function showAnswer() {
+      document.getElementById('flashMeaning').style.display = 'block';
+      document.getElementById('flashInfo').style.display = 'block';
+    }
+
+    function nextCard() {
+      flashIndex = (flashIndex + 1) % flashWords.length;
+      renderFlash();
+    }
+
+    function prevCard() {
+      flashIndex = (flashIndex - 1 + flashWords.length) % flashWords.length;
+      renderFlash();
+    }
+
+    function shuffleCards() {
+      flashWords = shuffleArray(flashWords);
+      flashIndex = 0;
+      renderFlash();
+    }
+
+    function markFlashDifficult() {
+      const w = flashWords[flashIndex];
+      if (!Storage.isDifficultWord(w.word)) {
+        Storage.addDifficultWord(w, currentTopic);
+        alert(`🔥 "${w.word}" đã được thêm vào kho từ khó!`);
+      } else {
+        alert(`"${w.word}" đã có trong kho từ khó.`);
+      }
+    }
+
+    // ============================================
+    // TAB 3: VIETNAMESE -> ENGLISH
+    // ============================================
+    let viToEnIdx = 0, viToEnOk = 0, viToEnBad = [], viToEnDone = false;
+
+    function startViToEn() {
+      viToEnList = shuffleArray([...words]);
+      viToEnIdx = 0; viToEnOk = 0; viToEnBad = []; viToEnDone = false;
+      renderViToEnSingle();
+    }
+
+    function renderViToEnSingle() {
+      const c = document.getElementById('viToEnContainer');
+      const t = viToEnList.length;
+      document.getElementById('viToEnProgress').style.width = (viToEnIdx / t * 100) + '%';
+      document.getElementById('viToEnCounter').textContent = `Câu ${Math.min(viToEnIdx+1,t)}/${t}`;
+      document.getElementById('viToEnScoreOk').textContent = `✓ ${viToEnOk}`;
+      document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
+
+      if (viToEnIdx >= t) {
+        showFillSummary(c, 'viToEnProgress', viToEnOk, viToEnBad, t, 'viToEn');
+        return;
+      }
+
+      const w = viToEnList[viToEnIdx];
+      viToEnDone = false;
+
+      c.innerHTML = `
+        <div class="abcd-single-question">
+          <div class="question">
+            <div class="question-label">Điền từ tiếng Anh:</div>
+            <div class="big-prompt">${w.meaning}</div>
+            <div class="small-hint">${w.type}</div>
+            <input type="text" id="viToEnInput" placeholder="Điền từ tiếng Anh..." autofocus
+              onkeydown="if(event.key==='Enter') checkViToEnSingle()" autocomplete="off">
+            <div style="margin-top:12px">
+              <button class="btn btn-primary" onclick="checkViToEnSingle()">✅ Kiểm tra</button>
+              <button class="btn btn-secondary btn-sm" onclick="skipViToEn()">⏭️ Bỏ qua</button>
+            </div>
+            <div id="viToEnFb"></div>
+          </div>
+        </div>`;
+
+      setTimeout(() => {
+        const inp = document.getElementById('viToEnInput');
+        if(inp) inp.focus();
+      }, 100);
+    }
+
+    function checkViToEnSingle() {
+      if (viToEnDone) return;
+      viToEnDone = true;
+
+      const w = viToEnList[viToEnIdx];
+      const inp = document.getElementById('viToEnInput');
+      const fb = document.getElementById('viToEnFb');
+      const ans = normalizeText(inp.value);
+
+      const target = w.word.toLowerCase();
+      const baseForm = target.split('→')[0].trim();
+      if (ans === target || ans === baseForm) {
+        viToEnOk++;
+        fb.className = 'abcd-feedback-banner correct';
+        fb.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+        inp.style.borderColor = 'var(--success)';
+      } else {
+        fb.className = 'abcd-feedback-banner wrong';
+        fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+        inp.style.borderColor = 'var(--error)';
+        viToEnBad.push(w);
+        Storage.addDifficultWord(w, currentTopic);
+      }
+
+      inp.disabled = true;
+      speakWord(w.word);
+      document.getElementById('viToEnScoreOk').textContent = `✓ ${viToEnOk}`;
+      document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
+
+      setTimeout(() => {
+        viToEnIdx++;
+        renderViToEnSingle();
+      }, 1500);
+    }
+
+    function skipViToEn() {
+      if (viToEnDone) return;
+      viToEnDone = true;
+
+      const w = viToEnList[viToEnIdx];
+      const fb = document.getElementById('viToEnFb');
+      fb.className = 'abcd-feedback-banner wrong';
+      fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+      viToEnBad.push(w);
+      Storage.addDifficultWord(w, currentTopic);
+
+      speakWord(w.word);
+      document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
+
+      setTimeout(() => {
+        viToEnIdx++;
+        renderViToEnSingle();
+      }, 1500);
+    }
+
+    // ============================================
+    // TAB 4: ENGLISH -> VIETNAMESE
+    // ============================================
+    let enToViIdx = 0, enToViOk = 0, enToViBad = [], enToViDone = false;
+
+    function startEnToVi() {
+      enToViList = shuffleArray([...words]);
+      enToViIdx = 0; enToViOk = 0; enToViBad = []; enToViDone = false;
+      renderEnToViSingle();
+    }
+
+    function renderEnToViSingle() {
+      const c = document.getElementById('enToViContainer');
+      const t = enToViList.length;
+      document.getElementById('enToViProgress').style.width = (enToViIdx / t * 100) + '%';
+      document.getElementById('enToViCounter').textContent = `Câu ${Math.min(enToViIdx+1,t)}/${t}`;
+      document.getElementById('enToViScoreOk').textContent = `✓ ${enToViOk}`;
+      document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
+
+      if (enToViIdx >= t) {
+        showFillSummary(c, 'enToViProgress', enToViOk, enToViBad, t, 'enToVi');
+        return;
+      }
+
+      const w = enToViList[enToViIdx];
+      enToViDone = false;
+
+      c.innerHTML = `
+        <div class="abcd-single-question">
+          <div class="question">
+            <div class="question-label">Điền nghĩa tiếng Việt:</div>
+            <div class="big-prompt">${w.word} <span style="font-size:16px; font-weight:normal; color:var(--text-muted); margin:0 8px;">${w.ipa || ''}</span> <button class="speak-btn" onclick="speakWord('${w.word}')" style="font-size:20px;vertical-align:middle;position:static;display:inline-block;opacity:0.75;">🔊</button></div>
+            <div class="small-hint">${w.type}</div>
+            <input type="text" id="enToViInput" placeholder="Điền nghĩa tiếng Việt..." autofocus
+              onkeydown="if(event.key==='Enter') checkEnToViSingle()" autocomplete="off">
+            <div style="margin-top:12px">
+              <button class="btn btn-primary" onclick="checkEnToViSingle()">✅ Kiểm tra</button>
+              <button class="btn btn-secondary btn-sm" onclick="skipEnToVi()">⏭️ Bỏ qua</button>
+            </div>
+            <div id="enToViFb"></div>
+          </div>
+        </div>`;
+
+      speakWord(w.word);
+      setTimeout(() => {
+        const inp = document.getElementById('enToViInput');
+        if(inp) inp.focus();
+      }, 100);
+    }
+
+    function checkEnToViSingle() {
+      if (enToViDone) return;
+      enToViDone = true;
+
+      const w = enToViList[enToViIdx];
+      const inp = document.getElementById('enToViInput');
+      const fb = document.getElementById('enToViFb');
+      const ans = normalizeText(inp.value);
+      const ok = w.viAnswers.some(v => normalizeText(v) === ans);
+
+      if (ok) {
+        enToViOk++;
+        fb.className = 'abcd-feedback-banner correct';
+        fb.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+        inp.style.borderColor = 'var(--success)';
+      } else {
+        fb.className = 'abcd-feedback-banner wrong';
+        fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.meaning}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+        inp.style.borderColor = 'var(--error)';
+        enToViBad.push(w);
+        Storage.addDifficultWord(w, currentTopic);
+      }
+
+      inp.disabled = true;
+      speakWord(w.word);
+      document.getElementById('enToViScoreOk').textContent = `✓ ${enToViOk}`;
+      document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
+
+      setTimeout(() => {
+        enToViIdx++;
+        renderEnToViSingle();
+      }, 1500);
+    }
+
+    function skipEnToVi() {
+      if (enToViDone) return;
+      enToViDone = true;
+
+      const w = enToViList[enToViIdx];
+      const fb = document.getElementById('enToViFb');
+      fb.className = 'abcd-feedback-banner wrong';
+      fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.meaning}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+      enToViBad.push(w);
+      Storage.addDifficultWord(w, currentTopic);
+
+      speakWord(w.word);
+      document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
+
+      setTimeout(() => {
+        enToViIdx++;
+        renderEnToViSingle();
+      }, 1500);
+    }
+
+    // ============================================
+    // TAB 5: ABCD QUIZ
+    // ============================================
+    let abcdIndex = 0;
+    let abcdCorrect = 0;
+    let abcdWrongWords = [];
+    let abcdAnswered = false;
+
+    function getMode() { return document.querySelector('input[name="abcdMode"]:checked').value; }
+
+    function buildABCD() {
+      const mode = getMode();
+      abcdList = words.map(w => {
+        if (mode === 'vi-en') {
+          const wrong = shuffleArray(words.filter(x => x.word !== w.word)).slice(0, 3).map(x => x.word);
+          while(wrong.length < 3) wrong.push("N/A");
+          return { ...w, prompt: w.meaning, answer: w.word, options: shuffleArray([w.word, ...wrong]) };
+        } else {
+          const wrong = shuffleArray(words.filter(x => x.meaning !== w.meaning)).slice(0, 3).map(x => x.meaning);
+          while(wrong.length < 3) wrong.push("N/A");
+          return { ...w, prompt: w.word, answer: w.meaning, options: shuffleArray([w.meaning, ...wrong]) };
+        }
+      });
+    }
+
+    function restartABCD() {
+      buildABCD();
+      abcdList = shuffleArray(abcdList);
+      abcdIndex = 0;
+      abcdCorrect = 0;
+      abcdWrongWords = [];
+      abcdAnswered = false;
+      renderABCDSingle();
+    }
+
+    function renderABCDSingle() {
+      const container = document.getElementById('abcdContainer');
+      const total = abcdList.length;
+
+      document.getElementById('abcdProgressBar').style.width = ((abcdIndex) / total * 100) + '%';
+      document.getElementById('abcdCounter').textContent = `Câu ${Math.min(abcdIndex + 1, total)}/${total}`;
+      document.getElementById('abcdScoreCorrect').textContent = `✓ ${abcdCorrect}`;
+      document.getElementById('abcdScoreWrong').textContent = `✗ ${abcdWrongWords.length}`;
+
+      if (abcdIndex >= total) {
+        showABCDSummary();
+        return;
+      }
+
+      const w = abcdList[abcdIndex];
+      const mode = getMode();
+      abcdAnswered = false;
+
+      const isEnVi = (mode === 'en-vi');
+      const promptHtml = isEnVi 
+        ? `${w.prompt} <span style="font-size:16px; font-weight:normal; color:var(--text-muted); margin-left:8px;">${w.ipa || ''}</span> <button class="speak-btn" onclick="speakWord('${w.prompt}')" style="position:static;font-size:18px;vertical-align:middle;margin-left:4px;display:inline-block;opacity:0.75;">🔊</button>` 
+        : w.prompt;
+
+      container.innerHTML = `
+        <div class="abcd-single-question">
+          <div class="question">
+            <div class="question-label">${mode === 'vi-en' ? 'Chọn từ tiếng Anh đúng:' : 'Chọn nghĩa tiếng Việt đúng:'}</div>
+            <div class="big-prompt">${promptHtml}</div>
+            <div class="small-hint">${w.type || ''}</div>
+            ${w.options.map((op, j) => `
+              <label class="option" id="abcdOpt${j}" onclick="selectABCDOption(${j}, '${op.replace(/'/g, "\\'")}')"
+                style="cursor:pointer">
+                <input type="radio" name="abcdSingle" value="${op}" style="pointer-events:none">
+                ${String.fromCharCode(65 + j)}. ${op}
+              </label>
+            `).join('')}
+            <div id="abcdFeedbackBanner"></div>
+          </div>
+        </div>
+      `;
+      if (isEnVi) {
+        speakWord(w.prompt);
+      }
+    }
+
+    function selectABCDOption(optIndex, selected) {
+      if (abcdAnswered) return;
+      abcdAnswered = true;
+
+      const w = abcdList[abcdIndex];
+      const isCorrect = selected === w.answer;
+      const options = document.querySelectorAll('#abcdContainer .option');
+      const banner = document.getElementById('abcdFeedbackBanner');
+
+      options.forEach((opt, j) => {
+        const val = opt.querySelector('input').value;
+        if (val === w.answer) {
+          opt.classList.add('option-correct');
+        } else if (j === optIndex && !isCorrect) {
+          opt.classList.add('option-wrong');
+        } else {
+          opt.classList.add('option-disabled');
+        }
+      });
+
+      if (isCorrect) {
+        abcdCorrect++;
+        banner.className = 'abcd-feedback-banner correct';
+        banner.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
+      } else {
+        banner.className = 'abcd-feedback-banner wrong';
+        banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
+        abcdWrongWords.push(w);
+        Storage.addDifficultWord(w, currentTopic);
+      }
+      speakWord(w.word);
+
+      document.getElementById('abcdScoreCorrect').textContent = `✓ ${abcdCorrect}`;
+      document.getElementById('abcdScoreWrong').textContent = `✗ ${abcdWrongWords.length}`;
+
+      setTimeout(() => {
+        abcdIndex++;
+        renderABCDSingle();
+      }, 1200);
+    }
+
+    function showABCDSummary() {
+      const total = abcdList.length;
+      const pct = Math.round((abcdCorrect / total) * 100);
+      const container = document.getElementById('abcdContainer');
+
+      document.getElementById('abcdProgressBar').style.width = '100%';
+
+      let emoji = '🎉';
+      let msg = 'Tuyệt vời! Bạn giỏi lắm!';
+      if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+      else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt, cần ôn thêm!'; }
+
+      container.innerHTML = `
+        <div class="quiz-summary">
+          <div style="font-size:48px">${emoji}</div>
+          <div class="quiz-summary-score">${pct}%</div>
+          <div class="quiz-summary-label">${msg}</div>
+          <div class="quiz-summary-stats">
+            <div class="quiz-summary-stat correct">
+              <div class="stat-num">${abcdCorrect}</div>
+              <div class="stat-lbl">Đúng</div>
+            </div>
+            <div class="quiz-summary-stat wrong">
+              <div class="stat-num">${abcdWrongWords.length}</div>
+              <div class="stat-lbl">Sai</div>
+            </div>
+            <div class="quiz-summary-stat total">
+              <div class="stat-num">${total}</div>
+              <div class="stat-lbl">Tổng</div>
+            </div>
+          </div>
+          ${abcdWrongWords.length > 0 ? `
+            <div class="quiz-wrong-list">
+              <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
+              ${abcdWrongWords.map(w => `
+                <div class="wrong-item">
+                  <span class="wrong-word">${w.word}</span>
+                  <span class="wrong-meaning">${w.meaning}</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      Storage.saveQuizResult(currentTopic, 'abcd', abcdCorrect, total);
+    }
+
+    function randomABCD() { restartABCD(); }
+
+    // ============================================
+    // TAB 6: TYPE QUIZ
+    // ============================================
+    let typeIdx = 0, typeOk = 0, typeBad = [], typeAnswered = false;
+
+    function startType() {
+      typeList = shuffleArray([...words]);
+      typeIdx = 0; typeOk = 0; typeBad = []; typeAnswered = false;
+      renderTypeSingle();
+    }
+
+    function renderTypeSingle() {
+      const c = document.getElementById('typeContainer');
+      const t = typeList.length;
+      document.getElementById('typeProgress').style.width = (typeIdx / t * 100) + '%';
+      document.getElementById('typeCounter').textContent = `Câu ${Math.min(typeIdx+1,t)}/${t}`;
+      document.getElementById('typeScoreOk').textContent = `✓ ${typeOk}`;
+      document.getElementById('typeScoreNo').textContent = `✗ ${typeBad.length}`;
+
+      if (typeIdx >= t) {
+        showTypeSummary();
+        return;
+      }
+
+      const w = typeList[typeIdx];
+      const allTypes = [...new Set(words.map(x => x.type))];
+      const standardTypes = ["noun", "verb", "adjective", "adverb"];
+      standardTypes.forEach(tp => {
+        if (!allTypes.includes(tp)) allTypes.push(tp);
+      });
+      const uniqueTypes = allTypes.slice(0, 4);
+
+      typeAnswered = false;
+
+      c.innerHTML = `
+        <div class="abcd-single-question">
+          <div class="question">
+            <div class="question-label">Chọn từ loại đúng:</div>
+            <div class="big-prompt">${w.word} <button class="speak-btn" onclick="speakWord('${w.word}')" style="font-size:20px;vertical-align:middle">🔊</button></div>
+            <div class="small-hint">${w.meaning}</div>
+            ${uniqueTypes.map((tp, j) => `
+              <label class="option" id="typeOpt${j}" onclick="selectTypeOption(${j}, '${tp.replace(/'/g, "\\'")}')"
+                style="cursor:pointer">
+                <input type="radio" name="typeSingle" value="${tp}" style="pointer-events:none">
+                ${tp}
+              </label>
+            `).join('')}
+            <div id="typeFeedbackBanner"></div>
+          </div>
+        </div>`;
+    }
+
+    function selectTypeOption(optIdx, selected) {
+      if (typeAnswered) return;
+      typeAnswered = true;
+
+      const w = typeList[typeIdx];
+      const isCorrect = w.type.toLowerCase().includes(selected.toLowerCase());
+      const options = document.querySelectorAll('#typeContainer .option');
+      const banner = document.getElementById('typeFeedbackBanner');
+
+      options.forEach((opt, j) => {
+        const val = opt.querySelector('input').value;
+        const correctOpt = w.type.toLowerCase().includes(val.toLowerCase());
+        if (correctOpt) opt.classList.add('option-correct');
+        else if (j === optIdx && !isCorrect) opt.classList.add('option-wrong');
+        else opt.classList.add('option-disabled');
+      });
+
+      if (isCorrect) {
+        typeOk++;
+        banner.className = 'abcd-feedback-banner correct';
+        banner.innerHTML = '🎉 Chính xác!';
+      } else {
+        banner.className = 'abcd-feedback-banner wrong';
+        banner.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.type}</b>`;
+        typeBad.push(w);
+      }
+
+      document.getElementById('typeScoreOk').textContent = `✓ ${typeOk}`;
+      document.getElementById('typeScoreNo').textContent = `✗ ${typeBad.length}`;
+
+      setTimeout(() => {
+        typeIdx++;
+        renderTypeSingle();
+      }, 1200);
+    }
+
+    function showTypeSummary() {
+      document.getElementById('typeProgress').style.width = '100%';
+      const t = typeList.length;
+      const pct = Math.round((typeOk / t) * 100);
+
+      let emoji = '🎉', msg = 'Tuyệt vời!';
+      if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+      else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt!'; }
+
+      document.getElementById('typeContainer').innerHTML = `
+        <div class="quiz-summary">
+          <div style="font-size:48px">${emoji}</div>
+          <div class="quiz-summary-score">${pct}%</div>
+          <div class="quiz-summary-label">${msg}</div>
+          <div class="quiz-summary-stats">
+            <div class="quiz-summary-stat correct"><div class="stat-num">${typeOk}</div><div class="stat-lbl">Đúng</div></div>
+            <div class="quiz-summary-stat wrong"><div class="stat-num">${typeBad.length}</div><div class="stat-lbl">Sai</div></div>
+            <div class="quiz-summary-stat total"><div class="stat-num">${t}</div><div class="stat-lbl">Tổng</div></div>
+          </div>
+          ${typeBad.length > 0 ? `
+            <div class="quiz-wrong-list">
+              <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ sai:</div>
+              ${typeBad.map(w => `<div class="wrong-item"><span class="wrong-word">${w.word}</span><span class="wrong-meaning">${w.type}</span></div>`).join('')}
+            </div>` : ''}
+        </div>`;
+
+      Storage.saveQuizResult(currentTopic, 'type', typeOk, t);
+    }
+
+    // ============================================
+    // SHARED: FILL QUIZ SUMMARY
+    // ============================================
+    function showFillSummary(container, progressId, correct, wrongList, total, quizType) {
+      document.getElementById(progressId).style.width = '100%';
+      const pct = Math.round((correct / total) * 100);
+
+      let emoji = '🎉', msg = 'Tuyệt vời! Bạn giỏi lắm!';
+      if (pct < 50) { emoji = '😤'; msg = 'Cần cố gắng hơn!'; }
+      else if (pct < 80) { emoji = '💪'; msg = 'Khá tốt, cần ôn thêm!'; }
+
+      container.innerHTML = `
+        <div class="quiz-summary">
+          <div style="font-size:48px">${emoji}</div>
+          <div class="quiz-summary-score">${pct}%</div>
+          <div class="quiz-summary-label">${msg}</div>
+          <div class="quiz-summary-stats">
+            <div class="quiz-summary-stat correct"><div class="stat-num">${correct}</div><div class="stat-lbl">Đúng</div></div>
+            <div class="quiz-summary-stat wrong"><div class="stat-num">${wrongList.length}</div><div class="stat-lbl">Sai</div></div>
+            <div class="quiz-summary-stat total"><div class="stat-num">${total}</div><div class="stat-lbl">Tổng</div></div>
+          </div>
+          ${wrongList.length > 0 ? `
+            <div class="quiz-wrong-list">
+              <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
+              ${wrongList.map(w => `<div class="wrong-item"><span class="wrong-word">${w.word}</span><span class="wrong-meaning">${w.meaning}</span></div>`).join('')}
+            </div>` : ''}
+        </div>`;
+
+      Storage.saveQuizResult(currentTopic, quizType, correct, total);
+    }
+
+    // ============================================
+    // KEYBOARD SHORTCUTS FOR FLASHCARD
+    // ============================================
+    document.addEventListener('keydown', (e) => {
+      const flashSection = document.getElementById('flash');
+      if (!flashSection || !flashSection.classList.contains('active')) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+
+      switch(e.key) {
+        case ' ':
+          e.preventDefault();
+          showAnswer();
+          break;
+        case 'ArrowRight':
+        case 'n':
+        case 'N':
+          e.preventDefault();
+          nextCard();
+          break;
+        case 'ArrowLeft':
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          prevCard();
+          break;
+        case 's':
+        case 'S':
+          e.preventDefault();
+          shuffleCards();
+          break;
+        case 'r':
+        case 'R':
+          e.preventDefault();
+          if (flashWords.length > 0) speakWord(flashWords[flashIndex].word);
+          break;
+      }
+    });
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>
