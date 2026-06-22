@@ -596,7 +596,12 @@ const DAYS_DATA_PART2 = [
       title: "So sánh hơn (Comparative) & Quy tắc biến đổi tính từ",
       explanation: "So sánh hơn dùng để so sánh giữa hai đối tượng (người, vật, sự việc).\n\n**1. TÍNH TỪ NGẮN (1 âm tiết, hoặc 2 âm tiết tận cùng bằng -y, -le, -er, -ow):**\nCông thức: Adj-er + than\n- Thông thường: Thêm -er (fast -> faster, cheap -> cheaper).\n- Tận cùng bằng -e: Chỉ thêm -r (large -> larger, wide -> wider).\n- Tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -er (easy -> easier, happy -> happier, busy -> busier).\n- Tận cùng dạng CVC (Phụ âm - Nguyên âm - Phụ âm): Gấp đôi phụ âm cuối rồi thêm -er (big -> bigger, hot -> hotter, thin -> thinner).\n\n**2. TÍNH TỪ DÀI (Các tính từ từ 2 âm tiết trở lên khác):**\nCông thức: More + Adj + than\n- Ví dụ: more expensive than (đắt hơn), more convenient than (tiện lợi hơn), more professional than (chuyên nghiệp hơn).\n\n**3. CÁC TRƯỜNG HỢP BẤT QUY TẮC CỰC KỲ QUAN TRỌNG:**\n- good / well -> better (tốt hơn)\n- bad / badly -> worse (tệ hơn)\n- far -> farther (xa hơn - khoảng cách địa lý) / further (xa hơn - thông tin, sâu sắc hơn)\n- many / much -> more (nhiều hơn)\n- little -> less (ít hơn)",
       structure: "Short Adj: Adj-er + than | Long Adj: More + Adj + than",
-      examples: [\n        "This copier is faster than the old one. (Máy photo này nhanh hơn cái cũ.)",\n        "Online shopping is more convenient than traditional shopping. (Mua sắm trực tuyến tiện lợi hơn mua sắm truyền thống.)",\n        "Today's sales results are better than yesterday's. (Kết quả doanh số hôm nay tốt hơn hôm qua.)",\n        "The new project is much more difficult than we thought. (Dự án mới khó hơn chúng tôi nghĩ rất nhiều.)"\n      ],
+      examples: [
+        "This copier is faster than the old one. (Máy photo này nhanh hơn cái cũ.)",
+        "Online shopping is more convenient than traditional shopping. (Mua sắm trực tuyến tiện lợi hơn mua sắm truyền thống.)",
+        "Today's sales results are better than yesterday's. (Kết quả doanh số hôm nay tốt hơn hôm qua.)",
+        "The new project is much more difficult than we thought. (Dự án mới khó hơn chúng tôi nghĩ rất nhiều.)"
+      ],
       tips: "Mẹo TOEIC: Có thể nhấn mạnh so sánh hơn bằng cách thêm \"much\" hoặc \"far\" phía trước (ví dụ: much faster, far more expensive). Luôn tìm từ \"than\" để nhận biết cấu trúc so sánh hơn!"
     },
     words: [
@@ -640,7 +645,12 @@ const DAYS_DATA_PART2 = [
       title: "So sánh nhất (Superlative) & Quy tắc biến đổi tính từ",
       explanation: "So sánh nhất dùng để so sánh một đối tượng với toàn bộ nhóm (từ 3 đối tượng trở lên).\n\n**1. TÍNH TỪ NGẮN (1 âm tiết, hoặc 2 âm tiết tận cùng bằng -y, -le, -er, -ow):**\nCông thức: The + Adj-est\n- Thông thường: Thêm -est (fast -> the fastest, cheap -> the cheapest).\n- Tận cùng bằng -e: Chỉ thêm -st (large -> the largest, wide -> the widest).\n- Tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -est (easy -> the easiest, happy -> the happiest, busy -> the busiest).\n- Tận cùng dạng CVC: Gấp đôi phụ âm cuối rồi thêm -est (big -> the biggest, hot -> the hottest).\n\n**2. TÍNH TỪ DÀI:**\nCông thức: The most + Adj\n- Ví dụ: the most expensive (đắt nhất), the most popular (phổ biến nhất), the most reliable (đáng tin cậy nhất).\n\n**3. CÁC TRƯỜNG HỢP BẤT QUY TẮC:**\n- good / well -> the best (tốt nhất)\n- bad / badly -> the worst (tệ nhất)\n- far -> the farthest / the furthest (xa nhất)\n- many / much -> the most (nhiều nhất)\n- little -> the least (ít nhất)",
       structure: "Short Adj: The + Adj-est | Long Adj: The most + Adj",
-      examples: [\n        "This is the cheapest office space in the city. (Đây là mặt bằng văn phòng rẻ nhất trong thành phố.)",\n        "He is the most experienced engineer in our team. (Anh ấy là kỹ sư giàu kinh nghiệm nhất trong đội ngũ của chúng tôi.)",\n        "This is the best solution to our budget problem. (Đây là giải pháp tốt nhất cho vấn đề ngân sách của chúng tôi.)",\n        "What is the most efficient way to complete the task? (Cách hiệu quả nhất để hoàn thành nhiệm vụ là gì?)"\n      ],
+      examples: [
+        "This is the cheapest office space in the city. (Đây là mặt bằng văn phòng rẻ nhất trong thành phố.)",
+        "He is the most experienced engineer in our team. (Anh ấy là kỹ sư giàu kinh nghiệm nhất trong đội ngũ của chúng tôi.)",
+        "This is the best solution to our budget problem. (Đây là giải pháp tốt nhất cho vấn đề ngân sách của chúng tôi.)",
+        "What is the most efficient way to complete the task? (Cách hiệu quả nhất để hoàn thành nhiệm vụ là gì?)"
+      ],
       tips: "Mẹo TOEIC: Luôn phải có mạo từ \"the\" đứng trước cấu trúc so sánh nhất. Nếu thấy có \"the\" trước chỗ trống và so sánh cả nhóm, hãy chọn ngay tính từ đuôi -est hoặc most + Adj!"
     },
     words: [

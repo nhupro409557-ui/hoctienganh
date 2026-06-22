@@ -123,14 +123,42 @@
         ⬅️ Chọn chủ đề khác
       </button>
 
+      <!-- Bộ chọn phần học cho chủ đề nhiều từ vựng -->
+      <div id="partSelectorContainer" style="margin-bottom: 20px; display: none; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--card-bg); padding: 12px 20px; border-radius: var(--radius); border: 1px solid var(--border-color); animation: fadeIn 0.4s ease;">
+        <span style="font-weight: bold; color: var(--text-color); font-size: 14px;">📖 Chia nhỏ từ vựng để học:</span>
+        <div class="part-buttons" id="partButtons" style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
       <div class="tabs" id="mainTabs">
-        <button class="tab-btn active" onclick="showTab('list',this)">📚 Danh sách từ</button>
+        <button class="tab-btn" id="grammarTabBtn" onclick="showTab('grammar',this)" style="display:none">📐 Ngữ Pháp</button>
+        <button class="tab-btn active" id="listTabBtn" onclick="showTab('list',this)">📚 Danh sách từ</button>
         <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcard</button>
         <button class="tab-btn" onclick="showTab('viToEn',this)">🇻🇳→🇬🇧 Việt→Anh</button>
         <button class="tab-btn" onclick="showTab('enToVi',this)">🇬🇧→🇻🇳 Anh→Việt</button>
         <button class="tab-btn" onclick="showTab('abcd',this)">📝 A/B/C/D</button>
         <button class="tab-btn" onclick="showTab('typeQuiz',this)">🏷️ Từ loại</button>
       </div>
+
+      <!-- Tab Grammar -->
+      <section id="grammar" class="section">
+        <div class="grammar-box" id="topicGrammarBox">
+          <div class="grammar-title" id="topicGrammarTitle"></div>
+          <div class="grammar-structure" id="topicGrammarStructure"></div>
+          <div class="grammar-explanation" id="topicGrammarExplanation"></div>
+          <ul class="grammar-examples" id="topicGrammarExamples"></ul>
+          <div id="topicGrammarExceptionsContainer" class="grammar-alert grammar-alert-danger" style="display:none">
+            <div class="grammar-alert-title">⚠️ Trường hợp ngoại lệ / Bất quy tắc:</div>
+            <ul class="grammar-alert-list" id="topicGrammarExceptions"></ul>
+          </div>
+          <div id="topicGrammarNotesContainer" class="grammar-alert grammar-alert-info" style="display:none">
+            <div class="grammar-alert-title">📌 Chú ý quan trọng / Lưu ý:</div>
+            <ul class="grammar-alert-list" id="topicGrammarNotes"></ul>
+          </div>
+          <div class="grammar-tip" id="topicGrammarTip" style="display:none"></div>
+        </div>
+      </section>
 
       <!-- Tab 1: Word List -->
       <section id="list" class="section active">
@@ -236,6 +264,9 @@
 
   <script src="storage.js"></script>
   <script src="topics_data.js"></script>
+  <script src="topics_determiners_adjectives.js"></script>
+  <script src="topics_grammar.js"></script>
+  <script src="formulas_data.js"></script>
   <script>
     // ============================================
     // TOPICS PAGE LOGIC
@@ -243,6 +274,8 @@
 
     let currentTopic = '';
     let words = [];
+    let allWords = [];
+    let currentPartIndex = -1; // -1: All, 0, 1, 2...: parts
 
     // Quiz states
     let flashIndex = 0, flashWords = [];
@@ -423,20 +456,96 @@
         `;
       }).join('');
     }
+    // ---- VOCABULARY PARTITION SYSTEM ----
+    function getPartRanges(totalLength) {
+      if (totalLength <= 30) return [];
+      const numParts = totalLength > 60 ? 3 : 2;
+      const partSize = Math.ceil(totalLength / numParts);
+      const ranges = [];
+      for (let i = 0; i < numParts; i++) {
+        const start = i * partSize;
+        const end = Math.min(start + partSize, totalLength);
+        ranges.push({ start, end, label: `Phần ${i + 1} (${start + 1} - ${end})` });
+      }
+      return ranges;
+    }
+
+    function renderPartSelector() {
+      const container = document.getElementById('partSelectorContainer');
+      const buttonsDiv = document.getElementById('partButtons');
+      const ranges = getPartRanges(allWords.length);
+
+      if (ranges.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'flex';
+      
+      let html = `<button class="filter-chip ${currentPartIndex === -1 ? 'active' : ''}" onclick="selectPart(-1)">Học tất cả (${allWords.length} từ)</button>`;
+      
+      ranges.forEach((r, idx) => {
+        html += `<button class="filter-chip ${currentPartIndex === idx ? 'active' : ''}" onclick="selectPart(${idx})">${r.label}</button>`;
+      });
+
+      buttonsDiv.innerHTML = html;
+    }
+
+    function selectPart(partIndex) {
+      currentPartIndex = partIndex;
+      const ranges = getPartRanges(allWords.length);
+      
+      if (partIndex === -1 || ranges.length === 0) {
+        words = [...allWords];
+        document.getElementById('pageSub').textContent = `Đang học chủ đề: ${currentTopic} • ${words.length} từ vựng`;
+      } else {
+        const r = ranges[partIndex];
+        words = allWords.slice(r.start, r.end);
+        document.getElementById('pageSub').textContent = `Đang học chủ đề: ${currentTopic} • ${r.label} • ${words.length} từ`;
+      }
+
+      // Re-render buttons
+      renderPartSelector();
+
+      // Restart learning games
+      showLearning();
+    }
 
     // ---- SELECT TOPIC ----
     function selectTopic(catName) {
       currentTopic = catName;
-      words = TOPICS_DATA[catName] || [];
+      allWords = TOPICS_DATA[catName] || [];
+
+      // Set default part selection
+      if (allWords.length > 30) {
+        currentPartIndex = 0; // Default to Part 1
+        const ranges = getPartRanges(allWords.length);
+        const r = ranges[0];
+        words = allWords.slice(r.start, r.end);
+        document.getElementById('pageSub').textContent = `Đang học chủ đề: ${catName} • ${r.label} • ${words.length} từ`;
+      } else {
+        currentPartIndex = -1; // Default to All
+        words = [...allWords];
+        document.getElementById('pageSub').textContent = `Đang học chủ đề: ${catName} • ${words.length} từ vựng`;
+      }
 
       // Update header
-      document.getElementById('pageTitle').textContent = categoryMetadata[catName].icon + ' ' + catName;
-      document.getElementById('pageDesc').innerHTML = categoryMetadata[catName].desc;
-      document.getElementById('pageSub').textContent = `Đang học chủ đề: ${catName} • ${words.length} từ vựng`;
+      const meta = categoryMetadata[catName] || {
+        icon: "📚",
+        desc: "Chủ đề từ vựng bổ sung kèm ví dụ thực tế."
+      };
+      document.getElementById('pageTitle').textContent = meta.icon + ' ' + catName;
+      document.getElementById('pageDesc').innerHTML = meta.desc;
 
       // Hide selector, show learning
       document.getElementById('topicsSelectorSection').style.display = 'none';
       document.getElementById('learningSection').style.display = 'block';
+
+      // Render part selector
+      renderPartSelector();
+
+      // Render grammar
+      renderTopicGrammar(catName);
 
       // Start learning module
       showLearning();
@@ -464,9 +573,19 @@
 
     // ---- SHOW LEARNING TABS ----
     function showLearning() {
-      // Show default tab (Word List)
-      const listTabBtn = document.querySelector('#mainTabs .tab-btn:first-child');
-      showTab('list', listTabBtn);
+      const grammarTabBtn = document.getElementById('grammarTabBtn');
+      const listTabBtn = document.getElementById('listTabBtn');
+
+      // Check if grammar data exists for this topic
+      const hasGrammar = typeof TOPICS_GRAMMAR !== 'undefined' && TOPICS_GRAMMAR[currentTopic];
+      grammarTabBtn.style.display = hasGrammar ? '' : 'none';
+
+      // Show grammar tab first if available, otherwise word list
+      if (hasGrammar) {
+        showTab('grammar', grammarTabBtn);
+      } else {
+        showTab('list', listTabBtn);
+      }
 
       renderList();
       flashWords = [...words];
@@ -476,6 +595,53 @@
       startEnToVi();
       randomABCD();
       startType();
+    }
+
+    // ---- RENDER TOPIC GRAMMAR ----
+    function renderTopicGrammar(catName) {
+      const grammarTabBtn = document.getElementById('grammarTabBtn');
+      if (typeof TOPICS_GRAMMAR === 'undefined' || !TOPICS_GRAMMAR[catName]) {
+        grammarTabBtn.style.display = 'none';
+        return;
+      }
+
+      const g = TOPICS_GRAMMAR[catName];
+      grammarTabBtn.style.display = '';
+
+      document.getElementById('topicGrammarTitle').textContent = '📐 ' + g.title;
+      document.getElementById('topicGrammarStructure').textContent = g.structure || '';
+      document.getElementById('topicGrammarStructure').style.display = g.structure ? '' : 'none';
+      document.getElementById('topicGrammarExplanation').innerHTML = (g.explanation || '').replace(/\n/g, '<br>');
+      document.getElementById('topicGrammarExamples').innerHTML = (g.examples || []).map(e => `<li>${e}</li>`).join('');
+
+      // Exceptions
+      const excContainer = document.getElementById('topicGrammarExceptionsContainer');
+      const excList = document.getElementById('topicGrammarExceptions');
+      if (g.exceptions && g.exceptions.length > 0) {
+        excContainer.style.display = '';
+        excList.innerHTML = g.exceptions.map(e => `<li>${e}</li>`).join('');
+      } else {
+        excContainer.style.display = 'none';
+      }
+
+      // Notes
+      const notesContainer = document.getElementById('topicGrammarNotesContainer');
+      const notesList = document.getElementById('topicGrammarNotes');
+      if (g.notes && g.notes.length > 0) {
+        notesContainer.style.display = '';
+        notesList.innerHTML = g.notes.map(n => `<li>${n}</li>`).join('');
+      } else {
+        notesContainer.style.display = 'none';
+      }
+
+      // Tips
+      const tipEl = document.getElementById('topicGrammarTip');
+      if (g.tips) {
+        tipEl.style.display = '';
+        tipEl.textContent = g.tips;
+      } else {
+        tipEl.style.display = 'none';
+      }
     }
 
     // ---- TEXT-TO-SPEECH ----
@@ -509,6 +675,14 @@
     function renderList() {
       document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
         const isDiff = Storage.isDifficultWord(w.word);
+        const formulaObj = typeof getWordFormula !== 'undefined' ? getWordFormula(w.word, w.type, currentTopic) : null;
+        const formulaHtml = formulaObj ? `
+          <div class="word-formula animate-fadeInUp" style="animation-delay:${(i * 20) + 50}ms">
+            <div class="word-formula-title">📐 ${formulaObj.title}:</div>
+            <div style="font-size:12px; line-height:1.6; color:var(--text-secondary);">${formulaObj.formula}</div>
+          </div>
+        ` : '';
+
         return `
           <div class="word-card animate-fadeInUp" style="animation-delay:${i * 20}ms">
             <button class="mark-difficult ${isDiff ? 'marked' : ''}" onclick="toggleDifficult(this, ${i})" title="Đánh dấu từ khó">
@@ -519,6 +693,7 @@
             <div class="type-badge">${w.type}</div>
             <div class="meaning">${w.meaning}</div>
             <div class="example">"${w.example}"</div>
+            ${formulaHtml}
           </div>
         `;
       }).join('');
@@ -647,7 +822,9 @@
 
       const target = w.word.toLowerCase();
       const baseForm = target.split('→')[0].trim();
-      if (ans === target || ans === baseForm) {
+      const isCorrect = ans === target || ans === baseForm || 
+                        (w.enAnswers && w.enAnswers.map(x => x.toLowerCase().trim()).includes(ans));
+      if (isCorrect) {
         viToEnOk++;
         fb.className = 'abcd-feedback-banner correct';
         fb.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;

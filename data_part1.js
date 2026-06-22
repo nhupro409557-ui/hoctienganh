@@ -58,9 +58,14 @@ const DAYS_DATA_PART1 = [
     reviewDays: [],
     grammar: {
       title: "Hiện tại đơn (Present Simple) & Quy tắc thêm s/es",
-      explanation: "Thì hiện tại đơn dùng để diễn tả:\n1. Thói quen hàng ngày: I go to work every day.\n2. Sự thật hiển nhiên: The sun rises in the east.\n3. Lịch trình cố định: The train leaves at 7 a.m.\n\nCấu trúc:\n- Khẳng định: S + V(s/es)\n  + S = I/You/We/They/Danh từ số nhiều + V nguyên mẫu (Ví dụ: We work.)\n  + S = He/She/It/Danh từ số ít/Danh từ không đếm được + V-s/es (Ví dụ: She works.)\n- Phủ định: S + do/does + not + V nguyên mẫu\n- Nghi vấn: Do/Does + S + V nguyên mẫu?\n\n**QUY TẮC THÊM S/ES CHO ĐỘNG TỪ (Với chủ ngữ số ít):**\n1. Hầu hết động từ: Thêm -s (work -> works, speak -> speaks).\n2. Động từ tận cùng bằng -o, -s, -x, -ch, -sh, -z (Mẹo nhớ: \"Ông Sáu Chạy Xe Sh Zip\"): Thêm -es\n   - go -> goes, do -> does\n   - pass -> passes, kiss -> kisses\n   - watch -> watches, teach -> teaches\n   - wash -> washes, brush -> brushes\n   - mix -> mixes, fix -> fixes\n3. Động từ tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -es.\n   - study -> studies, fly -> flies, try -> tries, carry -> carries.\n4. Động từ tận cùng bằng nguyên âm (u, e, o, a, i) + -y: Chỉ thêm -s.\n   - play -> plays, buy -> buys, pay -> pays."Ông Sáu Chạy Xe Sh Zip\\"): Thêm -es\n   - go -> goes, do -> does\n   - pass -> passes, kiss -> kisses\n   - watch -> watches, teach -> teaches\n   - wash -> washes, brush -> brushes\n   - mix -> mixes, fix -> fixes\n3. Động từ tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -es.\n   - study -> studies, fly -> flies, try -> tries, carry -> carries.\n4. Động từ tận cùng bằng nguyên âm (u, e, o, a, i) + -y: Chỉ thêm -s.\n   - play -> plays, buy -> buys, pay -> pays.",
+      explanation: "Thì hiện tại đơn dùng để diễn tả:\n1. Thói quen hàng ngày: I go to work every day.\n2. Sự thật hiển nhiên: The sun rises in the east.\n3. Lịch trình cố định: The train leaves at 7 a.m.\n\nCấu trúc:\n- Khẳng định: S + V(s/es)\n  + S = I/You/We/They/Danh từ số nhiều + V nguyên mẫu (Ví dụ: We work.)\n  + S = He/She/It/Danh từ số ít/Danh từ không đếm được + V-s/es (Ví dụ: She works.)\n- Phủ định: S + do/does + not + V nguyên mẫu\n- Nghi vấn: Do/Does + S + V nguyên mẫu?\n\n**QUY TẮC THÊM S/ES CHO ĐỘNG TỪ (Với chủ ngữ số ít):**\n1. Hầu hết động từ: Thêm -s (work -> works, speak -> speaks).\n2. Động từ tận cùng bằng -o, -s, -x, -ch, -sh, -z (Mẹo nhớ: \"Ông Sáu Chạy Xe Sh Zip\"): Thêm -es\n   - go -> goes, do -> does\n   - pass -> passes, kiss -> kisses\n   - watch -> watches, teach -> teaches\n   - wash -> washes, brush -> brushes\n   - mix -> mixes, fix -> fixes\n3. Động từ tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -es.\n   - study -> studies, fly -> flies, try -> tries, carry -> carries.\n4. Động từ tận cùng bằng nguyên âm (u, e, o, a, i) + -y: Chỉ thêm -s.\n   - play -> plays, buy -> buys, pay -> pays.",
       structure: "S + V(s/es) | S + do/does + not + V | Do/Does + S + V?",
-      examples: [\n        "She goes to the office at 8 a.m. (Cô ấy đi đến văn phòng lúc 8 giờ sáng.)",\n        "He studies English every evening. (Anh ấy học tiếng Anh mỗi tối.)",\n        "The company provides good service. (Công ty cung cấp dịch vụ tốt.)",\n        "Does the manager check the report daily? (Quản lý có kiểm tra báo cáo hàng ngày không?)"\n      ],
+      examples: [
+        "She goes to the office at 8 a.m. (Cô ấy đi đến văn phòng lúc 8 giờ sáng.)",
+        "He studies English every evening. (Anh ấy học tiếng Anh mỗi tối.)",
+        "The company provides good service. (Công ty cung cấp dịch vụ tốt.)",
+        "Does the manager check the report daily? (Quản lý có kiểm tra báo cáo hàng ngày không?)"
+      ],
       tips: "Mẹo nhớ đuôi es: \"Ông Sáu Chạy Xe Sh Zip\" (O, S, CH, X, SH, Z) -> thêm -es. Luôn đưa động từ về nguyên mẫu khi dùng trợ động từ do/does!"
     },
     words: [
@@ -202,7 +207,12 @@ const DAYS_DATA_PART1 = [
       title: "Danh từ số ít, số nhiều & Quy tắc thêm s/es",
       explanation: "Danh từ đếm được có hai dạng: Số ít (một đối tượng) và Số nhiều (hai trở lên).\n\n**QUY TẮC CHUYỂN DANH TỪ SỐ ÍT SANG SỐ NHIỀU:**\n1. Thông thường: Thêm -s vào sau danh từ (product -> products, item -> items).\n2. Danh từ tận cùng bằng -s, -ss, -sh, -ch, -x, -z, -o: Thêm -es.\n   - bus -> buses, class -> classes, watch -> watches, box -> boxes.\n   * Ngoại lệ với -o: Một số từ mượn chỉ thêm -s (photo -> photos, piano -> pianos).\n3. Danh từ tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -es.\n   - company -> companies, city -> cities, factory -> factories.\n   * Nếu trước -y là nguyên âm thì chỉ thêm -s: day -> days, key -> keys.\n4. Danh từ tận cùng bằng -f hoặc -fe: Đổi -f/-fe thành -v rồi thêm -es.\n   - shelf -> shelves (kệ), knife -> knives (dao), life -> lives (mạng sống).\n   * Ngoại lệ: roof -> roofs (mái nhà), belief -> beliefs (niềm tin).\n5. Danh từ bất quy tắc (Phải học thuộc vì xuất hiện rất nhiều trong TOEIC):\n   - man -> men, woman -> women\n   - child -> children (trẻ em), person -> people (người)\n   - tooth -> teeth (răng), foot -> feet (bàn chân)\n   - mouse -> mice (chuột)\n   - sheep -> sheep (cừu), fish -> fish (cá) - không đổi.",
       structure: "Singular + s/es/ies -> Plural | a/an + Singular | some/many + Plural",
-      examples: [\n        "We ordered three new shelves for the office. (Chúng tôi đã đặt mua 3 cái kệ mới cho văn phòng.)",\n        "The manager met three clients yesterday. (Quản lý đã gặp ba khách hàng ngày hôm qua.)",\n        "All employees must attend the meeting. (Tất cả nhân viên phải tham gia cuộc họp.)",\n        "There are many people waiting in the lobby. (Có nhiều người đang đợi ở hành lang.)"\n      ],
+      examples: [
+        "We ordered three new shelves for the office. (Chúng tôi đã đặt mua 3 cái kệ mới cho văn phòng.)",
+        "The manager met three clients yesterday. (Quản lý đã gặp ba khách hàng ngày hôm qua.)",
+        "All employees must attend the meeting. (Tất cả nhân viên phải tham gia cuộc họp.)",
+        "There are many people waiting in the lobby. (Có nhiều người đang đợi ở hành lang.)"
+      ],
       tips: "Lưu ý từ bất quy tắc: person -> people rất hay ra thi. Danh từ không đếm được (money, information, advice, water) KHÔNG được thêm -s/es và không đi với a/an!"
     },
     words: [
@@ -313,7 +323,12 @@ const DAYS_DATA_PART1 = [
       title: "Hiện tại tiếp diễn (Present Continuous) & Quy tắc thêm -ing",
       explanation: "Thì hiện tại tiếp diễn dùng để diễn tả hành động đang xảy ra tại thời điểm nói hoặc xung quanh thời điểm nói.\n\nCấu trúc:\n- Khẳng định: S + am/is/are + V-ing\n- Phủ định: S + am/is/are + not + V-ing\n- Nghi vấn: Am/Is/Are + S + V-ing?\n\n**QUY TẮC THÊM -ING VÀO SAU ĐỘNG TỪ:**\n1. Thông thường: Thêm trực tiếp -ing (go -> going, work -> working).\n2. Động từ tận cùng bằng một chữ -e: Bỏ -e rồi thêm -ing.\n   - write -> writing, take -> taking, drive -> driving, change -> changing.\n   * Lưu ý: Nếu tận cùng bằng -ee thì giữ nguyên: see -> seeing, agree -> agreeing.\n3. Động từ 1 âm tiết, tận cùng dạng Phụ âm - Nguyên âm - Phụ âm (CVC): Gấp đôi phụ âm cuối rồi thêm -ing.\n   - run -> running, sit -> sitting, plan -> planning, get -> getting, stop -> stopping.\n   * Ngoại lệ: Không gấp đôi nếu phụ âm cuối là w, x, y (play -> playing, snow -> snowing).\n4. Động từ 2 âm tiết, có trọng âm rơi vào âm tiết 2, tận cùng dạng CVC: Gấp đôi phụ âm cuối.\n   - begin -> beginning, prefer -> preferring, commit -> committing.\n5. Động từ tận cùng bằng -ie: Đổi -ie thành -y rồi thêm -ing.\n   - lie -> lying (nằm/nói dối), die -> dying (chết).",
       structure: "S + am/is/are + V-ing",
-      examples: [\n        "She is writing a report right now. (Cô ấy đang viết báo cáo ngay bây giờ.)",\n        "They are planning a new marketing campaign. (Họ đang lên kế hoạch cho chiến dịch tiếp thị mới.)",\n        "The technicians are fixing the copier. (Các kỹ thuật viên đang sửa máy photocopy.)",\n        "We are beginning the training session. (Chúng tôi đang bắt đầu buổi đào tạo.)"\n      ],
+      examples: [
+        "She is writing a report right now. (Cô ấy đang viết báo cáo ngay bây giờ.)",
+        "They are planning a new marketing campaign. (Họ đang lên kế hoạch cho chiến dịch tiếp thị mới.)",
+        "The technicians are fixing the copier. (Các kỹ thuật viên đang sửa máy photocopy.)",
+        "We are beginning the training session. (Chúng tôi đang bắt đầu buổi đào tạo.)"
+      ],
       tips: "Mẹo nhớ: Trọng âm ở âm tiết 1 thì không gấp đôi phụ âm cuối, ví dụ: visit -> visiting, open -> opening. Các động từ trạng thái (know, believe, love, want) thường không chia tiếp diễn!"
     },
     words: [
@@ -357,7 +372,12 @@ const DAYS_DATA_PART1 = [
       title: "Quá khứ đơn (Past Simple) & Quy tắc thêm -ed",
       explanation: "Thì quá khứ đơn diễn tả hành động đã xảy ra và chấm dứt hoàn toàn trong quá khứ, có thời gian xác định.\n\nCấu trúc với động từ thường:\n- Khẳng định: S + V-ed (Động từ có quy tắc) hoặc V2 (Động từ bất quy tắc)\n- Phủ định: S + did + not + V nguyên mẫu\n- Nghi vấn: Did + S + V nguyên mẫu?\n\n**QUY TẮC THÊM -ED CHO ĐỘNG TỪ CÓ QUY TẮC:**\n1. Thông thường: Thêm -ed (worked, started, played).\n2. Động từ tận cùng bằng -e: Chỉ cần thêm -d (live -> lived, arrive -> arrived, like -> liked).\n3. Động từ tận cùng bằng phụ âm + -y: Đổi -y thành -i rồi thêm -ed.\n   - study -> studied, cry -> cried, copy -> copied.\n   * Nếu trước -y là nguyên âm thì chỉ thêm -ed: play -> played, stay -> stayed.\n4. Động từ 1 âm tiết, tận cùng dạng Phụ âm - Nguyên âm - Phụ âm (CVC): Gấp đôi phụ âm cuối rồi thêm -ed.\n   - stop -> stopped, plan -> planned, fit -> fitted.\n   * Ngoại lệ: Không gấp đôi nếu phụ âm cuối là w, x, y.\n\n**ĐỘNG TỪ BẤT QUY TẮC PHỔ BIẾN TRONG TOEIC (Phải thuộc):**\n- go -> went (đi), have -> had (có), do -> did (làm), say -> said (nói)\n- make -> made (tạo ra), get -> got (nhận được), take -> took (cầm/lấy/mất thời gian)\n- see -> saw (nhìn), give -> gave (cho), find -> found (tìm thấy)\n- write -> wrote (viết), read -> read (đọc - viết giống nhau nhưng phát âm khác), meet -> met (gặp)\n- send -> sent (gửi), spend -> spent (chi tiêu), build -> built (xây dựng)\n- buy -> bought (mua), sell -> sold (bán), leave -> left (rời đi)",
       structure: "S + V-ed / V2 | S + did + not + V | Did + S + V?",
-      examples: [\n        "The manager sent the email yesterday. (Quản lý đã gửi email ngày hôm qua.)",\n        "They planned the event very carefully. (Họ đã lập kế hoạch cho sự kiện rất cẩn thận.)",\n        "We studied the market before launching the product. (Chúng tôi đã nghiên cứu thị trường trước khi tung sản phẩm.)",\n        "Did you meet the new employee last week? (Bạn có gặp nhân viên mới tuần trước không?)"\n      ],
+      examples: [
+        "The manager sent the email yesterday. (Quản lý đã gửi email ngày hôm qua.)",
+        "They planned the event very carefully. (Họ đã lập kế hoạch cho sự kiện rất cẩn thận.)",
+        "We studied the market before launching the product. (Chúng tôi đã nghiên cứu thị trường trước khi tung sản phẩm.)",
+        "Did you meet the new employee last week? (Bạn có gặp nhân viên mới tuần trước không?)"
+      ],
       tips: "Mẹo làm bài: Cứ xuất hiện did/didn't thì động từ chính phía sau phải về nguyên mẫu! Cần ghi nhớ cặp động từ có/bất quy tắc để tránh nhầm lẫn đuôi."
     },
     words: [

@@ -212,6 +212,7 @@
   <script src="data.js"></script>
   <script src="storage.js"></script>
   <script src="grammar_questions.js"></script>
+  <script src="formulas_data.js"></script>
   <script>
   // ============================================
   // LEARN PAGE LOGIC
@@ -248,7 +249,50 @@
       return;
     }
 
-    words = dayData.words || [];
+    // De-duplicate words:
+    // 1. Collect all words from previous days (to filter out already-learned words)
+    const prevDayWords = new Set();
+    if (!dayData.isReview) {
+      DAYS_DATA.forEach(d => {
+        if (d.day < currentDay && !d.isReview) {
+          (d.words || []).forEach(w => prevDayWords.add(w.word.toLowerCase()));
+        }
+      });
+    }
+
+    // 2. Build deduplicated list for current day:
+    //    - Merge entries with same word (combine meanings, keep best example)
+    //    - Skip words already seen in previous days
+    const mergedMap = new Map();
+    (dayData.words || []).forEach(w => {
+      const key = w.word.toLowerCase();
+      if (prevDayWords.has(key)) return; // already learned in a previous day
+      if (mergedMap.has(key)) {
+        // Merge meanings if different
+        const existing = mergedMap.get(key);
+        const newMeanings = w.meaning.split(',').map(m => m.trim());
+        const existingMeanings = existing.meaning.split(',').map(m => m.trim());
+        newMeanings.forEach(m => {
+          if (!existingMeanings.includes(m)) existingMeanings.push(m);
+        });
+        existing.meaning = existingMeanings.join(', ');
+        // Merge viAnswers
+        if (w.viAnswers) {
+          const existingVi = existing.viAnswers || [];
+          (w.viAnswers || []).forEach(a => {
+            if (!existingVi.includes(a)) existingVi.push(a);
+          });
+          existing.viAnswers = existingVi;
+        }
+        // Merge type if different
+        if (w.type && !existing.type.includes(w.type)) {
+          existing.type = existing.type + ' / ' + w.type;
+        }
+      } else {
+        mergedMap.set(key, Object.assign({}, w));
+      }
+    });
+    words = Array.from(mergedMap.values());
     document.title = `Ngày ${currentDay} - ${dayData.topic}`;
     document.getElementById('dayTitle').textContent = `Ngày ${currentDay}`;
     document.getElementById('dayTopic').textContent = dayData.topic;
@@ -561,6 +605,31 @@
       if (rd && rd.words) allReviewWords = allReviewWords.concat(rd.words);
     });
 
+    // De-duplicate: merge entries with same word
+    const reviewMergedMap = new Map();
+    allReviewWords.forEach(w => {
+      const key = w.word.toLowerCase();
+      if (reviewMergedMap.has(key)) {
+        const existing = reviewMergedMap.get(key);
+        const newMeanings = w.meaning.split(',').map(m => m.trim());
+        const existingMeanings = existing.meaning.split(',').map(m => m.trim());
+        newMeanings.forEach(m => {
+          if (!existingMeanings.includes(m)) existingMeanings.push(m);
+        });
+        existing.meaning = existingMeanings.join(', ');
+        if (w.viAnswers) {
+          const existingVi = existing.viAnswers || [];
+          (w.viAnswers || []).forEach(a => {
+            if (!existingVi.includes(a)) existingVi.push(a);
+          });
+          existing.viAnswers = existingVi;
+        }
+      } else {
+        reviewMergedMap.set(key, Object.assign({}, w));
+      }
+    });
+    allReviewWords = Array.from(reviewMergedMap.values());
+
     if (allReviewWords.length === 0) {
       document.getElementById('reviewDayContent').innerHTML = '<div class="empty-state"><p>Không có từ để ôn</p></div>';
       return;
@@ -648,6 +717,16 @@
   function renderList() {
     document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
       const isDiff = Storage.isDifficultWord(w.word);
+      
+      // Tra cứu công thức nếu có
+      const formulaObj = typeof getWordFormula !== 'undefined' ? getWordFormula(w.word, w.type, dayData ? dayData.topic : '') : null;
+      const formulaHtml = formulaObj ? `
+        <div class="word-formula" style="animation-delay:${(i * 30) + 50}ms">
+          <div class="word-formula-title">📐 ${formulaObj.title}:</div>
+          <div style="font-size:12px; line-height:1.6; color:var(--text-secondary);">${formulaObj.formula}</div>
+        </div>
+      ` : '';
+
       return `
         <div class="word-card animate-fadeInUp" style="animation-delay:${i * 30}ms">
           <button class="mark-difficult ${isDiff ? 'marked' : ''}" onclick="toggleDifficult(this, ${i})" title="Đánh dấu từ khó">
@@ -658,6 +737,7 @@
           <div class="type-badge">${w.type}</div>
           <div class="meaning">${w.meaning}</div>
           <div class="example">"${w.example}"</div>
+          ${formulaHtml}
         </div>
       `;
     }).join('');

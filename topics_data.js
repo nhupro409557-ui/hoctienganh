@@ -1014,96 +1014,21 @@ const TOPICS_DATA = {
   ],
   "Động từ nối": [
     {
-      "word": "am",
-      "ipa": "/æm/",
-      "meaning": "thì, là, ở (đi với I)",
-      "type": "verb",
-      "example": "I am a student.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở"
-      ]
-    },
-    {
-      "word": "is",
-      "ipa": "/ɪz/",
-      "meaning": "thì, là, ở (đi với he, she, it)",
-      "type": "verb",
-      "example": "She is a manager.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở"
-      ]
-    },
-    {
-      "word": "are",
-      "ipa": "/ɑːr/",
-      "meaning": "thì, là, ở (đi với you, we, they)",
-      "type": "verb",
-      "example": "They are very professional.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở"
-      ]
-    },
-    {
-      "word": "was",
-      "ipa": "/wʌz/",
-      "meaning": "thì, là, ở (quá khứ số ít)",
-      "type": "verb",
-      "example": "He was late yesterday.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở"
-      ]
-    },
-    {
-      "word": "were",
-      "ipa": "/wɜːr/",
-      "meaning": "thì, là, ở (quá khứ phân từ số nhiều)",
-      "type": "verb",
-      "example": "We were at the meeting.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở"
-      ]
-    },
-    {
       "word": "be",
       "ipa": "/biː/",
-      "meaning": "thì, là, ở (nguyên thể)",
+      "meaning": "thì, là, ở (chia theo thì: am/is/are/was/were/been/being)",
       "type": "verb",
-      "example": "You should be careful.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở",
-        "nguyên thể"
-      ]
-    },
-    {
-      "word": "been",
-      "ipa": "/bɪn/",
-      "meaning": "thì, là, ở (quá khứ phân từ)",
-      "type": "verb",
-      "example": "I have been busy all day.",
-      "viAnswers": [
-        "thì",
-        "là",
-        "ở"
-      ]
-    },
-    {
-      "word": "being",
-      "ipa": "/ˈbiːɪŋ/",
-      "meaning": "thì, là, ở (tiếp diễn/danh động từ)",
-      "type": "verb",
-      "example": "Thank you for being helpful.",
+      "example": "You should be careful. / I am a student. / He was late yesterday.",
+      "enAnswers": [
+        "be",
+        "am",
+        "is",
+        "are",
+        "was",
+        "were",
+        "been",
+        "being"
+      ],
       "viAnswers": [
         "thì",
         "là",
