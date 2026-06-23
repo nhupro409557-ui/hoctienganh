@@ -1099,6 +1099,82 @@ input[type="text"]::placeholder {
   accent-color: var(--accent);
 }
 
+.word-usage {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.word-usage b { color: var(--accent-hover); }
+
+.example-toggle {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--success);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.example-detail {
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.07);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.mastery-badge {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.mastery-new { background: rgba(148,163,184,.15); color: var(--text-muted); }
+.mastery-learning { background: rgba(59,130,246,.15); color: #60a5fa; }
+.mastery-struggling { background: rgba(239,68,68,.15); color: #f87171; }
+.mastery-mastered { background: rgba(16,185,129,.15); color: #34d399; }
+.mastery-due { background: rgba(245,158,11,.15); color: #fbbf24; }
+
+.context-option {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  text-align: left;
+}
+
+.feedback-explanation {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dictation-play {
+  display: block;
+  margin: 16px auto;
+  padding: 14px 24px;
+  border: 1px solid var(--border-accent);
+  border-radius: 999px;
+  background: rgba(99,102,241,.14);
+  color: var(--accent-hover);
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 800;
+}
+
 /* ============================== */
 /*          BADGE                 */
 /* ============================== */

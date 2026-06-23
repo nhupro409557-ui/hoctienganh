@@ -139,6 +139,9 @@
         <button class="tab-btn" onclick="showTab('enToVi',this)">🇬🇧→🇻🇳 Anh→Việt</button>
         <button class="tab-btn" onclick="showTab('abcd',this)">📝 A/B/C/D</button>
         <button class="tab-btn" onclick="showTab('typeQuiz',this)">🏷️ Từ loại</button>
+        <button class="tab-btn" onclick="showTab('collocations',this)">🔗 Học theo cụm</button>
+        <button class="tab-btn" onclick="showTab('contextQuiz',this)">🧩 Ngữ cảnh</button>
+        <button class="tab-btn" onclick="showTab('dictation',this)">🎧 Nghe & viết</button>
       </div>
 
       <!-- Tab Grammar -->
@@ -259,6 +262,36 @@
           <button class="btn btn-success" onclick="startType()">🔀 Trộn & Làm lại</button>
         </div>
       </section>
+
+      <section id="collocations" class="section">
+        <div class="note">🔗 Học cả cụm từ tự nhiên thay vì ghép từng từ riêng lẻ. Nhấn nút để xem bản dịch câu ví dụ.</div>
+        <div id="collocationGrid" class="word-grid"></div>
+      </section>
+
+      <section id="contextQuiz" class="section">
+        <div class="note">🧩 Chọn từ phù hợp nhất với ngữ cảnh. Sau khi trả lời, bạn sẽ thấy bản dịch và lý do chọn từ.</div>
+        <div class="progress"><div id="contextProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="contextCounter">Câu 0/0</span>
+          <span class="abcd-score"><span class="score-correct" id="contextOk">✓ 0</span><span class="score-wrong" id="contextBad">✗ 0</span></span>
+        </div>
+        <div class="abcd-single-container" id="contextContainer"></div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="startContextQuiz()">🔀 Bắt đầu / Làm lại</button>
+          <button class="btn btn-danger" id="contextRetryBtn" onclick="retryContextWrong()" style="display:none">🔁 Làm lại câu sai</button>
+        </div>
+      </section>
+
+      <section id="dictation" class="section">
+        <div class="note">🎧 Nghe phát âm rồi nhập lại từ tiếng Anh. Các từ trả lời sai sẽ được làm lại ngay sau lượt đầu.</div>
+        <div class="progress"><div id="dictationProgress" class="progress-bar"></div></div>
+        <div class="abcd-progress-info">
+          <span class="abcd-counter" id="dictationCounter">Câu 0/0</span>
+          <span class="abcd-score"><span class="score-correct" id="dictationOk">✓ 0</span><span class="score-wrong" id="dictationBad">✗ 0</span></span>
+        </div>
+        <div class="abcd-single-container" id="dictationContainer"></div>
+        <div class="btn-group"><button class="btn btn-success" onclick="startDictation()">🔀 Bắt đầu / Làm lại</button></div>
+      </section>
     </div>
   </div>
 
@@ -267,6 +300,8 @@
   <script src="topics_determiners_adjectives.js"></script>
   <script src="topics_grammar.js"></script>
   <script src="formulas_data.js"></script>
+  <script src="usage_notes.js"></script>
+  <script src="learning_extras.js"></script>
   <script>
     // ============================================
     // TOPICS PAGE LOGIC
@@ -663,6 +698,9 @@
       document.querySelectorAll('#mainTabs .tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       btn.classList.add('active');
+      if (id === 'collocations') renderCollocations();
+      if (id === 'contextQuiz' && !contextList.length) startContextQuiz();
+      if (id === 'dictation' && !dictationList.length) startDictation();
     }
 
     // ---- HELPERS ----
@@ -676,6 +714,12 @@
       document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
         const isDiff = Storage.isDifficultWord(w.word);
         const formulaObj = typeof getWordFormula !== 'undefined' ? getWordFormula(w.word, w.type, currentTopic) : null;
+        const usageNote = w.usage || (typeof getWordUsageNote === 'function' ? getWordUsageNote(w.word) : '');
+        const usageHtml = usageNote ? `<div class="word-usage"><b>Phân biệt cách dùng:</b> ${usageNote}</div>` : '';
+        const mastery = Storage.getWordMastery(w.word);
+        const masteryLabels = { new:'Chưa học', learning:'Đang học', struggling:'Hay sai', mastered:'Đã thuộc', due:'Đến hạn ôn' };
+        const exampleVi = typeof getExampleTranslation === 'function' ? getExampleTranslation(w) : '';
+        const exampleExplanation = typeof getExampleExplanation === 'function' ? getExampleExplanation(w) : '';
         const formulaHtml = formulaObj ? `
           <div class="word-formula animate-fadeInUp" style="animation-delay:${(i * 20) + 50}ms">
             <div class="word-formula-title">📐 ${formulaObj.title}:</div>
@@ -693,10 +737,24 @@
             <div class="type-badge">${w.type}</div>
             <div class="meaning">${w.meaning}</div>
             <div class="example">"${w.example}"</div>
+            <button class="example-toggle" onclick="toggleExampleDetail(this)">🇻🇳 Xem dịch & giải thích</button>
+            <div class="example-detail" style="display:none">
+              <div><b>Dịch:</b> ${exampleVi}</div>
+              <div><b>Vì sao dùng từ này:</b> ${exampleExplanation}</div>
+            </div>
+            <div class="mastery-badge mastery-${mastery.status}">${masteryLabels[mastery.status] || masteryLabels.new}</div>
+            ${usageHtml}
             ${formulaHtml}
           </div>
         `;
       }).join('');
+    }
+
+    function toggleExampleDetail(btn) {
+      const detail = btn.nextElementSibling;
+      const hidden = detail.style.display === 'none';
+      detail.style.display = hidden ? 'block' : 'none';
+      btn.textContent = hidden ? '🙈 Ẩn bản dịch' : '🇻🇳 Xem dịch & giải thích';
     }
 
     function toggleDifficult(btn, index) {
@@ -767,8 +825,8 @@
     // ============================================
     let viToEnIdx = 0, viToEnOk = 0, viToEnBad = [], viToEnDone = false;
 
-    function startViToEn() {
-      viToEnList = shuffleArray([...words]);
+    function startViToEn(customWords) {
+      viToEnList = shuffleArray([...(Array.isArray(customWords) ? customWords : words)]);
       viToEnIdx = 0; viToEnOk = 0; viToEnBad = []; viToEnDone = false;
       renderViToEnSingle();
     }
@@ -826,10 +884,12 @@
                         (w.enAnswers && w.enAnswers.map(x => x.toLowerCase().trim()).includes(ans));
       if (isCorrect) {
         viToEnOk++;
+        Storage.recordWordAttempt(w, true);
         fb.className = 'abcd-feedback-banner correct';
         fb.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
         inp.style.borderColor = 'var(--success)';
       } else {
+        Storage.recordWordAttempt(w, false);
         fb.className = 'abcd-feedback-banner wrong';
         fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
         inp.style.borderColor = 'var(--error)';
@@ -857,6 +917,7 @@
       fb.className = 'abcd-feedback-banner wrong';
       fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       viToEnBad.push(w);
+      Storage.recordWordAttempt(w, false);
       Storage.addDifficultWord(w, currentTopic);
 
       speakWord(w.word);
@@ -873,8 +934,8 @@
     // ============================================
     let enToViIdx = 0, enToViOk = 0, enToViBad = [], enToViDone = false;
 
-    function startEnToVi() {
-      enToViList = shuffleArray([...words]);
+    function startEnToVi(customWords) {
+      enToViList = shuffleArray([...(Array.isArray(customWords) ? customWords : words)]);
       enToViIdx = 0; enToViOk = 0; enToViBad = []; enToViDone = false;
       renderEnToViSingle();
     }
@@ -930,10 +991,12 @@
 
       if (ok) {
         enToViOk++;
+        Storage.recordWordAttempt(w, true);
         fb.className = 'abcd-feedback-banner correct';
         fb.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
         inp.style.borderColor = 'var(--success)';
       } else {
+        Storage.recordWordAttempt(w, false);
         fb.className = 'abcd-feedback-banner wrong';
         fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.meaning}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
         inp.style.borderColor = 'var(--error)';
@@ -961,6 +1024,7 @@
       fb.className = 'abcd-feedback-banner wrong';
       fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.meaning}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       enToViBad.push(w);
+      Storage.recordWordAttempt(w, false);
       Storage.addDifficultWord(w, currentTopic);
 
       speakWord(w.word);
@@ -997,8 +1061,15 @@
       });
     }
 
-    function restartABCD() {
-      buildABCD();
+    function restartABCD(customWords) {
+      if (Array.isArray(customWords)) {
+        const originalWords = words;
+        words = customWords;
+        buildABCD();
+        words = originalWords;
+      } else {
+        buildABCD();
+      }
       abcdList = shuffleArray(abcdList);
       abcdIndex = 0;
       abcdCorrect = 0;
@@ -1074,9 +1145,11 @@
 
       if (isCorrect) {
         abcdCorrect++;
+        Storage.recordWordAttempt(w, true);
         banner.className = 'abcd-feedback-banner correct';
         banner.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
       } else {
+        Storage.recordWordAttempt(w, false);
         banner.className = 'abcd-feedback-banner wrong';
         banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
         abcdWrongWords.push(w);
@@ -1134,6 +1207,7 @@
                 </div>
               `).join('')}
             </div>
+            <button class="btn btn-danger" onclick="restartABCD(abcdWrongWords)">🔁 Làm lại ngay các từ sai</button>
           ` : ''}
         </div>
       `;
@@ -1261,6 +1335,155 @@
     }
 
     // ============================================
+    // EXTRA TAB: COLLOCATIONS
+    // ============================================
+    function renderCollocations() {
+      const items = getCollocationsForWords(words);
+      document.getElementById('collocationGrid').innerHTML = items.map((item, index) => `
+        <div class="word-card animate-fadeInUp" style="animation-delay:${index * 20}ms">
+          <button class="speak-btn" onclick="speakWord('${item.phrase.replace(/'/g, "\\'")}')">🔊</button>
+          <div class="word">${item.phrase}</div>
+          <div class="meaning">${item.meaning}</div>
+          <div class="example">"${item.example}"</div>
+          <button class="example-toggle" onclick="toggleExampleDetail(this)">🇻🇳 Xem bản dịch</button>
+          <div class="example-detail" style="display:none"><b>Dịch:</b> ${item.exampleVi}</div>
+        </div>
+      `).join('');
+    }
+
+    // ============================================
+    // EXTRA TAB: CONTEXT QUIZ
+    // ============================================
+    let contextList = [], contextIndex = 0, contextCorrect = 0, contextWrong = [], contextAnswered = false;
+
+    function startContextQuiz(customList) {
+      contextList = shuffleArray([...(customList || getContextQuestionsForWords(words))]);
+      contextIndex = 0; contextCorrect = 0; contextWrong = []; contextAnswered = false;
+      document.getElementById('contextRetryBtn').style.display = 'none';
+      renderContextQuestion();
+    }
+
+    function renderContextQuestion() {
+      const total = contextList.length;
+      const container = document.getElementById('contextContainer');
+      document.getElementById('contextProgress').style.width = (total ? contextIndex / total * 100 : 0) + '%';
+      document.getElementById('contextCounter').textContent = `Câu ${Math.min(contextIndex + 1, total)}/${total}`;
+      document.getElementById('contextOk').textContent = `✓ ${contextCorrect}`;
+      document.getElementById('contextBad').textContent = `✗ ${contextWrong.length}`;
+      if (!total) {
+        container.innerHTML = '<div class="empty-state"><p>Chưa có bài ngữ cảnh phù hợp cho nhóm này.</p></div>';
+        return;
+      }
+      if (contextIndex >= total) {
+        document.getElementById('contextProgress').style.width = '100%';
+        container.innerHTML = `<div class="quiz-summary"><div style="font-size:48px">🧩</div><div class="quiz-summary-score">${Math.round(contextCorrect / total * 100)}%</div><div class="quiz-summary-label">Hoàn thành bài chọn từ theo ngữ cảnh</div>${contextWrong.length ? '<p>Các câu sai đã sẵn sàng để làm lại.</p>' : '<p>Bạn đã trả lời đúng toàn bộ.</p>'}</div>`;
+        document.getElementById('contextRetryBtn').style.display = contextWrong.length ? 'inline-flex' : 'none';
+        return;
+      }
+      const q = contextList[contextIndex];
+      contextAnswered = false;
+      container.innerHTML = `<div class="abcd-single-question"><div class="question">
+        <div class="question-label">Chọn từ phù hợp nhất:</div>
+        <div class="big-prompt">${q.sentence}</div>
+        ${shuffleArray(q.words).map((option, i) => `<button class="context-option option" onclick="answerContext(this,'${option.replace(/'/g, "\\'")}')">${String.fromCharCode(65+i)}. ${option}</button>`).join('')}
+        <div id="contextFeedback"></div>
+      </div></div>`;
+    }
+
+    function answerContext(btn, answer) {
+      if (contextAnswered) return;
+      contextAnswered = true;
+      const q = contextList[contextIndex];
+      const validAnswers = q.answers || [q.answer];
+      const correct = validAnswers.includes(answer);
+      document.querySelectorAll('#contextContainer .context-option').forEach(option => {
+        const value = option.textContent.replace(/^[A-Z]\.\s*/, '');
+        if (validAnswers.includes(value)) option.classList.add('option-correct');
+        else if (option === btn) option.classList.add('option-wrong');
+        else option.classList.add('option-disabled');
+      });
+      if (correct) contextCorrect++;
+      else contextWrong.push(q);
+      const matchedWord = words.find(w => String(w.word).toLowerCase() === String(q.answer).toLowerCase());
+      if (matchedWord) Storage.recordWordAttempt(matchedWord, correct);
+      document.getElementById('contextFeedback').className = `abcd-feedback-banner ${correct ? 'correct' : 'wrong'}`;
+      document.getElementById('contextFeedback').innerHTML = `${correct ? '✅ Chính xác!' : `❌ Đáp án phù hợp: <b>${q.answer}</b>`}<div class="feedback-explanation"><b>Dịch:</b> ${q.meaning}<br><b>Giải thích:</b> ${q.explanation}</div>`;
+      document.getElementById('contextOk').textContent = `✓ ${contextCorrect}`;
+      document.getElementById('contextBad').textContent = `✗ ${contextWrong.length}`;
+      setTimeout(() => { contextIndex++; renderContextQuestion(); }, 2400);
+    }
+
+    function retryContextWrong() {
+      if (contextWrong.length) startContextQuiz([...contextWrong]);
+    }
+
+    // ============================================
+    // EXTRA TAB: LISTENING DICTATION
+    // ============================================
+    let dictationList = [], dictationIndex = 0, dictationCorrect = 0, dictationWrong = [], dictationAnswered = false, dictationRetrying = false;
+
+    function startDictation(customList) {
+      const source = shuffleArray([...(customList || words)]);
+      dictationList = customList ? source : source.slice(0, Math.min(20, words.length));
+      dictationIndex = 0; dictationCorrect = 0; dictationWrong = []; dictationAnswered = false;
+      dictationRetrying = Boolean(customList);
+      renderDictation();
+    }
+
+    function renderDictation() {
+      const total = dictationList.length;
+      const container = document.getElementById('dictationContainer');
+      document.getElementById('dictationProgress').style.width = (total ? dictationIndex / total * 100 : 0) + '%';
+      document.getElementById('dictationCounter').textContent = `Câu ${Math.min(dictationIndex + 1, total)}/${total}`;
+      document.getElementById('dictationOk').textContent = `✓ ${dictationCorrect}`;
+      document.getElementById('dictationBad').textContent = `✗ ${dictationWrong.length}`;
+      if (!total) return;
+      if (dictationIndex >= total) {
+        if (dictationWrong.length && !dictationRetrying) {
+          const retryWords = [...dictationWrong];
+          container.innerHTML = '<div class="quiz-summary"><div style="font-size:48px">🔁</div><div class="quiz-summary-label">Bắt đầu làm lại các từ vừa sai…</div></div>';
+          setTimeout(() => startDictation(retryWords), 1200);
+          return;
+        }
+        document.getElementById('dictationProgress').style.width = '100%';
+        container.innerHTML = `<div class="quiz-summary"><div style="font-size:48px">🎧</div><div class="quiz-summary-score">${Math.round(dictationCorrect / total * 100)}%</div><div class="quiz-summary-label">${dictationWrong.length ? 'Vẫn còn từ cần ôn thêm' : 'Đã hoàn thành toàn bộ từ nghe'}</div></div>`;
+        return;
+      }
+      const w = dictationList[dictationIndex];
+      dictationAnswered = false;
+      container.innerHTML = `<div class="abcd-single-question"><div class="question">
+        <div class="question-label">Nghe và nhập từ:</div>
+        <button class="dictation-play" onclick="speakWord('${w.word.replace(/'/g, "\\'")}')">🔊 Phát âm</button>
+        <div class="small-hint">${w.type || ''} • ${w.meaning}</div>
+        <input id="dictationInput" type="text" placeholder="Nhập từ bạn nghe được..." autocomplete="off" onkeydown="if(event.key==='Enter') checkDictation()">
+        <div style="margin-top:12px"><button class="btn btn-primary" onclick="checkDictation()">✅ Kiểm tra</button></div>
+        <div id="dictationFeedback"></div>
+      </div></div>`;
+      speakWord(w.word);
+      setTimeout(() => document.getElementById('dictationInput')?.focus(), 100);
+    }
+
+    function checkDictation() {
+      if (dictationAnswered) return;
+      dictationAnswered = true;
+      const w = dictationList[dictationIndex];
+      const input = document.getElementById('dictationInput');
+      const correct = normalizeText(input.value) === normalizeText(w.word);
+      if (correct) dictationCorrect++;
+      else {
+        dictationWrong.push(w);
+        Storage.addDifficultWord(w, currentTopic);
+      }
+      Storage.recordWordAttempt(w, correct);
+      input.disabled = true;
+      document.getElementById('dictationFeedback').className = `abcd-feedback-banner ${correct ? 'correct' : 'wrong'}`;
+      document.getElementById('dictationFeedback').innerHTML = correct ? `✅ Chính xác: <b>${w.word}</b>` : `❌ Đáp án: <b>${w.word}</b> ${w.ipa || ''}`;
+      document.getElementById('dictationOk').textContent = `✓ ${dictationCorrect}`;
+      document.getElementById('dictationBad').textContent = `✗ ${dictationWrong.length}`;
+      setTimeout(() => { dictationIndex++; renderDictation(); }, 1500);
+    }
+
+    // ============================================
     // SHARED: FILL QUIZ SUMMARY
     // ============================================
     function showFillSummary(container, progressId, correct, wrongList, total, quizType) {
@@ -1285,7 +1508,8 @@
             <div class="quiz-wrong-list">
               <div style="font-weight:800;margin-bottom:10px;color:var(--error-hover)">📝 Từ cần ôn lại:</div>
               ${wrongList.map(w => `<div class="wrong-item"><span class="wrong-word">${w.word}</span><span class="wrong-meaning">${w.meaning}</span></div>`).join('')}
-            </div>` : ''}
+            </div>
+            <button class="btn btn-danger" onclick="${quizType === 'viToEn' ? 'startViToEn(viToEnBad)' : 'startEnToVi(enToViBad)'}">🔁 Làm lại ngay các từ sai</button>` : ''}
         </div>`;
 
       Storage.saveQuizResult(currentTopic, quizType, correct, total);

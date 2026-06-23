@@ -15,6 +15,7 @@ const Storage = {
     LAST_STUDY_DATE: 'eng_last_study',
     CHECKLIST: 'eng_checklist_',
     SETTINGS: 'eng_settings'
+    ,WORD_MASTERY: 'eng_word_mastery'
   },
 
   // ============================================
@@ -36,6 +37,8 @@ const Storage = {
         type: wordObj.type,
         example: wordObj.example,
         viAnswers: wordObj.viAnswers,
+        usage: wordObj.usage,
+        ipa: wordObj.ipa,
         day: day,
         addedAt: new Date().toISOString(),
         reviewCount: 0,
@@ -62,6 +65,38 @@ const Storage = {
 
   isDifficultWord(word) {
     return this.getDifficultWords().some(w => w.word === word);
+  },
+
+  getWordMasteryMap() {
+    try { return JSON.parse(localStorage.getItem(this.KEYS.WORD_MASTERY)) || {}; }
+    catch { return {}; }
+  },
+
+  getWordMastery(word) {
+    const item = this.getWordMasteryMap()[String(word).toLowerCase()];
+    if (!item) return { status: 'new', correct: 0, wrong: 0, nextReview: null };
+    if (item.nextReview && new Date(item.nextReview) <= new Date() && item.status !== 'mastered') {
+      return { ...item, status: 'due' };
+    }
+    return item;
+  },
+
+  recordWordAttempt(wordObj, isCorrect) {
+    const map = this.getWordMasteryMap();
+    const key = String(wordObj.word).toLowerCase();
+    const item = map[key] || { status: 'learning', correct: 0, wrong: 0, nextReview: null };
+    if (isCorrect) item.correct += 1;
+    else item.wrong += 1;
+
+    if (item.wrong >= 2 && item.correct < item.wrong + 2) item.status = 'struggling';
+    else if (item.correct >= 4 && item.correct >= item.wrong * 2 + 2) item.status = 'mastered';
+    else item.status = 'learning';
+
+    const delay = item.status === 'mastered' ? 7 * 86400000 : isCorrect ? 86400000 : 0;
+    item.nextReview = new Date(Date.now() + delay).toISOString();
+    map[key] = item;
+    localStorage.setItem(this.KEYS.WORD_MASTERY, JSON.stringify(map));
+    return item;
   },
 
   updateDifficultWordStats(word, isCorrect) {

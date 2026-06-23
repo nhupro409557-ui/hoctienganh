@@ -40,6 +40,13 @@
           <!-- Generated dynamically -->
         </div>
       </div>
+      <div class="filter-group">
+        <span class="filter-label">❤️ Phạm vi học</span>
+        <div class="filter-chips" id="sourceFilters">
+          <button class="filter-chip active" onclick="setSourceFilter('all', this)">Toàn bộ từ</button>
+          <button class="filter-chip" onclick="setSourceFilter('marked', this)">Chỉ từ đã đánh dấu</button>
+        </div>
+      </div>
     </div>
 
     <!-- Word Count -->
@@ -96,7 +103,11 @@
 
     <!-- Fill Mode -->
     <section id="fillMode" class="section">
-      <div class="note">💡 Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b>. Từ sai tự động vào kho từ khó!</div>
+      <div class="mode-box">
+        <label><input type="radio" name="reviewFillMode" value="vi-en" checked onchange="startReviewFill()">Việt → Anh</label>
+        <label><input type="radio" name="reviewFillMode" value="en-vi" onchange="startReviewFill()">Anh → Việt</label>
+      </div>
+      <div class="note" id="reviewFillNote">💡 Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b>. Từ sai tự động vào kho từ khó!</div>
       <div class="progress"><div id="reviewFillProgress" class="progress-bar"></div></div>
       <div class="abcd-progress-info">
         <span class="abcd-counter" id="reviewFillCounter">Câu 0/0</span>
@@ -131,6 +142,7 @@
   let selectedPhase = 'all';
   let selectedDays = [];
   let selectedType = 'all';
+  let selectedSource = 'all';
 
   // ---- INIT ----
   function init() {
@@ -223,11 +235,20 @@
     applyFilters();
   }
 
+  function setSourceFilter(source, btn) {
+    selectedSource = source;
+    document.querySelectorAll('#sourceFilters .filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
   function applyFilters() {
+    const markedWords = new Set(Storage.getDifficultWords().map(w => w.word.toLowerCase()));
     filteredWords = allWords.filter(w => {
       if (selectedPhase !== 'all' && w.phase !== selectedPhase) return false;
       if (selectedDays.length > 0 && !selectedDays.includes(w.day)) return false;
       if (selectedType !== 'all' && w.type !== selectedType) return false;
+      if (selectedSource === 'marked' && !markedWords.has(w.word.toLowerCase())) return false;
       return true;
     });
 
@@ -526,15 +547,21 @@
     }
 
     const w = reviewFillList[reviewFillIndex];
+    const mode = document.querySelector('input[name="reviewFillMode"]:checked').value;
+    const isEnVi = mode === 'en-vi';
     reviewFillAnswered = false;
+    document.getElementById('reviewFillNote').innerHTML = isEnVi
+      ? '💡 Hiện <b>từ tiếng Anh</b>, bạn điền <b>nghĩa tiếng Việt</b>. Có thể nhập một trong các nghĩa đúng.'
+      : '💡 Hiện <b>nghĩa tiếng Việt</b>, bạn điền <b>từ tiếng Anh</b>. Từ sai tự động vào kho từ khó!';
 
     container.innerHTML = `
       <div class="abcd-single-question">
         <div class="question">
-          <div class="question-label">Điền từ tiếng Anh:</div>
-          <div class="big-prompt">${w.meaning}</div>
+          <div class="question-label">${isEnVi ? 'Điền nghĩa tiếng Việt:' : 'Điền từ tiếng Anh:'}</div>
+          <div class="big-prompt">${isEnVi ? w.word : w.meaning}</div>
+          ${isEnVi ? `<button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin:8px auto;display:block">🔊</button>` : ''}
           <div class="small-hint">${w.type || ''} ${w.day ? '• Ngày ' + w.day : ''}</div>
-          <input type="text" id="reviewFillInput" placeholder="Điền từ tiếng Anh..." autofocus
+          <input type="text" id="reviewFillInput" placeholder="${isEnVi ? 'Điền nghĩa tiếng Việt...' : 'Điền từ tiếng Anh...'}" autofocus
             onkeydown="if(event.key==='Enter') checkReviewFill()">
           <div style="margin-top:12px">
             <button class="btn btn-primary" onclick="checkReviewFill()">✅ Kiểm tra</button>
@@ -560,15 +587,19 @@
     const input = document.getElementById('reviewFillInput');
     const feedback = document.getElementById('reviewFillFeedback');
     const ans = normalizeText(input.value);
+    const mode = document.querySelector('input[name="reviewFillMode"]:checked').value;
+    const acceptedAnswers = mode === 'en-vi'
+      ? (w.viAnswers && w.viAnswers.length ? w.viAnswers : w.meaning.split(',')).map(normalizeText)
+      : [normalizeText(w.word)];
 
-    if (ans === w.word.toLowerCase()) {
+    if (acceptedAnswers.includes(ans)) {
       reviewFillCorrect++;
       feedback.className = 'abcd-feedback-banner correct';
-      feedback.innerHTML = `🎉 Chính xác! <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+      feedback.innerHTML = `🎉 Chính xác! <b>${w.word}</b> — ${w.meaning} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       input.style.borderColor = 'var(--success)';
     } else {
       feedback.className = 'abcd-feedback-banner wrong';
-      feedback.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
+      feedback.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${mode === 'en-vi' ? w.meaning : w.word}</b> <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       input.style.borderColor = 'var(--error)';
       reviewFillWrong.push(w);
       Storage.addDifficultWord(w, w.day || 0);
