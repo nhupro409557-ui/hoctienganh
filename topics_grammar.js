@@ -1,7 +1,120 @@
-/* ====================================================
+﻿/* ====================================================
    TOPICS_GRAMMAR.JS - Ngu phap cho tung chu de
    ==================================================== */
 const TOPICS_GRAMMAR = {
+
+  "Cụm giới từ TOEIC": {
+    title: "Preposition Collocations hay ra trong TOEIC",
+    structure: "verb + preposition | adjective + preposition | noun + preposition | fixed prepositional phrase",
+    explanation: "Phần này học theo collocation, nghĩa là phải nhớ cả cụm chứ không dịch từng giới từ riêng lẻ.\n\n1. VERB + PREPOSITION: apply for, belong to, reply to, respond to, comply with, deal with, depend on, participate in, consist of, benefit from.\n\n2. ADJECTIVE + PREPOSITION: interested in, responsible for, eligible for, qualified for, similar to, related to, familiar with, satisfied with, capable of, aware of.\n\n3. NOUN + PREPOSITION: access to, solution to, response to, key to, reason for, need for, request for, increase in, information about, knowledge of.\n\n4. PREPOSITIONAL PHRASES: in charge of, in accordance with, in addition to, in advance, in case of, in response to, on behalf of, on time, by means of, according to, due to, because of, thanks to, regardless of, instead of, with regard to.",
+    examples: [
+      "apply for a position",
+      "respond to a request",
+      "comply with regulations",
+      "interested in marketing",
+      "responsible for hiring",
+      "access to the database",
+      "solution to the problem",
+      "in charge of the project",
+      "on behalf of the manager",
+      "according to the report"
+    ],
+    notes: [
+      "Verb + preposition là nhóm hay ra nhất trong câu điền giới từ sau động từ.",
+      "Adjective + preposition thường xuất hiện sau be: be interested in, be responsible for, be aware of.",
+      "Noun + preposition thường xuất hiện trong cụm danh từ: access to, reason for, increase in.",
+      "Prepositional phrases thường đứng đầu câu hoặc giữa câu để nối ý: according to, in addition to, due to.",
+      "Không đổi giới từ theo tiếng Việt; phải học nguyên cụm: reply to, depend on, comply with."
+    ],
+    tips: "Mẹo TOEIC: khi thấy chỗ trống ngay sau động từ/tính từ/danh từ quen thuộc, nghĩ đến collocation cố định trước khi dịch nghĩa."
+  },
+
+  "Giới từ": {
+    title: "Giới từ thường gặp trong TOEIC",
+    structure: "preposition + noun/noun phrase | adjective/verb/noun + preposition",
+    explanation: "Giới từ trong TOEIC thường xuất hiện ở ba dạng chính: chỉ thời gian/địa điểm, chỉ hướng hoặc quan hệ, và cụm cố định sau động từ/tính từ/danh từ.\n\nThời gian: in, on, at, for, since, during, by, until/till, after, before, around.\n\nĐịa điểm/vị trí: in, on, at, near, beside, opposite, above, over, under, below, behind, in front of.\n\nHướng/chuyển động: to, into, out of, through, across, toward(s), from.\n\nQuan hệ/cách thức/nguyên nhân/mục đích: with, without, of, about, because of, due to, thanks to, in order to, against.\n\nCụm TOEIC cần nhớ: participate in, depend on, good at, apply for, benefit from, belong to, reply to, agree with, capable of, worried about.",
+    examples: [
+      "IN: in 2020, in the morning, in a taxi, participate in.",
+      "ON: on Monday, on the table, on a bus, depend on.",
+      "AT: at 8 a.m., at home, at the station, good at.",
+      "FOR/SINCE/DURING/BY/UNTIL: for 3 years, since 2020, during the meeting, by Friday, until Friday.",
+      "TO/FROM/INTO/OUT OF/THROUGH/ACROSS: go to the office, recover from, move into, walk out of, through the process, across the street.",
+      "WITH/OF/ABOUT: agree with, capable of, information about."
+    ],
+    notes: [
+      "Không dùng in night; dùng at night.",
+      "For + khoảng thời gian: for 3 years. Since + mốc bắt đầu: since 2020.",
+      "During + sự kiện/danh từ: during the meeting; không dùng during 3 years.",
+      "By Friday = trước hoặc đúng thứ Sáu; until Friday = kéo dài tới thứ Sáu.",
+      "Because of/due to/thanks to đi với danh từ/cụm danh từ; in order to đi với V nguyên mẫu."
+    ],
+    tips: "Mẹo TOEIC: học giới từ theo cụm cố định, không chỉ học nghĩa đơn lẻ: interested in, rely on, responsible for, respond to, comply with, aware of."
+  },
+
+  "Động từ + Wh-word + to V": {
+    title: "Verb + Wh-word + to V",
+    structure: "S + verb + wh-word + to V | S + verb + object + wh-word + to V",
+    explanation: "Cấu trúc này dùng khi nói về việc biết, quyết định, hỏi, chỉ dẫn hoặc tìm ra cách làm một việc gì đó. Wh-word thường gặp: what, where, when, who, which, how.\n\n1. Nhóm Tư duy & Nhận thức (Mental Verbs): know, decide, understand, wonder, remember, forget, consider. Đây là nhóm diễn tả quá trình suy nghĩ, ghi nhớ hoặc ra quyết định của não bộ.\n\n2. Nhóm Truyền đạt & Hướng dẫn (Communication Verbs): tell, show, ask, explain, teach, advise. Với nhóm này thường có tân ngữ chỉ người đứng giữa động từ và wh-word: verb + person + wh-word + to V.\n\n3. Nhóm Tìm hiểu & Khám phá (Discovery Verbs): learn, find out, figure out, discover. Nhóm này diễn tả việc tìm tòi, học hỏi hoặc phát hiện ra cách/điều cần làm.",
+    examples: [
+      "know what to do = biết phải làm gì",
+      "decide where to go = quyết định đi đâu",
+      "understand how to use = hiểu cách dùng",
+      "tell me where to sign = bảo tôi ký ở đâu",
+      "show him how to fix = chỉ anh ấy cách sửa",
+      "find out what to buy = tìm xem nên mua gì",
+      "figure out how to solve = nghĩ cách giải quyết"
+    ],
+    notes: [
+      "Công thức thường: verb + wh-word + to V: know what to do, decide where to go.",
+      "Với nhóm truyền đạt/hướng dẫn: verb + người + wh-word + to V: tell me where to sign, teach us how to swim.",
+      "How to V = cách làm gì; what to V = nên/làm cái gì; where to V = ở đâu/đi đâu; when to V = khi nào; which to V = chọn cái nào; who to V = mời/gặp ai.",
+      "Sau wh-word dùng to V, không chia theo thì: how to use, where to go, what to say."
+    ],
+    tips: "Mẹo TOEIC: thấy know/decide/ask/tell/show/learn/find out/figure out + what/where/when/how/which/who thì phía sau thường là to V."
+  },
+  "Trạng từ không theo quy tắc hay ra": {
+    title: "Danh sách trạng từ không theo quy tắc hay ra trong TOEIC",
+    structure: "Adv + V/Adj/Adv | S + be + Adv | Clause; linking adv, clause",
+    explanation: "Nhóm trạng từ này cần học thuộc vì thường không tạo bằng quy tắc thêm -ly hoặc có vị trí/cách dùng riêng trong câu TOEIC.\n\nTần suất: always, usually, often, sometimes, never.\nThời gian: already, yet, still, just, soon.\nNơi chốn: here, anywhere, somewhere, nowhere.\nMức độ: very, too, so, enough, almost, nearly, hardly.\nLiên kết ý: therefore, moreover, otherwise.",
+    examples: [
+      "always/usually/often/sometimes/never: She always arrives on time.",
+      "already/yet/still/just/soon: The report has already been sent.",
+      "here/anywhere/somewhere/nowhere: Please sign here.",
+      "very/too/so/enough/almost/nearly/hardly: The project is almost complete.",
+      "therefore/moreover/otherwise: Please reply today; otherwise, the order will be canceled."
+    ],
+    notes: [
+      "Enough đứng sau tính từ/trạng từ: large enough, fast enough.",
+      "Yet thường dùng trong câu phủ định hoặc nghi vấn: not yet, have you finished yet?",
+      "Hardly mang nghĩa phủ định nhẹ: hầu như không."
+    ],
+    tips: "Mẹo: tần suất thường đứng trước động từ thường nhưng sau be; trạng từ liên kết thường nối hai mệnh đề hoặc đứng đầu câu mới."
+  },
+
+  "Dấu hiệu nhận biết danh từ không đếm được": {
+    title: "Quantifiers chỉ dùng cho danh từ không đếm được",
+    structure: "much/little/a little/less/the amount of + N không đếm được",
+    explanation: "Một số lượng từ (quantifiers) là dấu hiệu nhận biết danh từ không đếm được vì chúng chỉ đi với danh từ không đếm được.\n\nCác quantifiers cần nhớ:\nmuch\nlittle\na little\nless\nthe amount of\na large amount of\na great amount of\na small amount of\na considerable amount of\na huge amount of\na great deal of\na good deal of",
+    examples: [
+      "much + N không đếm được: much information",
+      "little + N không đếm được: little time",
+      "a little + N không đếm được: a little money",
+      "less + N không đếm được: less effort",
+      "the amount of + N không đếm được: the amount of water",
+      "a large amount of + N không đếm được: a large amount of funding",
+      "a great amount of + N không đếm được: a great amount of data",
+      "a small amount of + N không đếm được: a small amount of salt",
+      "a considerable amount of + N không đếm được: a considerable amount of money",
+      "a huge amount of + N không đếm được: a huge amount of traffic",
+      "a great deal of + N không đếm được: a great deal of experience",
+      "a good deal of + N không đếm được: a good deal of time"
+    ],
+    notes: [
+      "Sau các cụm này dùng danh từ không đếm được, không thêm -s/es.",
+      "Danh từ không đếm được thường chỉ chất liệu, khái niệm trừu tượng, thông tin, tiền, thời gian, nước, dữ liệu, kinh nghiệm."
+    ],
+    tips: "Mẹo: Gặp much, little, a little, less hoặc amount/deal of thì ưu tiên kiểm tra danh từ phía sau có phải danh từ không đếm được không."
+  },
 
   "\u0110\u1ed9ng t\u1eeb th\u01b0\u1eddng": {
     title: "\u0110\u1ed9ng t\u1eeb th\u01b0\u1eddng (Action Verbs) \u2014 C\u00e1ch d\u00f9ng & Chia \u0111\u1ed9ng t\u1eeb",
@@ -26,25 +139,28 @@ const TOPICS_GRAMMAR = {
   },
 
   "\u0110\u1ed9ng t\u1eeb khuy\u1ebft thi\u1ebfu": {
-    title: "\u0110\u1ed9ng t\u1eeb khuy\u1ebft thi\u1ebfu (Modal Verbs) \u2014 C\u00e1ch d\u00f9ng",
-    structure: "S + Modal + V (nguy\u00ean m\u1eabu kh\u00f4ng 'to')",
-    explanation: "Modal Verbs lu\u00f4n \u0111\u1ee9ng tr\u01b0\u1edbc \u0111\u1ed9ng t\u1eeb nguy\u00ean m\u1eabu kh\u00f4ng 'to', kh\u00f4ng thay \u0111\u1ed5i theo ch\u1ee7 ng\u1eef.\n\nCAN / COULD \u2014 Kh\u1ea3 n\u0103ng, cho ph\u00e9p: I can speak English.\nMUST / HAVE TO \u2014 B\u1eaft bu\u1ed9c: You must submit the form today.\nSHOULD / OUGHT TO \u2014 L\u1eddi khuy\u00ean: You should study harder.\nMAY / MIGHT \u2014 Kh\u1ea3 n\u0103ng kh\u00f4ng ch\u1eafc: It may rain today.\nWILL / WOULD \u2014 T\u01b0\u01a1ng lai, l\u1ecbch s\u1ef1: I will call you tomorrow.\nSHALL \u2014 \u0110\u1ec1 ngh\u1ecb (British): Shall we start?",
+    title: "\u0110\u1ed9ng t\u1eeb khuy\u1ebft thi\u1ebfu (Modal Verbs) th\u01b0\u1eddng g\u1eb7p trong TOEIC",
+    structure: "S + modal + V nguy\u00ean m\u1eabu | S + modal equivalent + to V",
+    explanation: "Modal verbs ch\u00ednh th\u01b0\u1eddng g\u1eb7p trong TOEIC:\ncan, could, may, might, shall, should, will, would, must, ought to, need, dare.\n\nModal t\u01b0\u01a1ng \u0111\u01b0\u01a1ng r\u1ea5t hay g\u1eb7p trong TOEIC:\nhave to, has to, had to, be able to, be allowed to, be supposed to, be going to, be required to, be expected to, be likely to, be willing to, be about to, used to.\n\nModal ch\u00ednh th\u01b0\u1eddng \u0111i v\u1edbi V nguy\u00ean m\u1eabu kh\u00f4ng 'to'. Modal t\u01b0\u01a1ng \u0111\u01b0\u01a1ng th\u01b0\u1eddng c\u00f3 d\u1ea1ng 'to V' sau c\u1ee5m.",
     examples: [
-      "You must submit the report by Friday. (B\u1ea1n ph\u1ea3i n\u1ed9p b\u00e1o c\u00e1o tr\u01b0\u1edbc th\u1ee9 S\u00e1u.)",
-      "She can manage the team effectively. (C\u00f4 \u1ea5y c\u00f3 th\u1ec3 qu\u1ea3n l\u00fd \u0111\u1ed9i nh\u00f3m hi\u1ec7u qu\u1ea3.)",
-      "You should prepare a backup plan. (B\u1ea1n n\u00ean chu\u1ea9n b\u1ecb k\u1ebf ho\u1ea1ch d\u1ef1 ph\u00f2ng.)",
-      "It might rain this afternoon \u2014 bring an umbrella."
+      "You must submit the report by Friday.",
+      "She can manage the team effectively.",
+      "The shipment might arrive tomorrow.",
+      "Employees are required to attend training.",
+      "Sales are expected to increase next quarter.",
+      "The train is about to depart."
     ],
     exceptions: [
-      "Modal verbs <b>kh\u00f4ng</b> th\u00eam -s/-es: <i>She can (NOT cans)</i>.",
-      "Modal verbs <b>kh\u00f4ng</b> d\u00f9ng 'to' sau (ngo\u1ea1i l\u1ec7: <i>ought to, have to, used to</i>).",
-      "<b>Must</b> kh\u00f4ng c\u00f3 d\u1ea1ng qu\u00e1 kh\u1ee9 \u2192 d\u00f9ng <i>had to</i>: <i>She had to work late yesterday.</i>"
+      "Modal verbs <b>kh\u00f4ng</b> th\u00eam -s/-es: <i>She can</i>, kh\u00f4ng d\u00f9ng <i>She cans</i>.",
+      "Sau can/could/may/might/shall/should/will/would/must d\u00f9ng V nguy\u00ean m\u1eabu kh\u00f4ng 'to'.",
+      "<b>Ought to</b>, <b>have to</b>, <b>used to</b> c\u00f3 'to' trong c\u1ee5m.",
+      "<b>Must</b> kh\u00f4ng c\u00f3 d\u1ea1ng qu\u00e1 kh\u1ee9 ri\u00eang, th\u01b0\u1eddng d\u00f9ng <i>had to</i>."
     ],
     notes: [
-      "Ph\u1ee7 \u0111\u1ecbnh: <b>cannot/can't, mustn't, shouldn't, won't</b>.",
-      "Nghi v\u1ea5n: \u0110\u1ea3o modal l\u00ean tr\u01b0\u1edbc ch\u1ee7 ng\u1eef: <i>Can you help me? / Should I go?</i>"
+      "Trong TOEIC, nh\u00f3m be required to, be expected to, be likely to, be supposed to th\u01b0\u1eddng xu\u1ea5t hi\u1ec7n trong v\u0103n phong c\u00f4ng vi\u1ec7c.",
+      "Need v\u00e0 dare c\u00f3 th\u1ec3 l\u00e0 modal ho\u1eb7c \u0111\u1ed9ng t\u1eeb th\u01b0\u1eddng: <i>You needn't go</i> / <i>You need to go</i>."
     ],
-    tips: "M\u1eb9o: CAN = c\u00f3 th\u1ec3 | MUST = b\u1eaft bu\u1ed9c | SHOULD = n\u00ean | MAY/MIGHT = c\u00f3 th\u1ec3 (kh\u00f4ng ch\u1eafc) | WILL = s\u1ebd."
+    tips: "M\u1eb9o TOEIC: g\u1eb7p ch\u1ed7 tr\u1ed1ng sau modal ch\u00ednh th\u00ec ch\u1ecdn V nguy\u00ean m\u1eabu; g\u1eb7p be required/expected/likely/supposed thì theo sau th\u01b0\u1eddng l\u00e0 to V."
   },
 
   "\u0110\u1ed9ng t\u1eeb n\u1ed1i": {
