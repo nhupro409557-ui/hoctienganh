@@ -7,6 +7,8 @@ const Storage = {
   // Keys
   KEYS: {
     DIFFICULT_WORDS: 'eng_difficult_words',
+    DIFFICULT_WORDS_TOPIC: 'eng_difficult_words_topic',
+    DIFFICULT_WORDS_PART: 'eng_difficult_words_part',
     DAY_PROGRESS: 'eng_day_progress_',
     REVIEW_STATUS: 'eng_review_status_',
     DIFFICULT_REVIEW: 'eng_diff_review_',
@@ -21,14 +23,70 @@ const Storage = {
   // ============================================
   // DIFFICULT WORDS (Kho từ khó thuộc)
   // ============================================
-  getDifficultWords() {
+  getDifficultKey(scope = 'day') {
+    if (scope === 'topic') return this.KEYS.DIFFICULT_WORDS_TOPIC;
+    if (scope === 'part') return this.KEYS.DIFFICULT_WORDS_PART;
+    return this.KEYS.DIFFICULT_WORDS;
+  },
+
+  normalizeDifficultScope(scope) {
+    return ['day', 'topic', 'part'].includes(scope) ? scope : 'day';
+  },
+
+  inferDifficultScope(source) {
+    if (typeof source === 'number') return 'day';
+    const value = String(source || '').trim();
+    if (!value || /^\d+$/.test(value)) return 'day';
+    if (/^part\b/i.test(value) || /\bpart\s*\d\b/i.test(value)) return 'part';
+    return 'topic';
+  },
+
+  migrateDifficultWordsByScope() {
+    if (localStorage.getItem('eng_difficult_scope_migrated_v2') === '1') return;
+    let legacy = [];
+    try { legacy = JSON.parse(localStorage.getItem(this.KEYS.DIFFICULT_WORDS)) || []; }
+    catch { legacy = []; }
+
+    const buckets = { day: [], topic: [], part: [] };
+    legacy.forEach(item => {
+      const source = item.source || item.day;
+      const scope = this.inferDifficultScope(source);
+      buckets[scope].push({ ...item, source, sourceScope: scope });
+    });
+
+    ['day', 'topic', 'part'].forEach(scope => {
+      const key = this.getDifficultKey(scope);
+      let existing = [];
+      if (scope !== 'day') {
+        try { existing = JSON.parse(localStorage.getItem(key)) || []; }
+        catch { existing = []; }
+      }
+      const map = {};
+      existing.concat(buckets[scope]).forEach(item => {
+        const wordKey = String(item.word || '').toLowerCase();
+        if (wordKey) map[wordKey] = item;
+      });
+      localStorage.setItem(key, JSON.stringify(Object.values(map)));
+    });
+
+    localStorage.setItem('eng_difficult_scope_migrated_v2', '1');
+  },
+
+  getDifficultWords(scope = 'day') {
+    scope = this.normalizeDifficultScope(scope);
+    this.migrateDifficultWordsByScope();
     try {
-      return JSON.parse(localStorage.getItem(this.KEYS.DIFFICULT_WORDS)) || [];
+      return JSON.parse(localStorage.getItem(this.getDifficultKey(scope))) || [];
     } catch { return []; }
   },
 
-  addDifficultWord(wordObj, day) {
-    const words = this.getDifficultWords();
+  saveDifficultWords(words, scope = 'day') {
+    localStorage.setItem(this.getDifficultKey(this.normalizeDifficultScope(scope)), JSON.stringify(words));
+  },
+
+  addDifficultWord(wordObj, day, scope) {
+    scope = this.normalizeDifficultScope(scope || this.inferDifficultScope(day));
+    const words = this.getDifficultWords(scope);
     const exists = words.find(w => w.word === wordObj.word);
     if (!exists) {
       words.push({
@@ -40,31 +98,35 @@ const Storage = {
         usage: wordObj.usage,
         ipa: wordObj.ipa,
         day: day,
+        source: day,
+        sourceScope: scope,
         addedAt: new Date().toISOString(),
         reviewCount: 0,
         correctCount: 0,
         box: 1, // SRS Box (1-5)
         nextReview: new Date().toISOString() // Due immediately when added
       });
-      localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
+      this.saveDifficultWords(words, scope);
     } else {
       // If it already exists, reset box and make it due immediately
       exists.box = 1;
       exists.nextReview = new Date().toISOString();
-      localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
+      exists.source = day;
+      exists.sourceScope = scope;
+      this.saveDifficultWords(words, scope);
     }
     return words;
   },
 
-  removeDifficultWord(word) {
-    let words = this.getDifficultWords();
+  removeDifficultWord(word, scope = 'day') {
+    let words = this.getDifficultWords(scope);
     words = words.filter(w => w.word !== word);
-    localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
+    this.saveDifficultWords(words, scope);
     return words;
   },
 
-  isDifficultWord(word) {
-    return this.getDifficultWords().some(w => w.word === word);
+  isDifficultWord(word, scope = 'day') {
+    return this.getDifficultWords(scope).some(w => w.word === word);
   },
 
   getWordMasteryMap() {
@@ -99,8 +161,8 @@ const Storage = {
     return item;
   },
 
-  updateDifficultWordStats(word, isCorrect) {
-    const words = this.getDifficultWords();
+  updateDifficultWordStats(word, isCorrect, scope = 'day') {
+    const words = this.getDifficultWords(scope);
     const w = words.find(x => x.word === word);
     if (w) {
       w.reviewCount = (w.reviewCount || 0) + 1;
@@ -112,7 +174,7 @@ const Storage = {
 
         if (w.box > 5) {
           // Graduated! Remove from difficult list
-          this.removeDifficultWord(word);
+          this.removeDifficultWord(word, scope);
           return true; // graduated
         }
 
@@ -141,7 +203,7 @@ const Storage = {
         w.box = 1;
         w.nextReview = new Date().toISOString();
       }
-      localStorage.setItem(this.KEYS.DIFFICULT_WORDS, JSON.stringify(words));
+      this.saveDifficultWords(words, scope);
     }
     return false; // not graduated
   },

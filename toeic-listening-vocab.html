@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tu vung TOEIC Listening Part 1-4</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="toeic-listening-vocab.css">
+</head>
+<body>
+  <header class="header listening-header">
+    <a href="index.html?no_redirect=true" class="back-btn">← Ve lo trinh chinh</a>
+    <h1>Tu vung TOEIC Listening Part 1-4</h1>
+    <p>Hoc theo dang de: mo ta tranh, hoi dap, hoi thoai, bai noi ngan</p>
+    <div class="subtitle">Danh sach tu · Flashcard · Quiz nhanh · Danh dau tu kho</div>
+  </header>
+
+  <main class="container listening-layout">
+    <aside class="listening-panel">
+      <h3>Chon phan luyen</h3>
+      <div id="partNav" class="part-nav"></div>
+    </aside>
+
+    <section class="listening-card">
+      <div class="listening-top">
+        <div>
+          <div class="part5-label" id="partLabel"></div>
+          <h2 id="partTitle"></h2>
+          <p class="text-muted" id="partFocus"></p>
+        </div>
+        <div class="listening-score">
+          <span class="score-pill" id="wordCount"></span>
+          <span class="score-pill" id="learnedCount"></span>
+        </div>
+      </div>
+
+      <div id="setGrid" class="set-grid"></div>
+
+      <div class="mode-tabs">
+        <button class="active" data-mode="list">Danh sách từ</button>
+        <button data-mode="flash">Flashcard</button>
+        <button data-mode="abcd">Trắc nghiệm A/B/C/D</button>
+        <button data-mode="enToVi">Viết Anh→Việt</button>
+        <button data-mode="viToEn">Viết Việt→Anh</button>
+        <button data-mode="typeQuiz">Phân loại từ</button>
+        <button data-mode="dictation">Chép chính tả</button>
+        <button data-mode="grammar">Ngữ pháp & Mẹo</button>
+      </div>
+
+      <div id="modeContent"></div>
+    </section>
+  </main>
+
+  <script src="storage.js"></script>
+  <script src="toeic-listening-vocab-data.js"></script>
+  <script src="toeic-listening-vocab.js"></script>
+</body>
+</html>

@@ -735,6 +735,10 @@ input[type="text"]::placeholder {
   background: linear-gradient(135deg, #f59e0b, #f97316);
   color: white;
 }
+.btn-info {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  color: white;
+}
 .btn-danger {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;

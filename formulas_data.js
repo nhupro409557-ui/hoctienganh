@@ -280,7 +280,113 @@ const FORMULAS_DATA = {
 };
 
 // Global formula lookup function
-function getWordFormula(word, type, category) {
+function buildUsageFormula(word, usage) {
+  if (!usage) return null;
+  const raw = String(usage).trim();
+  const normalized = raw.replace(/^Cáº¥u trÃºc:\s*/i, '').replace(/^Cấu trúc:\s*/i, '').trim();
+  if (!normalized || normalized.length > 120) return null;
+  return {
+    title: "Công thức dùng " + word,
+    formula: "• <b>Mẫu:</b> " + normalized + "<br>• <b>Ghi nhớ:</b> Học cả cụm này như một khối, không dịch từng từ riêng lẻ."
+  };
+}
+
+function getAutoFormula(word, type, category, usage) {
+  const w = (word || '').toLowerCase().trim();
+  const t = (type || '').toLowerCase().trim();
+  const c = (category || '').toLowerCase().trim();
+  const u = (usage || '').toLowerCase().trim();
+
+  if (u.includes('cáº¥u trÃºc:') || u.includes('cấu trúc:')) return buildUsageFormula(word, usage);
+
+  if (t.includes('modal') || c.includes('khuyáº¿t thiáº¿u') || c.includes('khuyết thiếu')) {
+    return {
+      title: "Công thức động từ khuyết thiếu",
+      formula: "• <b>Khẳng định:</b> S + modal + V nguyên mẫu<br>• <b>Phủ định:</b> S + modal + not + V nguyên mẫu<br>• <b>Câu hỏi:</b> Modal + S + V nguyên mẫu?"
+    };
+  }
+
+  if (t.includes('to-infinitive') || t.includes('to-v') || c.includes('to-v')) {
+    return {
+      title: "Công thức To-V",
+      formula: "• <b>Mẫu chính:</b> S + V/Adj + to + V nguyên mẫu<br>• <b>TOEIC hay hỏi:</b> decide/plan/agree/refuse/expect/be likely/be ready + to V"
+    };
+  }
+
+  if (t.includes('gerund') || t.includes('v-ing') || c.includes('v-ing')) {
+    return {
+      title: "Công thức V-ing",
+      formula: "• <b>Mẫu chính:</b> S + V + V-ing<br>• <b>TOEIC hay hỏi:</b> avoid/enjoy/finish/keep/suggest/consider + V-ing"
+    };
+  }
+
+  if (t.includes('linking') || c.includes('Ä‘á»™ng tá»« ná»‘i') || c.includes('động từ nối')) {
+    return {
+      title: "Công thức động từ nối",
+      formula: "• <b>Mẫu:</b> S + linking verb + Adj/Noun<br>• <b>Lưu ý:</b> Sau look/seem/appear/remain/become thường là tính từ hoặc danh từ, không dùng trạng từ."
+    };
+  }
+
+  if (t.includes('stative') || c.includes('tráº¡ng thÃ¡i') || c.includes('trạng thái')) {
+    return {
+      title: "Công thức động từ trạng thái",
+      formula: "• <b>Mẫu:</b> S + stative verb + O/Adj/Noun<br>• <b>Lưu ý:</b> Thường không dùng thì tiếp diễn: know, believe, understand, own, seem..."
+    };
+  }
+
+  if (t.includes('quantifier') || c.includes('lÆ°á»£ng tá»«') || c.includes('lượng từ') || c.includes('khÃ´ng Ä‘áº¿m') || c.includes('không đếm')) {
+    return {
+      title: "Công thức lượng từ",
+      formula: "• <b>Đếm được:</b> many/a few/few/several + N số nhiều<br>• <b>Không đếm được:</b> much/a little/little/less/amount of + N không đếm được"
+    };
+  }
+
+  if (t.includes('conjunction') || c.includes('liÃªn tá»«') || c.includes('liên từ')) {
+    return {
+      title: "Công thức liên từ",
+      formula: "• <b>Đẳng lập:</b> S + V, FANBOYS + S + V<br>• <b>Phụ thuộc:</b> Subordinating conjunction + S + V, S + V<br>• <b>Cặp liên từ:</b> both A and B / either A or B / not only A but also B"
+    };
+  }
+
+  if (t.includes('adverb') || c.includes('tráº¡ng tá»«') || c.includes('trạng từ')) {
+    return {
+      title: "Vị trí trạng từ",
+      formula: "• <b>Bổ nghĩa tính từ/trạng từ:</b> Adv + Adj/Adv<br>• <b>Bổ nghĩa động từ:</b> V + Adv hoặc Adv + V<br>• <b>Tần suất:</b> S + frequency adverb + V / S + be + frequency adverb"
+    };
+  }
+
+  if (t.includes('prepositional phrase') || c.includes('cá»¥m giá»›i tá»«') || c.includes('cụm giới từ')) {
+    return {
+      title: "Công thức cụm giới từ",
+      formula: "• <b>Mẫu:</b> Prepositional phrase + N/V-ing hoặc S + V + prepositional phrase<br>• <b>TOEIC:</b> học nguyên cụm như according to, because of, in charge of, on behalf of."
+    };
+  }
+
+  if (t.includes('verb + preposition') || c.includes('Ä‘á»™ng tá»« + giá»›i tá»«') || c.includes('động từ + giới từ')) {
+    return {
+      title: "Công thức động từ + giới từ",
+      formula: "• <b>Mẫu:</b> Verb + fixed preposition + N/V-ing<br>• <b>Ví dụ:</b> apply for, depend on, refer to, comply with, participate in."
+    };
+  }
+
+  if (t.includes('adjective + preposition') || c.includes('tÃ­nh tá»« + giá»›i tá»«') || c.includes('tính từ + giới từ')) {
+    return {
+      title: "Công thức tính từ + giới từ",
+      formula: "• <b>Mẫu:</b> be/get/remain + Adj + fixed preposition + N/V-ing<br>• <b>Ví dụ:</b> responsible for, interested in, familiar with, different from."
+    };
+  }
+
+  if (w.includes('...') || t.includes('structure') || t.includes('rule') || c.includes('cáº¥u trÃºc') || c.includes('cấu trúc')) {
+    return buildUsageFormula(word, usage) || {
+      title: "Công thức cấu trúc TOEIC",
+      formula: "• <b>Mẫu:</b> học đúng thứ tự thành phần trong cấu trúc này.<br>• <b>Lưu ý:</b> Hai vế nối với nhau phải song song về ngữ pháp khi có A/B."
+    };
+  }
+
+  return null;
+}
+
+function getWordFormula(word, type, category, usage) {
   if (!word) return null;
   const wLower = word.toLowerCase().trim();
   const tLower = type ? type.toLowerCase().trim() : '';
@@ -304,5 +410,5 @@ function getWordFormula(word, type, category) {
     return FORMULAS_DATA.types['pronoun'];
   }
 
-  return null;
+  return getAutoFormula(word, type, category, usage);
 }

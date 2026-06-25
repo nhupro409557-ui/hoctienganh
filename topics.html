@@ -131,6 +131,20 @@
         </div>
       </div>
 
+      <div id="topicDifficultPanel" class="note warning" style="display:none; margin-bottom:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <b>🔥 Từ khó của chủ đề này</b>
+            <div id="topicDifficultSummary" style="font-size:13px;color:var(--text-secondary);margin-top:4px"></div>
+          </div>
+          <div class="btn-group" style="margin:0">
+            <button class="btn btn-warning btn-sm" onclick="reviewTopicDifficult()">Ôn từ khó chủ đề</button>
+            <button class="btn btn-secondary btn-sm" onclick="showTopicDifficultList()">Xem danh sách</button>
+          </div>
+        </div>
+        <div id="topicDifficultList" style="display:none;margin-top:10px"></div>
+      </div>
+
       <div class="tabs" id="mainTabs">
         <button class="tab-btn" id="grammarTabBtn" onclick="showTab('grammar',this)" style="display:none">📐 Ngữ Pháp</button>
         <button class="tab-btn active" id="listTabBtn" onclick="showTab('list',this)">📚 Danh sách từ</button>
@@ -538,6 +552,7 @@
           </div>
         `;
       }).join('');
+      renderTopicDifficultPanel();
     }
     // ---- VOCABULARY PARTITION SYSTEM ----
     function getPartRanges(totalLength) {
@@ -592,6 +607,7 @@
 
       // Restart learning games
       showLearning();
+      renderTopicDifficultPanel();
     }
 
     // ---- SELECT TOPIC ----
@@ -632,6 +648,7 @@
 
       // Start learning module
       showLearning();
+      renderTopicDifficultPanel();
     }
 
     // ---- BACK TO SELECTOR ----
@@ -671,6 +688,7 @@
       }
 
       renderList();
+      renderTopicDifficultPanel();
       flashWords = [...words];
       flashIndex = 0;
       renderFlash();
@@ -755,13 +773,48 @@
     function shuffleArray(a) { return [...a].sort(() => Math.random() - 0.5); }
     function normalizeText(t) { return t.trim().toLowerCase().replace(/\s+/g, ' '); }
 
+    function getTopicDifficultWords() {
+      if (!currentTopic) return [];
+      return Storage.getDifficultWords('topic').filter(w => String(w.source || w.day) === String(currentTopic));
+    }
+
+    function renderTopicDifficultPanel() {
+      const panel = document.getElementById('topicDifficultPanel');
+      if (!panel) return;
+      const topicWords = getTopicDifficultWords();
+      if (!currentTopic || topicWords.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+      panel.style.display = 'block';
+      const dueCount = topicWords.filter(w => !w.nextReview || new Date(w.nextReview) <= new Date()).length;
+      document.getElementById('topicDifficultSummary').textContent = `${topicWords.length} từ khó riêng của chủ đề "${currentTopic}" · ${dueCount} từ đến hạn ôn`;
+      document.getElementById('topicDifficultList').innerHTML = topicWords.map(w => `
+        <span class="badge badge-warning" style="display:inline-flex;margin:4px 6px 0 0;gap:6px;align-items:center">
+          <b>${w.word}</b> <span>${w.meaning}</span>
+        </span>
+      `).join('');
+    }
+
+    function showTopicDifficultList() {
+      const list = document.getElementById('topicDifficultList');
+      list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function reviewTopicDifficult() {
+      const topicWords = getTopicDifficultWords();
+      if (topicWords.length === 0) return;
+      showTab('viToEn', document.querySelector('#mainTabs .tab-btn[onclick*="viToEn"]'));
+      startViToEn(topicWords);
+    }
+
     // ============================================
     // TAB 1: WORD LIST
     // ============================================
     function renderList() {
       document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
-        const isDiff = Storage.isDifficultWord(w.word);
-        const formulaObj = typeof getWordFormula !== 'undefined' ? getWordFormula(w.word, w.type, currentTopic) : null;
+        const isDiff = Storage.isDifficultWord(w.word, 'topic');
+        const formulaObj = typeof getWordFormula !== 'undefined' ? getWordFormula(w.word, w.type, currentTopic, w.usage) : null;
         const usageNote = w.usage || (typeof getWordUsageNote === 'function' ? getWordUsageNote(w.word) : '');
         const usageHtml = usageNote ? `<div class="word-usage"><b>Phân biệt cách dùng:</b> ${usageNote}</div>` : '';
         const mastery = Storage.getWordMastery(w.word);
@@ -807,18 +860,19 @@
 
     function toggleDifficult(btn, index) {
       const w = words[index];
-      if (Storage.isDifficultWord(w.word)) {
-        Storage.removeDifficultWord(w.word);
+      if (Storage.isDifficultWord(w.word, 'topic')) {
+        Storage.removeDifficultWord(w.word, 'topic');
         btn.classList.remove('marked');
         btn.innerHTML = '❤️';
       } else {
-        Storage.addDifficultWord(w, currentTopic);
+        Storage.addDifficultWord(w, currentTopic, 'topic');
         btn.classList.add('marked');
         btn.innerHTML = '🔥';
         btn.style.animation = 'none';
         btn.offsetHeight; // trigger reflow
         btn.style.animation = 'heartBeat 0.4s ease';
       }
+      renderTopicDifficultPanel();
     }
 
     // ============================================
@@ -860,8 +914,8 @@
 
     function markFlashDifficult() {
       const w = flashWords[flashIndex];
-      if (!Storage.isDifficultWord(w.word)) {
-        Storage.addDifficultWord(w, currentTopic);
+      if (!Storage.isDifficultWord(w.word, 'topic')) {
+        Storage.addDifficultWord(w, currentTopic, 'topic');
         alert(`🔥 "${w.word}" đã được thêm vào kho từ khó!`);
       } else {
         alert(`"${w.word}" đã có trong kho từ khó.`);
@@ -942,7 +996,7 @@
         fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
         inp.style.borderColor = 'var(--error)';
         viToEnBad.push(w);
-        Storage.addDifficultWord(w, currentTopic);
+        Storage.addDifficultWord(w, currentTopic, 'topic');
       }
 
       inp.disabled = true;
@@ -966,7 +1020,7 @@
       fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.word}</b> ${w.ipa || ''} <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       viToEnBad.push(w);
       Storage.recordWordAttempt(w, false);
-      Storage.addDifficultWord(w, currentTopic);
+      Storage.addDifficultWord(w, currentTopic, 'topic');
 
       speakWord(w.word);
       document.getElementById('viToEnScoreNo').textContent = `✗ ${viToEnBad.length}`;
@@ -1049,7 +1103,7 @@
         fb.innerHTML = `❌ Sai rồi! Đáp án: <b>${w.meaning}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
         inp.style.borderColor = 'var(--error)';
         enToViBad.push(w);
-        Storage.addDifficultWord(w, currentTopic);
+        Storage.addDifficultWord(w, currentTopic, 'topic');
       }
 
       inp.disabled = true;
@@ -1073,7 +1127,7 @@
       fb.innerHTML = `⏭️ Đã bỏ qua. Đáp án: <b>${w.meaning}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;margin-left:8px;font-size:16px;display:inline-block;opacity:1;vertical-align:middle;">🔊</button>`;
       enToViBad.push(w);
       Storage.recordWordAttempt(w, false);
-      Storage.addDifficultWord(w, currentTopic);
+      Storage.addDifficultWord(w, currentTopic, 'topic');
 
       speakWord(w.word);
       document.getElementById('enToViScoreNo').textContent = `✗ ${enToViBad.length}`;
@@ -1201,7 +1255,7 @@
         banner.className = 'abcd-feedback-banner wrong';
         banner.innerHTML = `❌ Sai rồi! Đáp án đúng: <b>${w.answer}</b> (${w.word} ${w.ipa || ''}) <button class="speak-btn" onclick="speakWord('${w.word}')" style="position:static;font-size:16px;margin-left:8px;vertical-align:middle;display:inline-block;opacity:1;">🔊</button>`;
         abcdWrongWords.push(w);
-        Storage.addDifficultWord(w, currentTopic);
+        Storage.addDifficultWord(w, currentTopic, 'topic');
       }
       speakWord(w.word);
 
@@ -1520,7 +1574,7 @@
       if (correct) dictationCorrect++;
       else {
         dictationWrong.push(w);
-        Storage.addDifficultWord(w, currentTopic);
+        Storage.addDifficultWord(w, currentTopic, 'topic');
       }
       Storage.recordWordAttempt(w, correct);
       input.disabled = true;

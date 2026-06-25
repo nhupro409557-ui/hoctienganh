@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Từ vựng TOEIC Reading Part 5-7</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="toeic-listening-vocab.css">
+</head>
+<body>
+  <header class="header listening-header" style="background: linear-gradient(135deg, #ef4444, #ec4899);">
+    <a href="index.html?no_redirect=true" class="back-btn">← Về lộ trình chính</a>
+    <h1>Từ vựng TOEIC Reading Part 5-7</h1>
+    <p>Học theo cấu trúc đề thi: Hoàn thành câu, Hoàn thành đoạn văn, Đọc hiểu văn bản</p>
+    <div class="subtitle">Danh sách từ · Flashcard · Trắc nghiệm · Viết chính tả · Ngữ pháp</div>
+  </header>
+
+  <main class="container listening-layout">
+    <aside class="listening-panel">
+      <h3>Chọn phần luyện</h3>
+      <div id="partNav" class="part-nav"></div>
+    </aside>
+
+    <section class="listening-card">
+      <div class="listening-top">
+        <div>
+          <div class="part5-label" id="partLabel" style="background:#ef4444"></div>
+          <h2 id="partTitle"></h2>
+          <p class="text-muted" id="partFocus"></p>
+        </div>
+        <div class="listening-score">
+          <span class="score-pill" id="wordCount"></span>
+          <span class="score-pill" id="learnedCount"></span>
+        </div>
+      </div>
+
+      <div id="setGrid" class="set-grid"></div>
+
+      <div class="mode-tabs">
+        <button class="active" data-mode="list">Danh sách từ</button>
+        <button data-mode="flash">Flashcard</button>
+        <button data-mode="abcd">Trắc nghiệm A/B/C/D</button>
+        <button data-mode="enToVi">Viết Anh→Việt</button>
+        <button data-mode="viToEn">Viết Việt→Anh</button>
+        <button data-mode="typeQuiz">Phân loại từ</button>
+        <button data-mode="dictation">Chép chính tả</button>
+        <button data-mode="grammar">Ngữ pháp & Mẹo</button>
+      </div>
+
+      <div id="modeContent"></div>
+    </section>
+  </main>
+
+  <script src="storage.js"></script>
+  <script src="toeic-reading-vocab-data.js"></script>
+  <script src="toeic-reading-vocab.js"></script>
+</body>
+</html>
