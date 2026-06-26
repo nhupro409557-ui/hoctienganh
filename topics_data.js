@@ -1120,6 +1120,53 @@ const TOPICS_DATA = {
       viAnswers: meaning.split(", ").flatMap(item => item.split("/")),
       usage: `Ghi nhớ: ${word}`
     }))
+  ],
+  "Động từ bất quy tắc": [
+    ...[
+      ["be", "been", "irregular verb V3", "The order has been confirmed.", "be -> been"],
+      ["become", "become", "irregular verb V3", "The process has become easier.", "become -> become"],
+      ["begin", "begun", "irregular verb V3", "The meeting has begun.", "begin -> begun"],
+      ["bring", "brought", "irregular verb V3", "She has brought the documents.", "bring -> brought"],
+      ["build", "built", "irregular verb V3", "The company has built a new warehouse.", "build -> built"],
+      ["buy", "bought", "irregular verb V3", "We have bought new equipment.", "buy -> bought"],
+      ["choose", "chosen", "irregular verb V3", "They have chosen a new supplier.", "choose -> chosen"],
+      ["come", "come", "irregular verb V3", "The package has come earlier than expected.", "come -> come"],
+      ["do", "done", "irregular verb V3", "The work has been done carefully.", "do -> done"],
+      ["find", "found", "irregular verb V3", "We have found a better solution.", "find -> found"],
+      ["get", "got/gotten", "irregular verb V3", "The team has got approval for the plan.", "get -> got/gotten"],
+      ["give", "given", "irregular verb V3", "The manager has given clear instructions.", "give -> given"],
+      ["go", "gone", "irregular verb V3", "The director has gone to the branch office.", "go -> gone"],
+      ["have", "had", "irregular verb V3", "We have had several meetings this week.", "have -> had"],
+      ["keep", "kept", "irregular verb V3", "She has kept all the receipts.", "keep -> kept"],
+      ["know", "known", "irregular verb V3", "This brand is known for reliable service.", "know -> known"],
+      ["leave", "left", "irregular verb V3", "He has left a message for you.", "leave -> left"],
+      ["make", "made", "irregular verb V3", "The decision has been made.", "make -> made"],
+      ["meet", "met", "irregular verb V3", "I have met the new supervisor.", "meet -> met"],
+      ["pay", "paid", "irregular verb V3", "The invoice has been paid.", "pay -> paid"],
+      ["put", "put", "irregular verb V3", "The files have been put on the desk.", "put -> put"],
+      ["read", "read", "irregular verb V3", "She has read the report.", "read -> read"],
+      ["say", "said", "irregular verb V3", "The client has said yes to the offer.", "say -> said"],
+      ["see", "seen", "irregular verb V3", "Have you seen the latest schedule?", "see -> seen"],
+      ["sell", "sold", "irregular verb V3", "The product has sold well this month.", "sell -> sold"],
+      ["send", "sent", "irregular verb V3", "The email has been sent.", "send -> sent"],
+      ["set", "set", "irregular verb V3", "The deadline has been set for Friday.", "set -> set"],
+      ["show", "shown", "irregular verb V3", "The results have shown steady growth.", "show -> shown"],
+      ["speak", "spoken", "irregular verb V3", "We have spoken to the supplier.", "speak -> spoken"],
+      ["spend", "spent", "irregular verb V3", "The company has spent more on training.", "spend -> spent"],
+      ["take", "taken", "irregular verb V3", "The files have been taken to the office.", "take -> taken"],
+      ["tell", "told", "irregular verb V3", "She has told us about the change.", "tell -> told"],
+      ["think", "thought", "irregular verb V3", "We have thought about your proposal.", "think -> thought"],
+      ["understand", "understood", "irregular verb V3", "The instructions have been understood.", "understand -> understood"],
+      ["write", "written", "irregular verb V3", "The report has been written.", "write -> written"]
+    ].map(([word, meaning, type, example, usage]) => ({
+      word,
+      ipa: "",
+      meaning,
+      type,
+      example,
+      viAnswers: meaning.split("/"),
+      usage
+    }))
   ]
 };
 

@@ -803,7 +803,7 @@ const TOPICS_GRAMMAR = {
   "\u0110\u1ed9ng t\u1eeb b\u1ea5t quy t\u1eafc": {
     title: "\u0110\u1ed9ng t\u1eeb b\u1ea5t quy t\u1eafc (Irregular Verbs) \u2014 V1 \u2192 V2 \u2192 V3",
     structure: "V1 (hi\u1ec7n t\u1ea1i) \u2192 V2 (qu\u00e1 kh\u1ee9 \u0111\u01a1n) \u2192 V3 (qu\u00e1 kh\u1ee9 ph\u00e2n t\u1eeb)",
-    explanation: "\u0110\u1ed9ng t\u1eeb b\u1ea5t quy t\u1eafc kh\u00f4ng th\u00eam -ed \u1edf V2/V3. C\u1ea7n H\u1eccC THU\u1ed8C L\u00d2NG.\n\nNH\u00d3M C\u00d9NG D\u1ea0NG V2=V3:\ncome\u2192came\u2192come, run\u2192ran\u2192run, become\u2192became\u2192become.\n\nNH\u00d3M V1=V2=V3:\ncut\u2192cut\u2192cut, put\u2192put\u2192put, hit\u2192hit\u2192hit, let\u2192let\u2192let, set\u2192set\u2192set.\n\nNH\u00d3M V2\u2260V3:\ngo\u2192went\u2192gone, take\u2192took\u2192taken, see\u2192saw\u2192seen, write\u2192wrote\u2192written, know\u2192knew\u2192known, give\u2192gave\u2192given, speak\u2192spoke\u2192spoken, break\u2192broke\u2192broken.\n\nNH\u00d3M KH\u00c1C:\nbe\u2192was/were\u2192been, have\u2192had\u2192had, do\u2192did\u2192done, make\u2192made\u2192made, buy\u2192bought\u2192bought, bring\u2192brought\u2192brought, think\u2192thought\u2192thought.",
+    explanation: "\u0110\u1ed9ng t\u1eeb b\u1ea5t quy t\u1eafc kh\u00f4ng th\u00eam -ed \u1edf V2/V3. Trong TOEIC c\u01a1 b\u1ea3n, n\u00ean \u01b0u ti\u00ean nh\u1eadn di\u1ec7n V3 trong th\u00ec ho\u00e0n th\u00e0nh v\u00e0 c\u00e2u b\u1ecb \u0111\u1ed9ng.\n\nNH\u00d3M TH\u01af\u1edcNG G\u1eb6P C\u1ea6N H\u1eccC TR\u01af\u1edaC (V1 \u2192 V3):\nbe\u2192been, become\u2192become, begin\u2192begun, bring\u2192brought, build\u2192built, buy\u2192bought, choose\u2192chosen, come\u2192come, do\u2192done, find\u2192found, get\u2192got/gotten, give\u2192given, go\u2192gone, have\u2192had, keep\u2192kept, know\u2192known, leave\u2192left, make\u2192made, meet\u2192met, pay\u2192paid, put\u2192put, read\u2192read, say\u2192said, see\u2192seen, sell\u2192sold, send\u2192sent, set\u2192set, show\u2192shown, speak\u2192spoken, spend\u2192spent, take\u2192taken, tell\u2192told, think\u2192thought, understand\u2192understood, write\u2192written.\n\nD\u1ea4U HI\u1ec6U HAY G\u1eb6P:\nhas/have + V3; had + V3; be + V3; modal + be + V3.\n\nNH\u00d3M C\u00d3 TH\u1ec2 H\u1eccC SAU N\u1ebeU M\u1ee4C TI\u00caU CH\u1ec8 KHO\u1ea2NG 600 T\u1eea:\narise, awake, bear, bid, bind, bleed, creep, forbid, forsake, grind, kneel, leap, shed, shrink, slit, sow, spring, stink, strive, swear, sweep, swing, tear, weave, weep, wring.",
     examples: [
       "She went to the meeting without telling anyone.",
       "They have chosen a new CEO for the company.",
@@ -816,9 +816,10 @@ const TOPICS_GRAMMAR = {
     ],
     notes: [
       "Ph\u00e2n bi\u1ec7t V2 (Qu\u00e1 kh\u1ee9 \u0111\u01a1n) v\u00e0 V3 (Past Participle) khi c\u00e1c d\u1ea1ng kh\u00e1c nhau.",
-      "Trong b\u1ecb \u0111\u1ed9ng v\u00e0 th\u00ec ho\u00e0n th\u00e0nh lu\u00f4n d\u00f9ng V3."
+      "Trong b\u1ecb \u0111\u1ed9ng v\u00e0 th\u00ec ho\u00e0n th\u00e0nh lu\u00f4n d\u00f9ng V3.",
+      "Nếu đang học bộ khoảng 600 từ TOEIC cơ bản, hãy học nhóm thường gặp trước; nhóm tần suất thấp có thể để sau."
     ],
-    tips: "Nh\u00f3m theo \u00e2m t\u01b0\u01a1ng t\u1ef1: ring-rang-rung / sing-sang-sung / drink-drank-drunk. H\u1ecdc b\u1ea3ng v\u00e0 ki\u1ec3m tra h\u00e0ng ng\u00e0y."
+    tips: "Mẹo TOEIC: thấy has/have/had hoặc be đứng trước chỗ trống thì nghĩ ngay đến V3, ví dụ has been done, was sent, have written, is known, was built."
   },
 
   "\u0110\u1ed9ng t\u1eeb d\u1ea1ng b\u1ecb \u0111\u1ed9ng": {
