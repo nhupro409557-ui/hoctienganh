@@ -1257,7 +1257,88 @@ const GrammarQuiz = {
     "on weekdays": { vi: "vào các ngày trong tuần", type: "Cụm trạng từ" },
     "every month": { vi: "mỗi tháng", type: "Cụm trạng từ" },
     "each friday": { vi: "mỗi thứ Sáu", type: "Cụm trạng từ" },
-    "regularly": { vi: "một cách thường xuyên", type: "Trạng từ" }
+    "regularly": { vi: "một cách thường xuyên", type: "Trạng từ (Adverb)" },
+
+    // Common words from grammar templates
+    "work": { vi: "làm việc", type: "Động từ (Verb)" },
+    "works": { vi: "làm việc", type: "Động từ (Verb)" },
+    "working": { vi: "việc làm việc", type: "Danh động từ (Gerund)" },
+    "worked": { vi: "đã làm việc", type: "Động từ quá khứ (Past Verb)" },
+    "go": { vi: "đi", type: "Động từ (Verb)" },
+    "goes": { vi: "đi", type: "Động từ (Verb)" },
+    "going": { vi: "việc đi", type: "Danh động từ (Gerund)" },
+    "study": { vi: "học, nghiên cứu", type: "Động từ (Verb)" },
+    "studies": { vi: "học, nghiên cứu", type: "Động từ (Verb)" },
+    "studying": { vi: "việc học", type: "Danh động từ (Gerund)" },
+    "leave": { vi: "rời đi", type: "Động từ (Verb)" },
+    "left": { vi: "đã rời đi", type: "Động từ quá khứ (Past Verb)" },
+    "leaving": { vi: "việc rời đi", type: "Danh động từ (Gerund)" },
+    "attend": { vi: "tham dự", type: "Động từ (Verb)" },
+    "attends": { vi: "tham dự", type: "Động từ (Verb)" },
+    "attending": { vi: "việc tham dự", type: "Danh động từ (Gerund)" },
+    "attended": { vi: "đã tham dự", type: "Động từ quá khứ (Past Verb)" },
+    "announce": { vi: "thông báo", type: "Động từ (Verb)" },
+    "complete": { vi: "hoàn thành", type: "Động từ (Verb)" },
+    "completed": { vi: "đã hoàn thành", type: "Động từ quá khứ (Past Verb)" },
+    "decide": { vi: "quyết định", type: "Động từ (Verb)" },
+    "decided": { vi: "đã quyết định", type: "Động từ quá khứ (Past Verb)" },
+    "recommend": { vi: "khuyến nghị", type: "Động từ (Verb)" },
+    "recommended": { vi: "đã khuyến nghị", type: "Động từ quá khứ (Past Verb)" },
+    "introduce": { vi: "giới thiệu", type: "Động từ (Verb)" },
+    "introduced": { vi: "đã giới thiệu", type: "Động từ quá khứ (Past Verb)" },
+    "purchase": { vi: "mua sắm", type: "Động từ (Verb)" },
+    "approve": { vi: "phê duyệt", type: "Động từ (Verb)" },
+    "approved": { vi: "đã phê duyệt", type: "Động từ quá khứ (Past Verb)" },
+    "operate": { vi: "vận hành", type: "Động từ (Verb)" },
+    "operating": { vi: "việc vận hành", type: "Danh động từ (Gerund)" },
+    "located": { vi: "tọa lạc, nằm ở", type: "Tính từ (Adjective)" },
+    "require": { vi: "yêu cầu", type: "Động từ (Verb)" },
+    "required": { vi: "được yêu cầu", type: "Tính từ (Adjective)" },
+    "manage": { vi: "quản lý", type: "Động từ (Verb)" },
+    "managed": { vi: "đã quản lý", type: "Động từ quá khứ (Past Verb)" },
+    "implement": { vi: "triển khai, thực hiện", type: "Động từ (Verb)" },
+    "implemented": { vi: "đã triển khai", type: "Động từ quá khứ (Past Verb)" },
+
+    // Common nouns from templates
+    "the company": { vi: "công ty", type: "Danh từ (Noun)" },
+    "the board": { vi: "ban giám đốc", type: "Danh từ (Noun)" },
+    "the team": { vi: "nhóm, đội", type: "Danh từ (Noun)" },
+    "the staff": { vi: "nhân viên", type: "Danh từ tập hợp (Collective Noun)" },
+    "the committee": { vi: "ủy ban", type: "Danh từ (Noun)" },
+    "the policy": { vi: "chính sách", type: "Danh từ (Noun)" },
+    "the budget": { vi: "ngân sách", type: "Danh từ (Noun)" },
+    "the deadline": { vi: "hạn chót", type: "Danh từ (Noun)" },
+    "the conference": { vi: "hội nghị", type: "Danh từ (Noun)" },
+    "the campaign": { vi: "chiến dịch", type: "Danh từ (Noun)" },
+    "the machinery": { vi: "máy móc", type: "Danh từ (Noun)" },
+    "the draft": { vi: "bản nháp", type: "Danh từ (Noun)" },
+    "the resources": { vi: "nguồn lực", type: "Danh từ số nhiều (Plural Noun)" },
+    "the client": { vi: "khách hàng", type: "Danh từ (Noun)" },
+    "the clients": { vi: "các khách hàng", type: "Danh từ số nhiều (Plural Noun)" },
+    "the supervisor": { vi: "người giám sát", type: "Danh từ (Noun)" },
+
+    // Common adjectives & adverbs from templates
+    "new": { vi: "mới", type: "Tính từ (Adjective)" },
+    "quickly": { vi: "một cách nhanh chóng", type: "Trạng từ (Adverb)" },
+    "immediately": { vi: "ngay lập tức", type: "Trạng từ (Adverb)" },
+    "efficiently": { vi: "một cách hiệu quả", type: "Trạng từ (Adverb)" },
+    "carefully": { vi: "một cách cẩn thận", type: "Trạng từ (Adverb)" },
+    "always": { vi: "luôn luôn", type: "Trạng từ (Adverb)" },
+    "currently": { vi: "hiện tại", type: "Trạng từ (Adverb)" },
+    "entirely": { vi: "hoàn toàn", type: "Trạng từ (Adverb)" },
+
+    // Time expressions from templates
+    "yesterday": { vi: "hôm qua", type: "Trạng từ chỉ thời gian" },
+    "tomorrow": { vi: "ngày mai", type: "Trạng từ chỉ thời gian" },
+    "last week": { vi: "tuần trước", type: "Cụm trạng từ chỉ thời gian" },
+    "last year": { vi: "năm ngoái", type: "Cụm trạng từ chỉ thời gian" },
+    "next week": { vi: "tuần sau", type: "Cụm trạng từ chỉ thời gian" },
+    "right now": { vi: "ngay bây giờ", type: "Cụm trạng từ chỉ thời gian" },
+    "at the moment": { vi: "vào lúc này", type: "Cụm trạng từ chỉ thời gian" },
+    "on sundays": { vi: "vào các ngày Chủ nhật", type: "Cụm trạng từ chỉ thời gian" },
+    "on time": { vi: "đúng giờ", type: "Cụm trạng từ" },
+    "on schedule": { vi: "đúng tiến độ", type: "Cụm trạng từ" },
+    "as soon as possible": { vi: "càng sớm càng tốt", type: "Cụm trạng từ" }
   },
 
   // Hàm sinh ra 50 câu hỏi trắc nghiệm ngẫu nhiên cho một ngày học
@@ -1421,39 +1502,84 @@ const GrammarQuiz = {
         return `${label}: SAI. Phương án này không đáp ứng sự hòa hợp chủ-vị hoặc cấu trúc từ loại cần thiết của câu.`;
       });
 
-      // Tạo dịch nghĩa và từ vựng tích hợp (NEW)
-      let actionVi = this.TRANSLATIONS[verb.base.toLowerCase()]?.vi || '';
-      let subVi = this.TRANSLATIONS[subject.toLowerCase()]?.vi || '';
-      let objVi = this.TRANSLATIONS[object.toLowerCase()]?.vi || '';
-      let placeVi = this.TRANSLATIONS[place.toLowerCase()]?.vi || '';
-      let timeVi = this.TRANSLATIONS[time.toLowerCase()]?.vi || '';
-
-      // Tự động thêm trợ động từ nếu có
-      let helper = "";
+      // Tạo dịch nghĩa và từ vựng tích hợp — chỉ hiển thị từ thực sự có trong câu hỏi
       const qLower = questionText.toLowerCase();
+
+      // Quét toàn bộ từ điển TRANSLATIONS, chỉ giữ lại từ/cụm từ thực sự xuất hiện trong câu hỏi
+      const vocabItems = [];
+      const matchedParts = []; // để ghép câu dịch
+      const transKeys = Object.keys(this.TRANSLATIONS);
+      // Sắp xếp key dài trước để khớp cụm từ dài hơn ưu tiên (ví dụ "in the office" trước "the")
+      transKeys.sort((a, b) => b.length - a.length);
+      const usedRanges = []; // tránh trùng lặp highlight
+
+      for (const key of transKeys) {
+        const keyLower = key.toLowerCase();
+        const pos = qLower.indexOf(keyLower);
+        if (pos === -1) continue;
+        // Kiểm tra không bị trùng overlap với từ/cụm đã khớp
+        const end = pos + keyLower.length;
+        const overlaps = usedRanges.some(r => !(end <= r[0] || pos >= r[1]));
+        if (overlaps) continue;
+        usedRanges.push([pos, end]);
+
+        const entry = this.TRANSLATIONS[key];
+        // Lấy đúng dạng viết gốc trong câu hỏi (giữ nguyên hoa/thường)
+        const originalText = questionText.substring(pos, end);
+        vocabItems.push({
+          pos: pos,
+          html: `- <b>${originalText}</b>: ${entry.vi} (<i>${entry.type}</i>)`
+        });
+        matchedParts.push({ pos: pos, vi: entry.vi });
+      }
+
+      // Bổ sung thêm đáp án đúng vào danh sách từ vựng nếu chưa có
+      const correctWord = correctOptionText;
+      const correctLower = correctWord.toLowerCase();
+      if (this.TRANSLATIONS[correctLower]) {
+        const alreadyHas = vocabItems.some(v => v.html.toLowerCase().includes(`<b>${correctLower}</b>`));
+        if (!alreadyHas) {
+          const cEntry = this.TRANSLATIONS[correctLower];
+          vocabItems.push({
+            pos: 9999,
+            html: `- <b>${correctWord}</b> <span style="color:var(--success)">✓ đáp án</span>: ${cEntry.vi} (<i>${cEntry.type}</i>)`
+          });
+        }
+      }
+
+      // Sắp xếp từ vựng theo thứ tự xuất hiện trong câu
+      vocabItems.sort((a, b) => a.pos - b.pos);
+
+      // Tự động dịch nghĩa câu hỏi dựa trên các từ đã khớp
+      let helper = "";
       if (qLower.includes("will")) helper = "sẽ ";
       else if (qLower.includes("must")) helper = "phải ";
       else if (qLower.includes("should")) helper = "nên ";
       else if (qLower.includes("can")) helper = "có thể ";
       else if (qLower.includes("did ") || qLower.includes("yesterday") || qLower.includes("last week") || qLower.includes("ago")) helper = "đã ";
 
-      if (subVi) subVi = subVi.charAt(0).toUpperCase() + subVi.slice(1);
-      const sentenceTranslation = `${subVi} ${helper}${actionVi} ${objVi} ${placeVi} ${timeVi}.`;
+      // Ghép dịch nghĩa từ các phần đã khớp theo thứ tự xuất hiện
+      matchedParts.sort((a, b) => a.pos - b.pos);
+      let sentenceTranslation = '';
+      if (matchedParts.length > 0) {
+        const viParts = matchedParts.map(p => p.vi);
+        // Chèn trợ động từ sau chủ ngữ (phần tử đầu tiên)
+        if (viParts.length >= 2 && helper) {
+          viParts.splice(1, 0, helper.trim());
+        }
+        sentenceTranslation = viParts.join(' ');
+        sentenceTranslation = sentenceTranslation.charAt(0).toUpperCase() + sentenceTranslation.slice(1);
+        if (!sentenceTranslation.endsWith('.')) sentenceTranslation += '.';
+      } else {
+        sentenceTranslation = coreExplanation;
+      }
 
-      // Khởi tạo danh sách từ vựng tích hợp kèm từ loại
-      const vocabItems = [];
-      if (subject) vocabItems.push(`- <b>${subject}</b>: ${this.TRANSLATIONS[subject.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[subject.toLowerCase()]?.type || ''}</i>)`);
-      if (verb) vocabItems.push(`- <b>${verb.base}</b>: ${this.TRANSLATIONS[verb.base.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[verb.base.toLowerCase()]?.type || ''}</i>)`);
-      if (object) vocabItems.push(`- <b>${object}</b>: ${this.TRANSLATIONS[object.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[object.toLowerCase()]?.type || ''}</i>)`);
-      if (place) vocabItems.push(`- <b>${place}</b>: ${this.TRANSLATIONS[place.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[place.toLowerCase()]?.type || ''}</i>)`);
-      if (time) vocabItems.push(`- <b>${time}</b>: ${this.TRANSLATIONS[time.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[time.toLowerCase()]?.type || ''}</i>)`);
-
-      // Tạo giải thích chuyên sâu (Tutor-style) với dịch nghĩa & từ loại
+      // Tạo giải thích chuyên sâu (Tutor-style) với dịch nghĩa & từ vựng thực tế trong câu
       let detailedExplanation = `
         📝 <b>Dịch nghĩa câu:</b> ${sentenceTranslation}<br><br>
         💡 <b>Nguyên lý ngữ pháp:</b> ${coreExplanation}<br><br>
-        📚 <b>Học từ vựng tích hợp:</b><br>
-        ${vocabItems.join('<br>')}<br><br>
+        ${vocabItems.length > 0 ? `📚 <b>Từ vựng trong câu:</b><br>
+        ${vocabItems.map(v => v.html).join('<br>')}<br><br>` : ''}
         🔍 <b>Phân tích chi tiết các đáp án:</b><br>
         ${optionExplanations.map((expLine, idx) => `${String.fromCharCode(65 + idx)}. ${expLine}`).join('<br>')}
       `;
