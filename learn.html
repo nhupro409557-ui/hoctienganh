@@ -60,6 +60,7 @@
         <button class="tab-btn" onclick="showTab('abcd',this)">📝 A/B/C/D</button>
         <button class="tab-btn" onclick="showTab('typeQuiz',this)">🏷️ Từ loại</button>
         <button class="tab-btn" id="grammarQuizTabBtn" onclick="showTab('grammarQuiz',this)" style="display:none">✍️ Trắc nghiệm Ngữ pháp</button>
+        <button class="tab-btn" id="toeicPracticeTabBtn" onclick="showTab('toeicPractice',this)">🎯 Thực chiến Part 5-7</button>
       </div>
 
       <!-- Study Filter Panel -->
@@ -208,6 +209,75 @@
         </div>
       </section>
 
+      <!-- Tab 8: TOEIC Practice Part 5-7 (NEW) -->
+      <section id="toeicPractice" class="section">
+        <div class="toeic-practice-box" style="margin-top: 16px;">
+          <!-- Welcome overview screen -->
+          <div id="toeicPracticeOverview" class="practice-overview">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 8px; font-size: 18px;">
+              🎯 Luyện đề thực chiến TOEIC Part 5, 6, 7
+            </h3>
+            <p style="color: var(--text-muted); font-size: 13.5px; line-height: 1.6; margin-bottom: 20px;">
+              Bài tập tổng hợp hôm nay bao gồm <b>5 câu Part 5</b>, <b>1 đoạn Part 6 (4 câu)</b> và <b>1 đoạn Part 7 (3 câu)</b>. Tất cả câu hỏi đều có dịch nghĩa và giải thích chi tiết từng đáp án để giúp bạn cải thiện tốc độ đọc hiểu và nâng band điểm thực tế.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; text-align: center;">
+              <div style="background: var(--bg-hover); padding: 12px; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-weight: 700; font-size: 20px; color: var(--primary);">5 câu</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Part 5 (Điền câu)</div>
+              </div>
+              <div style="background: var(--bg-hover); padding: 12px; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-weight: 700; font-size: 20px; color: var(--success);">4 câu</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Part 6 (Điền đoạn)</div>
+              </div>
+              <div style="background: var(--bg-hover); padding: 12px; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-weight: 700; font-size: 20px; color: var(--accent);">3 câu</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Part 7 (Đọc hiểu)</div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg w-full" onclick="startToeicPracticeQuiz()">Bắt đầu làm bài (12 câu)</button>
+          </div>
+
+          <!-- Active Quiz Screen -->
+          <div id="toeicPracticeQuizPanel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 700; font-size: 14px;">
+              <span id="practiceQuestionCounter" style="color: var(--text-secondary);">Câu 1/12</span>
+              <span id="practiceScoreCounter" style="color: var(--success);">Đúng: 0</span>
+            </div>
+            
+            <div class="progress" style="margin-bottom: 20px;"><div id="practiceProgress" class="progress-bar" style="width: 0%;"></div></div>
+            
+            <!-- Question card content -->
+            <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 16px;">
+              <div id="practicePartLabel" style="font-weight: 800; font-size: 12px; letter-spacing: 0.05em; color: var(--primary); text-transform: uppercase; margin-bottom: 12px;">PART 5</div>
+              
+              <!-- Passage area (only shown for Part 6 and 7) -->
+              <div id="practicePassageArea" style="background: var(--bg-hover); padding: 16px; border-radius: var(--radius); border-left: 4px solid var(--accent); font-family: inherit; font-size: 13.5px; line-height: 1.6; margin-bottom: 16px; white-space: pre-line; display: none;"></div>
+
+              <div id="practiceQuestionText" style="font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; color: var(--text-primary);"></div>
+              
+              <div id="practiceOptionsList" class="abcd-options" style="display: grid; grid-template-columns: 1fr; gap: 10px;"></div>
+              
+              <!-- Detailed explanation block (shown after answering) -->
+              <div id="practiceExplanationPanel" style="margin-top: 20px; padding: 16px; border-radius: var(--radius); background: var(--bg-hover); border: 1px solid var(--border); display: none;"></div>
+            </div>
+
+            <!-- Quiz actions -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+              <button class="btn btn-secondary" onclick="exitToeicPracticeQuiz()">← Thoát</button>
+              <button class="btn btn-primary" id="practiceNextBtn" style="display: none;" onclick="nextToeicPracticeQuestion()">Câu tiếp theo →</button>
+            </div>
+          </div>
+
+          <!-- Result summary screen -->
+          <div id="toeicPracticeResultPanel" style="display: none; text-align: center; padding: 24px;">
+            <h2 id="practiceResultTitle" style="margin-top: 0; font-size: 24px; color: var(--text-primary);">🎉 Hoàn thành bài tập!</h2>
+            <div style="font-size: 48px; font-weight: 800; color: var(--primary); margin: 16px 0;" id="practiceResultScore">9/12</div>
+            <p id="practiceResultFeedback" style="color: var(--text-secondary); margin-bottom: 24px; font-size: 14px;"></p>
+            <button class="btn btn-primary" onclick="startToeicPracticeQuiz()">Làm lại bài tập</button>
+          </div>
+        </div>
+      </section>
+
       <!-- Complete Day Button -->
       <div class="text-center mt-lg">
         <button class="btn btn-success btn-lg" onclick="completeDay()" id="completeDayBtn">
@@ -248,6 +318,7 @@
   <script src="storage.js"></script>
   <script src="grammar_questions.js"></script>
   <script src="formulas_data.js"></script>
+  <script src="toeic_practice_generator.js"></script>
   <script>
   // ============================================
   // LEARN PAGE LOGIC
@@ -1721,6 +1792,7 @@
         { id: 'viToEn', label: 'Làm bài Việt → Anh' },
         { id: 'enToVi', label: 'Làm bài Anh → Việt' },
         { id: 'abcd', label: 'Làm bài trắc nghiệm A/B/C/D' },
+        { id: 'toeicPracticeCompleted', label: 'Luyện đề thực chiến Part 5-7 (12 câu)' },
         { id: 'review', label: 'Ôn lại từ cũ + ghi 5 từ khó nhất' },
         { id: 'note', label: 'Ghi chép cuối ngày' }
       );
@@ -1731,6 +1803,7 @@
         { id: 'viToEn', label: 'Làm bài Việt → Anh' },
         { id: 'enToVi', label: 'Làm bài Anh → Việt' },
         { id: 'abcd', label: 'Làm bài trắc nghiệm A/B/C/D' },
+        { id: 'toeicPracticeCompleted', label: 'Luyện đề thực chiến Part 5-7 (12 câu)' },
         { id: 'review', label: 'Ôn lại từ cũ + ghi 5 từ khó nhất' },
         { id: 'note', label: 'Ghi chép cuối ngày' }
       ];
@@ -1744,7 +1817,10 @@
       } else {
         items.push({ id: 'grammar', label: 'Ôn tập ngữ pháp đã học' });
       }
-      items.push({ id: 'note', label: 'Ghi chép cuối ngày' });
+      items.push(
+        { id: 'toeicPracticeCompleted', label: 'Luyện đề thực chiến Part 5-7 (12 câu)' },
+        { id: 'note', label: 'Ghi chép cuối ngày' }
+      );
     }
 
     const saved = Storage.getChecklist(currentDay);
@@ -1832,6 +1908,156 @@
     if (newDay >= 1 && newDay <= 60) {
       window.location.href = `learn.html?day=${newDay}`;
     }
+  }
+
+  // ---- TAB 8: TOEIC PRACTICE PART 5-7 ----
+  let practiceQuestions = [];
+  let practiceIndex = 0;
+  let practiceScore = 0;
+  let practiceAnswers = [];
+
+  function startToeicPracticeQuiz() {
+    if (typeof TOEICPracticeGenerator !== 'undefined') {
+      const topicEn = dayData ? dayData.topicEn : '';
+      const topicVi = dayData ? dayData.topic : '';
+      practiceQuestions = TOEICPracticeGenerator.generate(currentDay, words, topicEn, topicVi);
+    } else {
+      practiceQuestions = [];
+    }
+    
+    practiceIndex = 0;
+    practiceScore = 0;
+    practiceAnswers = [];
+    
+    document.getElementById('toeicPracticeOverview').style.display = 'none';
+    document.getElementById('toeicPracticeResultPanel').style.display = 'none';
+    document.getElementById('toeicPracticeQuizPanel').style.display = 'block';
+    
+    renderToeicPracticeQuestion();
+  }
+
+  function renderToeicPracticeQuestion() {
+    if (practiceQuestions.length === 0) {
+      document.getElementById('toeicPracticeQuizPanel').innerHTML = '<div class="empty-state"><p>Không có bài tập thực chiến cho ngày hôm nay.</p></div>';
+      return;
+    }
+
+    const q = practiceQuestions[practiceIndex];
+    const total = practiceQuestions.length;
+    
+    document.getElementById('practiceQuestionCounter').textContent = `Câu ${practiceIndex + 1}/${total}`;
+    document.getElementById('practiceScoreCounter').textContent = `Đúng: ${practiceScore}`;
+    document.getElementById('practiceProgress').style.width = (practiceIndex / total * 100) + '%';
+    
+    document.getElementById('practicePartLabel').textContent = q.partLabel;
+    
+    const passageArea = document.getElementById('practicePassageArea');
+    if (q.passage) {
+      passageArea.style.display = 'block';
+      passageArea.innerHTML = q.passage;
+    } else {
+      passageArea.style.display = 'none';
+    }
+    
+    document.getElementById('practiceQuestionText').innerHTML = q.question;
+    
+    const optionsList = document.getElementById('practiceOptionsList');
+    const letters = ['A', 'B', 'C', 'D'];
+    optionsList.innerHTML = q.options.map((opt, i) => `
+      <button class="abcd-btn" onclick="selectToeicPracticeOption(${i})">
+        <span class="abcd-letter">${letters[i]}</span>
+        <span>${opt}</span>
+      </button>
+    `).join('');
+    
+    document.getElementById('practiceExplanationPanel').style.display = 'none';
+    document.getElementById('practiceNextBtn').style.display = 'none';
+  }
+
+  function selectToeicPracticeOption(idx) {
+    const q = practiceQuestions[practiceIndex];
+    const ok = idx === q.answerIdx;
+    
+    // Disable all options and show correct/wrong styles
+    const buttons = document.querySelectorAll('#practiceOptionsList .abcd-btn');
+    buttons.forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === q.answerIdx) {
+        btn.classList.add('correct');
+      }
+      if (i === idx && !ok) {
+        btn.classList.add('wrong');
+      }
+    });
+    
+    if (ok) {
+      practiceScore++;
+      document.getElementById('practiceScoreCounter').textContent = `Đúng: ${practiceScore}`;
+    }
+    
+    practiceAnswers.push(ok);
+    
+    // Show explanation panel
+    const explanationPanel = document.getElementById('practiceExplanationPanel');
+    const letters = ['A', 'B', 'C', 'D'];
+    explanationPanel.style.display = 'block';
+    explanationPanel.innerHTML = `
+      <h4 style="margin-top: 0; color: ${ok ? 'var(--success)' : 'var(--danger)'}; font-size: 15px; margin-bottom: 8px;">
+        ${ok ? '🎉 Chính xác!' : `❌ Chưa đúng — Đáp án đúng là ${letters[q.answerIdx]}`}
+      </h4>
+      <p style="margin-bottom: 8px; font-size: 13.5px; font-weight: 500;">
+        <b>Dịch nghĩa:</b> ${q.translation}
+      </p>
+      <p style="margin-bottom: 0; font-size: 13.5px; line-height: 1.5; color: var(--text-secondary);">
+        <b>Giải thích:</b> ${q.explanation}
+      </p>
+    `;
+    
+    const nextBtn = document.getElementById('practiceNextBtn');
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = practiceIndex === practiceQuestions.length - 1 ? 'Xem kết quả' : 'Câu tiếp theo →';
+  }
+
+  function nextToeicPracticeQuestion() {
+    if (practiceIndex < practiceQuestions.length - 1) {
+      practiceIndex++;
+      renderToeicPracticeQuestion();
+    } else {
+      completeToeicPractice();
+    }
+  }
+
+  function exitToeicPracticeQuiz() {
+    document.getElementById('toeicPracticeQuizPanel').style.display = 'none';
+    document.getElementById('toeicPracticeOverview').style.display = 'block';
+  }
+
+  function completeToeicPractice() {
+    document.getElementById('toeicPracticeQuizPanel').style.display = 'none';
+    document.getElementById('toeicPracticeResultPanel').style.display = 'block';
+    
+    const total = practiceQuestions.length;
+    document.getElementById('practiceResultScore').textContent = `${practiceScore}/${total}`;
+    
+    let feedback = '';
+    const pct = (practiceScore / total) * 100;
+    if (pct >= 80) {
+      feedback = '🎉 Tuyệt vời! Bạn đã hoàn thành xuất sắc bài tập thực chiến hôm nay. Khả năng đọc hiểu của bạn rất tốt!';
+    } else if (pct >= 50) {
+      feedback = '👍 Khá tốt! Hãy ôn lại các từ vựng và công thức ngữ pháp chưa vững để cải thiện điểm số.';
+    } else {
+      feedback = '💪 Cố gắng lên! Đọc kỹ phần dịch nghĩa và giải thích chi tiết để tích lũy kinh nghiệm làm bài nhé.';
+    }
+    document.getElementById('practiceResultFeedback').textContent = feedback;
+    
+    // Auto-check checklist item
+    const savedChecklist = Storage.getChecklist(currentDay);
+    if (!savedChecklist['toeicPracticeCompleted']) {
+      Storage.toggleChecklistItem(currentDay, 'toeicPracticeCompleted');
+    }
+    
+    // Update checklist rendering
+    renderChecklist();
   }
 
   // ---- KEYBOARD SHORTCUTS ----
