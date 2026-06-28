@@ -2233,3 +2233,632 @@ const DAYS_DATA_PART3 = [
 ];
 
 const DAYS_DATA = DAYS_DATA_PART1.concat(DAYS_DATA_PART2, DAYS_DATA_PART3);
+
+// NEW GRAMMAR CURRICULUM OVERWRITE
+const NEW_GRAMMAR = {
+  "1": {
+    "title": "Câu đơn (S + V, S + V + O)",
+    "explanation": "Câu đơn là loại câu cơ bản nhất trong tiếng Anh. Câu đơn gồm một chủ ngữ (Subject) và một động từ (Verb), có thể có tân ngữ (Object).\n\n1. S + V: Chủ ngữ + Động từ (không cần tân ngữ)\nVí dụ: She works. (Cô ấy làm việc.)\n\n2. S + V + O: Chủ ngữ + Động từ + Tân ngữ\nVí dụ: He reads a report. (Anh ấy đọc một báo cáo.)\n\nLưu ý: Chủ ngữ là người/vật thực hiện hành động. Tân ngữ là người/vật chịu tác động của hành động.",
+    "structure": "S + V | S + V + O",
+    "examples": [
+      "She works. (Cô ấy làm việc.)",
+      "He sends an email. (Anh ấy gửi một email.)",
+      "The manager checks the report. (Quản lý kiểm tra báo cáo.)",
+      "We attend meetings. (Chúng tôi tham dự cuộc họp.)"
+    ],
+    "exceptions": [
+      "Một số động từ là nội động từ (intransitive verbs) như arrive, occur, rise, work, sleep, sit, stand... không bao giờ đi kèm tân ngữ trực tiếp và không dùng ở bị động.",
+      "Một số động từ là ngoại động từ (transitive verbs) như need, want, buy, send, explain... bắt buộc phải có tân ngữ đi sau, không thể đứng một mình."
+    ],
+    "notes": [
+      "Chủ ngữ (S) có thể là danh từ, cụm danh từ hoặc đại từ (I, you, he, she...).",
+      "Phải đảm bảo sự hòa hợp giữa chủ ngữ và động từ (Chủ ngữ số ít đi với động từ chia số ít, chủ ngữ số nhiều đi với động từ chia số nhiều)."
+    ],
+    "tips": "Mẹo: Luôn bắt đầu câu bằng chủ ngữ (ai/cái gì), rồi đến hành động (làm gì), cuối cùng là đối tượng (cái gì/ai)."
+  },
+  "2": {
+    "title": "Nhận diện Từ loại qua Hậu tố (Suffixes)",
+    "explanation": "Trong đề thi TOEIC Part 5, các câu hỏi về từ loại chiếm số lượng lớn. Việc nhớ đuôi từ loại giúp bạn chọn ngay đáp án đúng trong 3 giây.\\n\\n<table style=\\\"width:100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; font-size: 13px;\\\"><thead><tr style=\\\"background-color: var(--bg-hover); border-bottom: 2px solid var(--border);\\\"><th style=\\\"padding: 8px; text-align: left; font-weight: 700; color: var(--text-primary);\\\">Từ loại</th><th style=\\\"padding: 8px; text-align: left; font-weight: 700; color: var(--text-primary);\\\">Hậu tố phổ biến</th><th style=\\\"padding: 8px; text-align: left; font-weight: 700; color: var(--text-primary);\\\">Ví dụ minh họa</th></tr></thead><tbody><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 8px; font-weight: 700; color: var(--text-secondary);\\\">Danh từ (Noun)</td><td style=\\\"padding: 8px;\\\">-tion, -sion, -ment, -ness, -ity, -ance, -ence, -er, -or, -ee, -ant</td><td style=\\\"padding: 8px;\\\">decision, agreement, manager, employee, assistant</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 8px; font-weight: 700; color: var(--text-secondary);\\\">Tính từ (Adjective)</td><td style=\\\"padding: 8px;\\\">-ful, -less, -able, -ible, -ive, -ous, -al, -ic, -y</td><td style=\\\"padding: 8px;\\\">helpful, reliable, flexible, creative, professional</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 8px; font-weight: 700; color: var(--text-secondary);\\\">Động từ (Verb)</td><td style=\\\"padding: 8px;\\\">-ize, -ise, -ate, -ify, -en</td><td style=\\\"padding: 8px;\\\">organize, create, simplify, shorten</td></tr><tr><td style=\\\"padding: 8px; font-weight: 700; color: var(--text-secondary);\\\">Trạng từ (Adverb)</td><td style=\\\"padding: 8px;\\\">-ly (Tính từ + ly)</td><td style=\\\"padding: 8px;\\\">creatively, professionally, carefully</td></tr></tbody></table>",
+    "structure": "Word + Suffix = Part of Speech",
+    "examples": [
+      "develop (V) -> development (N) -> developing/developed (Adj)",
+      "rely (V) -> reliability (N) -> reliable (Adj) -> reliably (Adv)",
+      "beauty (N) -> beautify (V) -> beautiful (Adj) -> beautifully (Adv)"
+    ],
+    "exceptions": [
+      "<b>BẪY CỰC LỚN TRONG TOEIC:</b> Một số từ kết thúc bằng đuôi <b>-al</b> nhưng lại là DANH TỪ chứ không phải tính từ: <i>proposal (đề xuất), approval (phê duyệt), arrival (sự đến nơi), renewal (sự gia hạn), disposal (sự vứt bỏ), referral (thư giới thiệu)</i>.",
+      "Một số từ kết thúc bằng đuôi <b>-ive</b> nhưng lại là DANH TỪ: <i>representative (người đại diện), initiative (sáng kiến), alternative (sự thay thế), objective (mục tiêu)</i>.",
+      "Một số từ có đuôi <b>-ly</b> vừa là tính từ vừa là trạng từ: <i>daily, weekly, monthly, yearly, early</i>."
+    ],
+    "notes": [
+      "Mẹo tìm tính từ nhanh trong 4 đáp án: Hãy tìm trạng từ kết thúc bằng đuôi <b>-ly</b>, sau đó bỏ đuôi <b>-ly</b> đi ta sẽ thu được tính từ tương ứng."
+    ],
+    "tips": "Mẹo: Nếu phân vân giữa các đáp án, hãy tìm trạng từ đuôi -ly trước. Bỏ đuôi -ly đi bạn sẽ thu được Tính từ. Từ đó loại trừ và suy ra đáp án đúng."
+  },
+  "3": {
+    "title": "Từ loại sau the / a / an / my / his / her",
+    "explanation": "Sau các từ hạn định (the, a, an, my, his, her, their, our, this, that...) phải là DANH TỪ hoặc CỤM DANH TỪ (tính từ + danh từ).\n\nQuy tắc:\n• the/a/an/my + DANH TỪ: the house, a kitchen, my apartment\n• the/a/an/my + TÍNH TỪ + DANH TỪ: the new house, a large kitchen\n\n⚠️ KHÔNG được đặt động từ hay trạng từ ngay sau the/a/an/my.",
+    "structure": "the / a / an / my + (adjective) + NOUN",
+    "examples": [
+      "The apartment is very nice. (apartment = noun sau the)",
+      "She signed a new lease. (new = adj, lease = noun sau a)",
+      "His monthly rent is $500. (monthly = adj, rent = noun sau his)"
+    ],
+    "exceptions": [
+      "Nếu sau chỗ trống đã có sẵn một danh từ làm trung tâm, vị trí trống trước đó phải điền <b>tính từ</b> để bổ nghĩa cho danh từ đó chứ không điền danh từ khác. Cấu trúc: <code>a/an/the + Adj + Noun</code>."
+    ],
+    "notes": [
+      "Công thức đầy đủ vị trí: <code>a/an/the/tính từ sở hữu + (Adv) + (Adj) + Danh từ</code>.",
+      "Luôn luôn kiểm tra từ đứng ngay sau khoảng trống trước khi chọn đáp án."
+    ],
+    "tips": "Thấy the/a/an/my → tìm danh từ ngay sau. Nếu có 2 chỗ trống, thường là tính từ + danh từ."
+  },
+  "4": {
+    "title": "Từ loại sau very / sau chủ ngữ",
+    "explanation": "1) Sau VERY, SO, TOO, QUITE, RATHER → dùng TÍNH TỪ hoặc TRẠNG TỪ:\n• very + adj: The weather is very hot.\n• very + adv: He works very carefully.\n\n2) Sau CHỦ NGỮ + BE → dùng TÍNH TỪ (không dùng trạng từ):\n• The pollution is serious. ✅\n• The pollution is seriously. ❌\n\n3) Sau CHỦ NGỮ + ĐỘNG TỪ THƯỜNG → dùng TRẠNG TỪ:\n• The temperature rises quickly. ✅",
+    "structure": "very/so/too + ADJ/ADV | S + be + ADJ | S + V + ADV",
+    "examples": [
+      "The climate is very different. (very + adj)",
+      "Pollution is very serious. (be + adj)",
+      "The temperature changes quickly. (V + adv)"
+    ],
+    "exceptions": [
+      "Sau trạng từ chỉ mức độ (very, extremely, highly...) thường là tính từ. Tuy nhiên, nếu sau tính từ là một danh từ, thì trạng từ đó vẫn bổ nghĩa cho tính từ đứng trước danh từ. Cấu trúc: <code>S + V + a + very + Adj + N</code>."
+    ],
+    "notes": [
+      "Trạng từ có thể đứng xen vào giữa Chủ ngữ và Động từ thường để bổ nghĩa cho động từ: <code>Subject + Adverb + Verb</code> (ví dụ: <i>He quickly signed the contract</i>). Tránh nhầm lẫn điền tính từ vào đây."
+    ],
+    "tips": "Nhớ: sau BE → tính từ; sau VERY → tính từ hoặc trạng từ; bổ nghĩa cho động từ → trạng từ."
+  },
+  "5": {
+    "title": "Danh từ số ít / số nhiều (Singular & Plural Nouns)",
+    "explanation": "Danh từ số ít chỉ một đối tượng, danh từ số nhiều chỉ từ hai đối tượng trở lên.\n\nQuy tắc thêm -s/-es cho danh từ số nhiều:\n1. Thông thường: Thêm -s (book -> books, report -> reports)\n2. Tận cùng là -ch, -sh, -s, -x, -z, -o: Thêm -es (box -> boxes, watch -> watches)\n3. Tận cùng là phụ âm + y: Đổi y thành i rồi thêm -es (company -> companies)\n4. Tận cùng là f/fe: Đổi thành -ves (half -> halves, life -> lives)\n\nDanh từ bất quy tắc phổ biến:\nman -> men, woman -> women, person -> people, child -> children, foot -> feet, tooth -> teeth.",
+    "structure": "Noun + s/es",
+    "examples": [
+      "The companies signed the agreements. (companies, agreements = plural nouns)",
+      "She has three documents. (documents = plural)",
+      "This person is a close associate. (person, associate = singular)"
+    ],
+    "exceptions": [
+      "Một số danh từ không đếm được KHÔNG bao giờ thêm -s/-es: <i>information, advice, furniture, equipment, luggage, baggage, news</i>.",
+      "Một số danh từ luôn ở dạng số nhiều: <i>headquarters, species, series</i>."
+    ],
+    "notes": [
+      "Danh từ đếm được số ít KHÔNG thể đứng một mình trong câu mà không có từ hạn định (a/an/the/my...) đứng trước.",
+      "Danh từ không đếm được và danh từ số nhiều có thể đứng một mình."
+    ],
+    "tips": "Mẹo: Hãy kiểm tra xem danh từ phía sau chỗ trống là số ít hay số nhiều để chọn mạo từ (a/an/many/several...) phù hợp."
+  },
+  "6": {
+    "title": "Tính từ & Trạng từ (Adjectives & Adverbs)",
+    "explanation": "Tính từ (Adjective) dùng để mô tả tính chất của danh từ. Trạng từ (Adverb) dùng để mô tả cách thức của động từ, tính chất của tính từ hoặc trạng từ khác.\n\n1. Vị trí của Tính từ:\n- Đứng trước danh từ: Adj + N (a difficult task)\n- Đứng sau động từ liên kết (linking verbs: be, seem, look, become, remain...): S + Linking V + Adj\n\n2. Vị trí của Trạng từ:\n- Bổ nghĩa cho động từ thường: V + Adv / Adv + V (run quickly, carefully write)\n- Bổ nghĩa cho tính từ: Adv + Adj (extremely busy)\n- Bổ nghĩa cho trạng từ khác: Adv + Adv (very well)\n- Đứng đầu câu để bổ nghĩa cho cả câu: Adv, S + V",
+    "structure": "Adj + N | S + be/linking V + Adj | V + Adv | Adv + Adj",
+    "examples": [
+      "We hired a professional consultant. (professional = adj, consultant = noun)",
+      "The project remains incomplete. (incomplete = adj sau linking verb remain)",
+      "She completed the report successfully. (successfully = adv bổ nghĩa cho động từ completed)",
+      "The prices are reasonably low. (reasonably = adv bổ nghĩa cho tính từ low)"
+    ],
+    "exceptions": [
+      "Một số từ có đuôi -ly nhưng lại là tính từ chứ không phải trạng từ: <i>friendly (thân thiện), lovely (đáng yêu), costly (đắt đỏ), timely (kịp thời), orderly (trật tự)</i>.",
+      "Một số trạng từ không có đuôi -ly và có dạng giống hệt tính từ: <i>fast (nhanh), hard (chăm chỉ/khó), late (trễ), early (sớm)</i>."
+    ],
+    "notes": [
+      "Công thức tạo trạng từ thường gặp: Tính từ + -ly = Trạng từ (quick -> quickly).",
+      "Tránh nhầm lẫn điền trạng từ sau các động từ liên kết (linking verbs). Ví dụ: The food smells delicious (không dùng deliciously)."
+    ],
+    "tips": "Mẹo TOEIC: Nếu thấy chỗ trống nằm giữa trợ động từ và động từ chính, hoặc nằm giữa trạng từ và danh từ, hãy ưu tiên chọn Trạng từ."
+  },
+  "7": {
+    "title": "Ôn tập ngữ pháp (Ngày 1 - 6)",
+    "explanation": "Ôn tập và củng cố toàn bộ các chủ điểm ngữ pháp nền tảng từ Ngày 1 đến Ngày 6:\n\n1. Ngày 1: Câu đơn cơ bản (S + V, S + V + O)\n2. Ngày 2: Nhận diện Từ loại qua Hậu tố (Suffixes)\n3. Ngày 3: Vị trí từ loại sau Mạo từ/Sở hữu\n4. Ngày 4: Vị trí từ loại sau Very/Chủ ngữ\n5. Ngày 5: Danh từ số ít / số nhiều\n6. Ngày 6: Tính từ & Trạng từ kết hợp\n\nHãy tập trung làm bài tập tổng hợp để nhận diện nhanh các loại từ trong đề thi TOEIC Part 5.",
+    "structure": "Review Phase 1.1",
+    "examples": [
+      "The assistant (N) carefully (Adv) checked (V) the new (Adj) schedule (N)."
+    ],
+    "exceptions": [],
+    "notes": [
+      "Luôn xác định từ loại của 4 đáp án trước khi dịch nghĩa.",
+      "Nhớ các bẫy danh từ đuôi -al, -ive (proposal, alternative, representative)."
+    ],
+    "tips": "Tự ôn tập: Viết ra giấy 10 đuôi danh từ, 5 đuôi tính từ, và 4 đuôi động từ phổ biến nhất đã học."
+  },
+  "8": {
+    "title": "Thì Hiện tại đơn & Hiện tại tiếp diễn",
+    "explanation": "Sử dụng chính xác hai thì cơ bản ở hiện tại:\\n\\n<div style=\\\"margin: 10px 0; padding: 12px; border-radius: var(--radius); border-left: 4px solid var(--primary); background: var(--bg-hover);\\\"><div style=\\\"font-weight: 700; margin-bottom: 6px;\\\">⏳ So sánh nhanh Cách dùng:</div><div style=\\\"display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;\\\"><div><span style=\\\"color: var(--primary); font-weight: 700;\\\">Hiện tại đơn (Simple Present)</span><br>• Hành động lặp đi lặp lại, lịch trình cố định, thói quen.<br>• <i>Ví dụ: The bus leaves at 8 a.m.</i></div><div><span style=\\\"color: var(--success); font-weight: 700;\\\">Hiện tại tiếp diễn (Present Continuous)</span><br>• Hành động đang diễn ra tại thời điểm nói hoặc tạm thời.<br>• <i>Ví dụ: We are waiting for the bus now.</i></div></div></div>",
+    "structure": "Simple: S + V(-s/es) | Continuous: S + am/is/are + V-ing",
+    "examples": [
+      "The express train arrives at 10 a.m. (Thói quen/Lịch trình)",
+      "The technicians are repairing the generator now. (Đang diễn ra bây giờ)",
+      "She lives in Hanoi but is working in Ho Chi Minh City this month. (Sự thật lâu dài vs Tạm thời)"
+    ],
+    "exceptions": [
+      "Không dùng thì tiếp diễn với các động từ trạng thái (stative verbs) chỉ nhận thức, cảm xúc, sở hữu như: <i>know, believe, understand, want, like, have (sở hữu), own, belong to...</i> (Ví dụ: I know the answer, không dùng I am knowing)."
+    ],
+    "notes": [
+      "Dấu hiệu hiện tại đơn: <i>always, usually, often, every day, once a week...</i>",
+      "Dấu hiệu hiện tại tiếp diễn: <i>now, right now, at the moment, currently...</i>"
+    ],
+    "tips": "Mẹo TOEIC: Nếu trong câu xuất hiện trạng từ chỉ tần suất (always, often...) -> chọn Hiện tại đơn. Nếu có 'currently' hoặc 'at present' -> ưu tiên chọn Hiện tại tiếp diễn."
+  },
+  "9": {
+    "title": "Thì Quá khứ đơn & Quá khứ tiếp diễn",
+    "explanation": "Phối hợp thì quá khứ đơn và quá khứ tiếp diễn để diễn tả các hành động xảy ra trong quá khứ:\\n\\n<div style=\\\"margin: 10px 0; padding: 12px; border-radius: var(--radius); border-left: 4px solid var(--warning); background: var(--bg-hover);\\\"><div style=\\\"font-weight: 700; margin-bottom: 6px;\\\">⏳ Trục thời gian Quá khứ & Sự xen vào:</div><div style=\\\"display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;\\\"><div><span style=\\\"color: var(--warning); font-weight: 700;\\\">Quá khứ tiếp diễn (Was/Were + V-ing)</span><br>• Hành động kéo dài liên tục, đang xảy ra trong quá khứ.<br>• <i>Ví dụ: I was typing the report...</i></div><div><span style=\\\"color: var(--danger); font-weight: 700;\\\">Quá khứ đơn (V2/ed) xen vào</span><br>• Hành động ngắn đột ngột cắt ngang hành động đang xảy ra.<br>• <i>Ví dụ: ...when the computer shut down.</i></div></div><div style=\\\"margin-top: 6px; font-size: 12px; font-style: italic; color: var(--text-muted);\\\">Cấu trúc: <b>While</b> + Quá khứ tiếp diễn (hành động dài), <b>When</b> + Quá khứ đơn (hành động ngắn).</div></div>",
+    "structure": "Past Simple: S + V2/ed | Past Continuous: S + was/were + V-ing",
+    "examples": [
+      "The firm signed the contract in 2020. (Quá khứ đơn đã chấm dứt)",
+      "I was working on the computer when the power cut. (Đang xảy ra thì cắt ngang)",
+      "While they were discussing the budget, the supervisor walked in. (discussing = dài, walked in = ngắn)"
+    ],
+    "exceptions": [
+      "Khi hai hành động xảy ra song song đồng thời trong quá khứ, ta dùng thì Quá khứ tiếp diễn cho cả hai vế (nối bằng while). Ví dụ: <i>Yesterday, while she was typing, he was printing</i>."
+    ],
+    "notes": [
+      "Dấu hiệu quá khứ đơn: <i>yesterday, last week, ago, in + năm quá khứ</i>.",
+      "Động từ bất quy tắc cần học thuộc: go -> went, write -> wrote, buy -> bought, break -> broke."
+    ],
+    "tips": "Mẹo TOEIC: Gặp cấu trúc 'when/while', hãy xem xét hành động nào đang kéo dài (chia tiếp diễn) và hành động nào bất ngờ xen vào (chia quá khứ đơn)."
+  },
+  "10": {
+    "title": "Thì Tương lai & Động từ khuyết thiếu",
+    "explanation": "Cách dùng các thì tương lai và động từ khuyết thiếu (Modal Verbs):\n\n1. Tương lai đơn (Will):\n- Quyết định bộc phát tại thời điểm nói, lời hứa, hoặc dự đoán không có căn cứ rõ ràng.\n- Cấu trúc: S + will + V-bare.\n\n2. Tương lai gần (Be going to):\n- Kế hoạch, dự định đã có từ trước, hoặc dự đoán có căn cứ thực tế ở hiện tại.\n- Cấu trúc: S + am/is/are + going to + V-bare.\n\n3. Động từ khuyết thiếu (Modal Verbs: can, must, should, may...):\n- Diễn tả khả năng, sự bắt buộc, lời khuyên hoặc sự cho phép.\n- Cấu trúc: S + Modal Verb + V-bare (không bao giờ thêm -s/-es/-ed/-ing sau modal verb).\n- must (bắt buộc) vs mustn't (cấm đoán) vs don't have to (không cần).",
+    "structure": "S + will/can/must/should + V-bare | S + be going to + V-bare",
+    "examples": [
+      "We will send the contract tomorrow. (Tương lai đơn)",
+      "The manager is going to open a new branch next month. (Tương lai gần có kế hoạch)",
+      "Employees must wear their ID badges at all times. (Bắt buộc)",
+      "You should review the specifications carefully. (Lời khuyên)"
+    ],
+    "exceptions": [
+      "Sau động từ khuyết thiếu luôn là động từ nguyên mẫu không 'to'. Ngoại lệ là các cụm tương đương: have to (phải), ought to (nên), be able to (có thể)."
+    ],
+    "notes": [
+      "Will và be going to đều đi kèm với các trạng từ tương lai: tomorrow, next week, soon, shortly, upcoming.",
+      "Động từ khuyết thiếu không chia theo ngôi (không thêm -s cho ngôi thứ 3 số ít: He can do, không dùng He cans)."
+    ],
+    "tips": "Mẹo TOEIC: Sau will/can/must/should/may... bắt buộc phải là động từ nguyên mẫu không chia (V-bare). Nhận diện nhanh đáp án ở dạng nguyên thể."
+  },
+  "11": {
+    "title": "Sự hòa hợp Chủ ngữ - Động từ (S-V Agreement)",
+    "explanation": "Động từ chính trong câu phải hòa hợp về mặt số ít/số nhiều với chủ ngữ chính.\n\n1. Quy tắc cơ bản:\n- Chủ ngữ số ít -> Động từ số ít (V-s/es, is, was, has).\n- Chủ ngữ số nhiều -> Động từ số nhiều (V-bare, are, were, have).\n\n2. Các trường hợp dễ nhầm lẫn:\n- Danh từ nối bằng AND: Thường chia số nhiều (The manager and the secretary are...). Nhưng nếu chỉ cùng 1 người/vật thì chia số ít.\n- Danh từ có giới từ theo sau: S + [giới từ + danh từ khác] + V. Chủ ngữ chính là S đứng trước giới từ. (Ví dụ: The quality of these products is good. Chủ ngữ chính là quality, chia 'is').\n- Cấu trúc: Either A or B / Neither A nor B / Not only A but also B -> Động từ chia theo chủ ngữ gần nhất (B).\n- Các từ: Each, Every, Everyone, Someone, Anything... luôn chia động từ số ít.",
+    "structure": "S(sing) + V(sing) | S(plur) + V(plur) | S1 + prep + S2 + V(chia theo S1)",
+    "examples": [
+      "The performance of the new team members was outstanding. (Chủ ngữ chính là performance, chia was)",
+      "Neither the director nor the managers have arrived. (Động từ chia theo managers - số nhiều)",
+      "Each of the applicants is required to submit a resume. (Each chia số ít)"
+    ],
+    "exceptions": [
+      "Danh từ tập hợp (staff, family, committee, team) có thể chia số ít nếu coi là 1 tập thể thống nhất, hoặc số nhiều nếu nhấn mạnh từng cá nhân. Trong TOEIC thường chia số ít.",
+      "Các danh từ chỉ tiền tệ, thời gian, khoảng cách, đo lường (e.g., $100, 3 miles, 2 hours) làm chủ ngữ luôn chia động từ số ít."
+    ],
+    "notes": [
+      "Hãy luôn lược bỏ các cụm giới từ nhiễu đứng giữa chủ ngữ và động từ để tìm ra danh từ cốt lõi làm chủ ngữ.",
+      "Coi chừng bẫy danh từ có đuôi -s nhưng là số ít (news, economics, physics)."
+    ],
+    "tips": "Mẹo TOEIC: Khi làm câu hỏi chia động từ, bước đầu tiên là tìm xem chủ ngữ chính là gì, gạch bỏ các phần giới từ đi kèm ở giữa để tránh bị đánh lừa số ít/số nhiều."
+  },
+  "12": {
+    "title": "Giới từ thời gian & nơi chốn (in, on, at...)",
+    "explanation": "Cách sử dụng giới từ in, on, at cho thời gian và địa điểm:\n\n1. Giới từ chỉ Thời gian:\n- AT: dùng với giờ cụ thể, thời điểm chính xác (at 9 a.m., at noon, at Christmas).\n- ON: dùng với ngày cụ thể trong tháng, thứ trong tuần (on Monday, on October 20th, on weekdays).\n- IN: dùng với tháng, năm, mùa, thế kỷ, buổi trong ngày (in July, in 2026, in the morning).\n\n2. Giới từ chỉ Nơi chốn:\n- AT: vị trí cụ thể, địa chỉ nhà có số, địa điểm làm việc/học tập (at the airport, at 10 Main Street, at home).\n- ON: trên bề mặt vật lý, số tầng lầu, tên đường phố (on the table, on the 5th floor, on Wall Street).\n- IN: bên trong không gian khép kín, thành phố, quốc gia, lục địa (in the drawer, in Hanoi, in Vietnam).",
+    "structure": "at/on/in + Time | at/on/in + Location",
+    "examples": [
+      "The meeting starts at 10 a.m. on Monday. (at + giờ, on + thứ)",
+      "The main office is located in Hanoi. (in + thành phố)",
+      "Please place the files on the desk. (on + bề mặt)"
+    ],
+    "exceptions": [
+      "Không dùng giới từ trước các từ: next, last, this, every (Ví dụ: I will go next Monday, không nói on next Monday).",
+      "Dùng at night nhưng in the night/morning/afternoon."
+    ],
+    "notes": [
+      "Phân biệt giới từ nơi chốn: in the street (trong khu phố) vs on the street (trên mặt đường).",
+      "Các cụm cố định: on time (đúng giờ), in time (kịp giờ)."
+    ],
+    "tips": "Mẹo TOEIC: Gặp câu hỏi giới từ, nhìn ngay vào từ/cụm từ đứng sau để xác định đó là mốc giờ, thứ ngày hay tháng năm, địa chỉ cụ thể hay không gian rộng."
+  },
+  "13": {
+    "title": "Câu hỏi Wh- (Where, When, Why, How, Who, What, Which)",
+    "explanation": "Cấu trúc và cách sử dụng các từ để hỏi (Wh-words) trong câu nghi vấn:\n\n1. Ý nghĩa các từ hỏi:\n- Who (ai - hỏi người làm chủ ngữ), Whom (ai - hỏi người làm tân ngữ), Whose (của ai - sở hữu).\n- Where (ở đâu - địa điểm), When (khi nào - thời gian), Why (tại sao - nguyên nhân).\n- What (cái gì - sự vật/hành động), Which (cái nào - lựa chọn giới hạn), How (như thế nào - cách thức/mức độ).\n\n2. Cấu trúc câu hỏi:\n- Wh-word + trợ động từ (do/does/did/will/can) + S + V-bare?\n- Wh-word + be + S?\n- Nếu Wh-word làm chủ ngữ chính: Wh-word + V (chia trực tiếp, không mượn do/does/did).",
+    "structure": "Wh- + do/does/did + S + V-bare? | Wh- + V?",
+    "examples": [
+      "Where do they park their cars? (Hỏi nơi chốn)",
+      "When did you sign the contract? (Hỏi mốc thời gian)",
+      "Who checked the final report? (Who làm chủ ngữ, động từ chia quá khứ)",
+      "Why is the shipment delayed? (Hỏi lý do)"
+    ],
+    "exceptions": [
+      "Câu hỏi chủ ngữ: Who/What + V + O? Không cần dùng do/does/did. Ví dụ: Who works here? ✅ (không dùng Who does work here? ❌)."
+    ],
+    "notes": [
+      "How + tính từ/trạng từ hỏi về mức độ: How long (bao lâu - khoảng thời gian), How often (bao lâu một lần - tần suất), How many (bao nhiêu - đếm được), How much (bao nhiêu - không đếm được).",
+      "Trong đề thi Listening Part 2, câu hỏi Wh- là loại câu hỏi dễ nhất vì chỉ cần nghe rõ từ hỏi để chọn đáp án tương thích (ví dụ: hỏi Where thì trả lời chỉ nơi chốn)."
+    ],
+    "tips": "Mẹo TOEIC: Luôn trả động từ về nguyên mẫu khi đã mượn trợ động từ trong câu hỏi. Đối với Part 2 Listening, không bao giờ trả lời bằng YES/NO cho câu hỏi Wh-."
+  },
+  "14": {
+    "title": "Ôn tập ngữ pháp (Ngày 8 - 13)",
+    "explanation": "Ôn tập và củng cố toàn bộ các chủ điểm ngữ pháp cốt lõi từ Ngày 8 đến Ngày 13:\n\n1. Ngày 8: Thì Hiện tại đơn & Hiện tại tiếp diễn\n2. Ngày 9: Thì Quá khứ đơn & Quá khứ tiếp diễn\n3. Ngày 10: Thì Tương lai & Động từ khuyết thiếu\n4. Ngày 11: Sự hòa hợp Chủ ngữ - Động từ (S-V Agreement)\n5. Ngày 12: Giới từ thời gian & nơi chốn\n6. Ngày 13: Câu hỏi Wh-\n\nHãy tập trung làm các bài tập tổng hợp để phân biệt nhanh các thì và chia động từ hòa hợp chủ vị.",
+    "structure": "Review Phase 1.2",
+    "examples": [
+      "When the manager arrives (S-V), we will start (Future) the session at 2 p.m (Prep)."
+    ],
+    "exceptions": [],
+    "notes": [
+      "Luôn gạch bỏ cụm giới từ nhiễu để chia động từ đúng theo chủ ngữ chính.",
+      "Phân biệt kỹ giữa thì quá khứ đơn (đã kết thúc) và thì hiện tại tiếp diễn (đang diễn ra)."
+    ],
+    "tips": "Tự ôn tập: Hãy đặt 3 câu ví dụ có sử dụng cấu trúc xen vào của quá khứ (when/while) kết hợp với các giới từ chỉ thời gian."
+  },
+  "15": {
+    "title": "Giới từ nâng cao & Cụm giới từ cố định",
+    "explanation": "Cách dùng các giới từ đặc biệt chỉ sự so sánh, mục đích, nguyên nhân và các cụm giới từ cố định (Preposition Collocations):\n\n1. Giới từ thời gian/quan hệ nâng cao:\n- during + N (trong suốt giai đoạn/sự kiện) vs for + khoảng thời gian có số đếm.\n- by + mốc thời gian (trước hoặc đúng hạn) vs until + mốc thời gian (kéo dài liên tục cho tới lúc đó).\n- because of / due to / thanks to + N/V-ing (bởi vì, nhờ có).\n- despite / in spite of + N/V-ing (mặc dù).\n\n2. Cụm giới từ cố định (Collocations) rất hay thi:\n- Verb + Prep: apply for, reply to, respond to, comply with, depend on, consist of, participate in.\n- Adj + Prep: interested in, responsible for, eligible for, familiar with, aware of, capable of.",
+    "structure": "Prep + N/V-ing | verb/adj + preposition",
+    "examples": [
+      "The office is closed during the holiday. (during + sự kiện)",
+      "Please submit the report by Friday. (by + hạn chót)",
+      "He is eligible for the promotion. (eligible đi với for)",
+      "We must comply with the guidelines. (comply đi với with)"
+    ],
+    "exceptions": [
+      "During không đi với khoảng thời gian dạng số đếm: không nói during 3 days (dùng for 3 days).",
+      "Due to đứng sau be làm tính từ, còn Because of đứng đầu câu hoặc giữa câu làm trạng từ bổ nghĩa cho cả mệnh đề."
+    ],
+    "notes": [
+      "Sau giới từ, động từ bắt buộc phải ở dạng V-ing nếu không có danh từ làm tân ngữ.",
+      "comply with = adhere to = abide by = conform to (đều mang nghĩa tuân thủ, tuân theo quy định)."
+    ],
+    "tips": "Mẹo TOEIC: Khi thấy chỗ trống nằm sau một động từ hoặc tính từ quen thuộc, hãy nghĩ đến các cụm giới từ cố định đi kèm trước khi dịch nghĩa. Học từ vựng theo cụm giới từ là chìa khóa đạt điểm cao Part 5."
+  },
+  "16": {
+    "title": "Liên từ & Cụm liên từ (and, but, because, although...)",
+    "explanation": "Liên từ (Conjunctions) dùng để kết nối từ, cụm từ hoặc mệnh đề trong câu.\n\n1. Liên từ kết hợp (Coordinating Conjunctions - FANBOYS):\n- and (và), but (nhưng), or (hoặc), so (vì vậy), yet (tuy nhiên).\n- Các cặp liên từ tương hỗ: both... and (cả... và), either... or (hoặc... hoặc), neither... nor (không... cũng không), not only... but also (không những... mà còn).\n\n2. Liên từ phụ thuộc (Subordinating Conjunctions - theo sau là mệnh đề S+V):\n- Chỉ nguyên nhân: because, since, as + S + V (bởi vì).\n- Chỉ sự tương phản: although, even though, though + S + V (mặc dù).\n- Chỉ điều kiện: if, unless (nếu không/trừ khi), as long as / provided that (miễn là).\n- Chỉ thời gian: when, while, before, after, as soon as + S + V.",
+    "structure": "S + V + conjunction + S + V | Conjunction + S + V, S + V",
+    "examples": [
+      "We completed the project, but we missed the deadline. (but nối 2 vế câu)",
+      "Although sales increased, profits fell. (although + mệnh đề chỉ sự tương phản)",
+      "Please sign here; otherwise, the order will be canceled. (trạng từ liên kết)",
+      "Both the director and the manager attended. (both... and)"
+    ],
+    "exceptions": [
+      "Không dùng cả although và but trong cùng một câu ghép tiếng Anh: Although it rained, we went. ✅ (Không nói Although it rained, but we went. ❌)."
+    ],
+    "notes": [
+      "Phân biệt Liên từ (đi với mệnh đề S+V) và Giới từ (đi với cụm danh từ/V-ing):\n- because / although + S + V\n- because of / despite + N / V-ing\n- unless + S + V (khẳng định) = If S + don't/doesn't + V."
+    ],
+    "tips": "Mẹo TOEIC: Luôn kiểm tra phía sau ô trống là một mệnh đề (S + V) hay một cụm danh từ (Noun Phrase) để lựa chọn giữa liên từ (e.g. although) hay giới từ (e.g. despite)."
+  },
+  "17": {
+    "title": "Ôn tập toàn bộ ngữ pháp Giai đoạn 1",
+    "explanation": "Hệ thống hóa toàn bộ kiến thức ngữ pháp của 16 ngày đầu tiên:\n- Cách xác định và phân bổ Từ loại (Danh, Tính, Động, Trạng, Hậu tố).\n- Chia động từ theo các thì cốt lõi ở Hiện tại, Quá khứ, Tương lai & Sự hòa hợp Chủ vị.\n- Sử dụng đúng Giới từ thời gian/nơi chốn, các cụm collocation và Liên từ chỉ nguyên nhân/tương phản.\n\nHãy tập trung làm đề tổng hợp Phase 1 để chuẩn bị bước sang các cấu trúc nâng cao ở Giai đoạn 2.",
+    "structure": "Comprehensive Review Giai đoạn 1",
+    "examples": [
+      "The coordinator (N) will verify (V) if (Conj) the document is in compliance (Prep) with the rules."
+    ],
+    "exceptions": [],
+    "notes": [
+      "Học viên thường mất điểm ở câu từ loại do không nhìn kỹ từ đứng trước/sau chỗ trống.",
+      "Thì quá khứ đơn và sự hòa hợp chủ vị là hai mảng ngữ pháp bị sai nhiều nhất."
+    ],
+    "tips": "Làm bài kiểm tra tổng hợp, ghi lại toàn bộ lỗi sai vào sổ tay học tập để ôn luyện lại phần lý thuyết còn yếu."
+  },
+  "21": {
+    "title": "Mệnh đề quan hệ (Who, Whom, Which, That, Whose)",
+    "explanation": "Mệnh đề quan hệ (Relative Clauses) dùng để bổ nghĩa cho danh từ đứng trước nó.\n\n1. Các đại từ quan hệ thay thế:\n- WHO: Thay thế cho danh từ chỉ người, làm Chủ ngữ trong mệnh đề quan hệ. (Theo sau là Động từ: ... N(người) + WHO + V).\n- WHOM: Thay thế cho danh từ chỉ người, làm Tân ngữ. (Theo sau là Mệnh đề: ... N(người) + WHOM + S + V).\n- WHICH: Thay thế cho danh từ chỉ vật, làm Chủ ngữ hoặc Tân ngữ. (... N(vật) + WHICH + V / ... N(vật) + WHICH + S + V).\n- THAT: Có thể thay thế cho Who, Whom, Which trong mệnh đề quan hệ xác định (không có dấu phẩy).\n- WHOSE: Thay thế cho tính từ sở hữu của người/vật. (... N + WHOSE + Danh từ khác + V/S+V).",
+    "structure": "N(người) + who + V | N(người) + whom + S + V | N + whose + Noun + V",
+    "examples": [
+      "The employee who won the award was promoted. (who thay cho người, làm chủ ngữ cho won)",
+      "The client whom we met yesterday is very satisfied. (whom làm tân ngữ cho met)",
+      "The document which is on the desk is important. (which thay cho vật)",
+      "The manager whose car is parked outside has arrived. (whose chỉ sở hữu đối với car)"
+    ],
+    "exceptions": [
+      "THAT không được đứng sau giới từ hoặc dấu phẩy (mệnh đề quan hệ không xác định). Ví dụ: The manager, with whom I worked, is friendly. ✅ (Không dùng with that ❌)."
+    ],
+    "notes": [
+      "Mệnh đề quan hệ không xác định (có dấu phẩy) dùng để bổ sung thông tin phụ cho một danh từ đã được xác định cụ thể (tên riêng, có this/that/my...).",
+      "Whose bắt buộc phải đi kèm một danh từ ngay sau nó: whose + Noun."
+    ],
+    "tips": "Mẹo TOEIC: Luôn nhìn phía sau ô trống. Nếu là một Động từ -> chọn Who/Which. Nếu là một Danh từ đi kèm -> chọn Whose. Nếu là một mệnh đề (S + V) -> chọn Whom/Which."
+  },
+  "22": {
+    "title": "Rút gọn Mệnh đề quan hệ (V-ing / V-ed)",
+    "explanation": "Rút gọn mệnh đề quan hệ là cách biến đổi mệnh đề quan hệ thành một cụm phân từ để câu ngắn gọn hơn. Điều kiện: Đại từ quan hệ phải làm chủ ngữ trong mệnh đề đó.\n\n1. Dạng Chủ động: Rút gọn thành V-ing\n- Quy tắc: Lược bỏ đại từ quan hệ (who/which/that) và trợ động từ (nếu có), chuyển động từ chính về dạng V-ing.\n- Ví dụ: The man who works here -> The man working here.\n\n2. Dạng Bị động: Rút gọn thành V3/ed\n- Quy tắc: Lược bỏ đại từ quan hệ và động từ to be (am/is/are/was/were), giữ nguyên động từ ở dạng V3/ed.\n- Ví dụ: The report which was sent yesterday -> The report sent yesterday.",
+    "structure": "N + V-ing (chủ động) | N + V3/ed (bị động)",
+    "examples": [
+      "The employee representing our company signed the agreement. (Chủ động: who represented -> representing)",
+      "The machines manufactured in this factory are very durable. (Bị động: which were manufactured -> manufactured)",
+      "Anyone attending the seminar must register. (who attends -> attending)"
+    ],
+    "exceptions": [
+      "Nếu trước danh từ có các từ chỉ thứ tự (the first, the second, the last...) hoặc so sánh nhất (the best, the most...), mệnh đề quan hệ rút gọn dưới dạng TO + V-bare. (Ví dụ: He is the first person to arrive. ✅)"
+    ],
+    "notes": [
+      "Đây là một trong những điểm ngữ pháp gây nhầm lẫn nhiều nhất trong TOEIC vì câu có vẻ có 2 động từ chính. Thực chất, chỉ có 1 động từ chính của câu, động từ còn lại là phần rút gọn.",
+      "Công thức nhận diện: S + [Phần rút gọn V-ing/V3] + Động từ chính chia thì + O."
+    ],
+    "tips": "Mẹo TOEIC: Khi thấy câu đã có động từ chia thì đầy đủ làm vị ngữ chính, mà trước đó lại có ô trống đứng sau danh từ, hãy nghĩ đến Mệnh đề quan hệ rút gọn. Chọn V-ing nếu danh từ tự làm hành động, chọn V3/ed nếu danh từ nhận tác động (thường có 'by' theo sau)."
+  },
+  "23": {
+    "title": "Danh động từ & Động từ nguyên mẫu (Gerund & Infinitive)",
+    "explanation": "Cách sử dụng động từ ở dạng V-ing (Danh động từ) hoặc To + V (Động từ nguyên mẫu có 'to') sau một động từ khác:\n\n1. Các động từ theo sau bởi Danh động từ (V + V-ing):\n- avoid (tránh), consider (cân nhắc), delay/postpone (trì hoãn), enjoy (thích), recommend/suggest (đề xuất), mind (ngại), finish (hoàn thành), practice (thực hành).\n\n2. Các động từ theo sau bởi Động từ nguyên mẫu (V + to V):\n- decide (quyết định), plan (lên kế hoạch), agree (đồng ý), promise (hứa), refuse (từ chối), fail (thất bại), hope/wish (hy vọng/ước), manage (xoay xở được), offer (đề nghị).\n\n3. Động từ đi kèm Tân ngữ (V + Object + to V):\n- advise sb to V (khuyên), ask sb to V (yêu cầu), require sb to V (yêu cầu), encourage sb to V (khuyến khích), allow sb to V (cho phép).",
+    "structure": "V + V-ing | V + to V | V + object + to V",
+    "examples": [
+      "We decided to delay the project. (decide + to V, delay + V-ing)",
+      "The manager recommended hiring new staff. (recommend + V-ing)",
+      "The policy requires employees to change their passwords. (require + O + to V)",
+      "She managed to finish the report on time. (manage + to V)"
+    ],
+    "exceptions": [
+      "Một số từ đi với cả hai nhưng mang nghĩa khác nhau:\n- remember/forget + to V: nhớ/quên phải làm gì (tương lai).\n- remember/forget + V-ing: nhớ/quên đã làm gì (quá khứ).\n- try + to V: cố gắng làm gì vs try + V-ing: thử làm gì."
+    ],
+    "notes": [
+      "Sau giới từ luôn luôn là V-ing: interested in hiring, responsible for preparing.",
+      "to trong look forward to V-ing, object to V-ing, be used to V-ing là giới từ, nên động từ theo sau phải là V-ing."
+    ],
+    "tips": "Mẹo TOEIC: Nhớ kỹ nhóm động từ đi với 'to V' (decide, plan, fail, agree...) và nhóm đi với 'V-ing' (avoid, recommend, postpone...). Khi thấy các động từ này, bạn có thể chọn ngay đáp án trong 2 giây."
+  },
+  "24": {
+    "title": "Phân từ làm tính từ & Rút gọn mệnh đề trạng ngữ",
+    "explanation": "Cách dùng phân từ (V-ing và V-ed) làm tính từ bổ nghĩa và cách rút gọn mệnh đề trạng ngữ chỉ thời gian/nguyên nhân:\n\n1. Tính từ Phân từ (Participle Adjectives):\n- V-ing: mang nghĩa chủ động, mô tả tính chất, bản chất của sự vật/sự việc làm người khác có cảm xúc đó. (an interesting seminar - buổi thảo luận thú vị).\n- V-ed: mang nghĩa bị động, chỉ cảm xúc, thái độ của con người khi bị tác động. (an interested customer - khách hàng quan tâm).\n\n2. Rút gọn Mệnh đề trạng ngữ (khi 2 vế cùng chủ ngữ):\n- Lược bỏ liên từ (hoặc giữ lại) và chủ ngữ ở vế phụ, chuyển động từ về V-ing (chủ động) hoặc V-ed (bị động).\n- Cấu trúc thường gặp: Before/After/While + V-ing, S + V. (Ví dụ: After reviewing the report, the manager made a decision.)",
+    "structure": "V-ing (bản chất vật) | V-ed (cảm xúc người) | Before/After/While + V-ing, S + V",
+    "examples": [
+      "We are looking for an experienced technician. (experienced = tính từ chỉ người có kinh nghiệm)",
+      "The presentation was boring, so the audience felt bored. (boring chỉ bản chất, bored chỉ cảm xúc khán giả)",
+      "Before signing the lease, you should read it. (After/Before + V-ing)"
+    ],
+    "exceptions": [
+      "Một số từ tận cùng bằng -ing hoặc -ed nhưng là tính từ cố định: damaging (gây hại), missing (thất lạc), detailed (chi tiết), complicated (phức tạp), sophisticated (tinh xảo)."
+    ],
+    "notes": [
+      "Công thức rút gọn: Liên từ + V-ing/V3, S + V. Chỉ rút gọn được khi chủ ngữ ở hai vế là MỘT."
+    ],
+    "tips": "Mẹo TOEIC: Để phân biệt tính từ V-ing/V-ed: Hỏi xem đối tượng được bổ nghĩa là người hay vật. Nếu là người -> ưu tiên đuôi -ed (cảm xúc/kinh nghiệm); nếu là vật -> ưu tiên đuôi -ing (tính chất/bản chất). Nếu gặp Before/After/While + ô trống + Tân ngữ -> chọn ngay V-ing."
+  },
+  "25": {
+    "title": "Câu bị động (Passive Voice) - Cơ bản",
+    "explanation": "Câu bị động dùng khi ta muốn nhấn mạnh đối tượng chịu tác động của hành động thay vì người thực hiện hành động.\n\nCấu trúc cơ bản ở các thì đơn giản:\n- Hiện tại đơn: S + am/is/are + V3/ed (+ by O)\n- Quá khứ đơn: S + was/were + V3/ed (+ by O)\n- Tương lai đơn: S + will be + V3/ed (+ by O)\n\n⚠️ Lưu ý: Nội động từ (arrive, happen, rise...) không dùng ở bị động.",
+    "structure": "S + be + V3/ed + (by + Agent)",
+    "examples": [
+      "The contract was signed by the director yesterday. (Bị động quá khứ đơn)",
+      "The files are processed every Friday. (Bị động hiện tại đơn)",
+      "The package will be delivered tomorrow. (Bị động tương lai đơn)"
+    ],
+    "exceptions": [
+      "Các nội động từ (intransitive verbs) như: <i>arrive, occur, rise, work, sit, stay, look, happen</i>... không có tân ngữ nên không bao giờ chia ở dạng bị động. Ví dụ: không dùng <i>The accident was happened</i> ❌ mà chia <i>The accident happened</i> ✅."
+    ],
+    "notes": [
+      "Động từ chính của câu bị động bắt buộc phải ở dạng Quá khứ phân từ (Past Participle - V3/ed).",
+      "If chủ ngữ trong câu chủ động là mơ hồ (people, they, someone...) thì có thể bỏ 'by + agent' trong câu bị động."
+    ],
+    "tips": "Mẹo TOEIC: Xem phía sau chỗ trống có tân ngữ (Noun) không. Nếu không có danh từ làm tân ngữ trực tiếp đi sau, khả năng cao câu đó chia bị động (be + V3/ed). Ngược lại có tân ngữ -> chọn chủ động."
+  },
+  "26": {
+    "title": "Bị động các thì tiếp diễn và hoàn thành",
+    "explanation": "Cấu trúc bị động ở các thì phức tạp:\n\n1. Hiện tại tiếp diễn bị động:\n- Cấu trúc: S + am/is/are + being + V3/ed\n- Ví dụ: The report is being written. (Báo cáo đang được viết.)\n\n2. Quá khứ tiếp diễn bị động:\n- Cấu trúc: S + was/were + being + V3/ed\n- Ví dụ: The server was being repaired when the power went out.\n\n3. Hiện tại hoàn thành bị động:\n- Cấu trúc: S + have/has + been + V3/ed\n- Ví dụ: The contract has been signed.\n\n4. Quá khứ hoàn thành bị động:\n- Cấu trúc: S + had + been + V3/ed\n- Ví dụ: The office had been cleaned before the guests arrived.",
+    "structure": "S + be + being + V3/ed | S + have/has/had + been + V3/ed",
+    "examples": [
+      "The documents are being printed at the moment. (Bị động tiếp diễn)",
+      "The new policy has been announced by the board. (Bị động hiện tại hoàn thành)",
+      "We realized the database had been updated. (Bị động quá khứ hoàn thành)"
+    ],
+    "exceptions": [
+      "BẪY BEING trong Listening Part 1: Cấu trúc 'is/are being + V3/ed' mô tả hành động đang tác động lên vật. Trong tranh bắt buộc phải có người đang thực hiện hành động đó. Nếu tranh không vẽ người -> câu này SAI."
+    ],
+    "notes": [
+      "Nhận diện các trợ động từ: been (hoàn thành) và being (tiếp diễn) đứng ngay trước V3/ed.",
+      "Luôn đảm bảo sự hòa hợp số ít/số nhiều giữa chủ ngữ mới và trợ động từ (is/are, was/were, has/have)."
+    ],
+    "tips": "Mẹo: Thì hoàn thành bị động 'have/has been + V3/ed' cực kỳ hay xuất hiện trong TOEIC với các từ chỉ thời gian như already, recently, since, for."
+  },
+  "27": {
+    "title": "Bị động với Động từ khuyết thiếu (Modal passive)",
+    "explanation": "Cấu trúc bị động đi kèm với các động từ khuyết thiếu (will, can, must, should, may, have to...):\n\nCấu trúc:\n- Khẳng định: S + Modal Verb + BE + V3/ed\n- Phủ định: S + Modal Verb + not + BE + V3/ed\n- Trợ động từ tương đương: S + be expected to / be required to + BE + V3/ed\n\nVí dụ:\n- The report must be submitted by Friday. (Báo cáo phải được nộp trước thứ Sáu.)\n- Payments can be made online. (Thanh toán có thể được thực hiện trực tuyến.)",
+    "structure": "S + will/can/must/should/may + be + V3/ed",
+    "examples": [
+      "All applications must be submitted online. (must + be + V3)",
+      "The meeting should be postponed. (should + be + V3)",
+      "The system can be accessed from home. (can + be + V3)",
+      "Employees are required to be trained. (trợ động từ tương đương)"
+    ],
+    "exceptions": [
+      "Một số cấu trúc modal tương đương có dạng to V: have to be V3, be allowed to be V3, used to be V3. Đảm bảo giữ nguyên to be dạng nguyên thể sau 'to'."
+    ],
+    "notes": [
+      "Động từ 'be' trong cấu trúc này luôn giữ nguyên mẫu, không được chia thành am/is/are hay was/were.",
+      "Thường dùng để mô tả quy định, hướng dẫn trong môi trường công sở."
+    ],
+    "tips": "Mẹo TOEIC: Khi thấy Modal Verb + chỗ trống + giới từ/trạng từ (không có tân ngữ danh từ) -> chọn dạng 'be + V3/ed'. Rất dễ nhận diện."
+  },
+  "28": {
+    "title": "So sánh hơn & So sánh bằng",
+    "explanation": "Cách dùng cấu trúc so sánh bằng và so sánh hơn trong tiếng Anh:\n\n1. So sánh bằng (Equative):\n- Cấu trúc: as + Adj/Adv + as\n- Ví dụ: He is as tall as his father. / She works as hard as her colleague.\n- Phủ định: not as/so + Adj/Adv + as (không bằng).\n\n2. So sánh hơn (Comparative):\n- Tính từ/Trạng từ ngắn (1 âm tiết): Adj/Adv-er + than (faster than, larger than).\n- Tính từ/Trạng từ dài (2 âm tiết trở lên): more + Adj/Adv + than (more professional than, more carefully than).\n- Các trường hợp đặc biệt: good/well -> better, bad/badly -> worse, far -> farther/further.\n- Nhấn mạnh so sánh hơn: dùng far, much trước tính từ so sánh hơn (far higher, much better).",
+    "structure": "as + Adj/Adv + as | Adj-er + than | more + Adj/Adv + than",
+    "examples": [
+      "Our new copier is as fast as the old one. (So sánh bằng tính từ)",
+      "Sales this month are higher than last month. (So sánh hơn tính từ ngắn)",
+      "This software works more efficiently than the previous version. (So sánh hơn trạng từ dài)",
+      "Her proposal is far more creative than mine. (Nhấn mạnh so sánh hơn)"
+    ],
+    "exceptions": [
+      "Tính từ 2 âm tiết kết thúc bằng -y (easy, happy, busy) vẫn coi là tính từ ngắn: đổi y thành i rồi thêm -er (easier, busier).",
+      "Tránh bẫy so sánh kép trùng lặp: không dùng 'more higher' ❌ mà dùng 'higher' hoặc 'much higher' ✅."
+    ],
+    "notes": [
+      "Chọn tính từ hay trạng từ giữa 'as...as' phụ thuộc vào động từ chính của câu (linking verb -> tính từ, động từ thường -> trạng từ).",
+      "Dấu hiệu nhận biết so sánh hơn là từ 'than' đứng sau chỗ trống."
+    ],
+    "tips": "Mẹo TOEIC: Thấy 'than' -> chọn ngay đáp án có đuôi -er hoặc chứa 'more'. Thấy 'as...as' -> chọn dạng tính từ/trạng từ nguyên bản (không thêm đuôi -er, -est, không thêm more/most)."
+  },
+  "29": {
+    "title": "So sánh nhất & So sánh đặc biệt (Double comparative)",
+    "explanation": "Cách dùng so sánh nhất và cấu trúc so sánh kép (Càng... thì càng...):\n\n1. So sánh nhất (Superlative):\n- Tính từ/Trạng từ ngắn: the + Adj/Adv-est (the fastest, the hardest).\n- Tính từ/Trạng từ dài: the + most + Adj/Adv (the most expensive, the most carefully).\n- Trường hợp đặc biệt: good/well -> the best, bad/badly -> the worst, far -> the farthest/furthest.\n\n2. So sánh kép (Double Comparative):\n- Cấu trúc: The + comparative + S + V, the + comparative + S + V (Càng... càng...)\n- Ví dụ: The sooner we submit, the better. (Chúng ta nộp càng sớm càng tốt.)",
+    "structure": "the + Adj-est | the most + Adj | The + comparative + S + V, the + comparative + S + V",
+    "examples": [
+      "This is the largest warehouse in our region. (So sánh nhất tính từ ngắn)",
+      "Mr. David is the most experienced manager. (So sánh nhất tính từ dài)",
+      "The more you practice, the more confident you will be. (So sánh kép)",
+      "The earlier we start, the easier it will be. (So sánh kép)"
+    ],
+    "exceptions": [
+      "Không dùng mạo từ 'the' trong so sánh nhất khi trước đó đã có tính từ sở hữu (my, his, her, its...). (Ví dụ: This is his best report, không dùng his the best)."
+    ],
+    "notes": [
+      "So sánh nhất thường đi kèm giới từ 'in' + danh từ chỉ nơi chốn/tập thể (in the world, in the team) hoặc giới từ 'of' + khoảng thời gian/số lượng (of the year, of all candidates).",
+      "Dấu hiệu nhận biết so sánh nhất: có mạo từ 'the' đứng ngay trước chỗ trống."
+    ],
+    "tips": "Mẹo: Thấy 'the' trước ô trống -> kiểm tra đáp án có đuôi -est hoặc 'most'. Thấy hai vế bắt đầu bằng 'The + ... , The + ...' -> chọn cấu trúc so sánh kép (The + so sánh hơn)."
+  },
+  "30": {
+    "title": "Câu điều kiện loại 1 & loại 2 (If Clause)",
+    "explanation": "Câu điều kiện dùng để diễn tả một giả định và kết quả xảy ra dưới điều kiện đó.\n\n1. Câu điều kiện loại 1 (Có thật ở hiện tại/tương lai):\n- Diễn tả giả định có thể xảy ra ở hiện tại hoặc tương lai.\n- Công thức: If + S + V(hiện tại đơn), S + will/can/may + V-bare.\n- Mệnh đề chính có thể là câu mệnh lệnh: If you have questions, please contact me.\n\n2. Câu điều kiện loại 2 (Trái thực tế ở hiện tại):\n- Diễn tả giả định không có thật, giả tưởng, không thể xảy ra ở hiện tại.\n- Công thức: If + S + V(quá khứ đơn/were), S + would/could + V-bare.\n- Lưu ý: Động từ to be ở mệnh đề If của loại 2 luôn chia là WERE cho mọi ngôi chủ ngữ (If I were you, If he were here...).",
+    "structure": "If + S + V(pres), S + will/can + V-bare | If + S + V(past/were), S + would/could + V-bare",
+    "examples": [
+      "If you complete the training, you will receive a certificate. (Điều kiện loại 1)",
+      "If they offered a discount, we would buy the printer. (Điều kiện loại 2 trái thực tế hiện tại)",
+      "If I were the director, I would increase the budget. (Be chia were ở loại 2)",
+      "If the machine stops, press the red button. (Mệnh lệnh ở vế chính loại 1)"
+    ],
+    "exceptions": [
+      "Không dùng 'will' hoặc 'would' trong mệnh đề chứa IF (mệnh đề điều kiện). Ví dụ: If it rains... (không dùng If it will rain ❌)."
+    ],
+    "notes": [
+      "Liên từ unless (trừ khi) = If ... not. Theo sau unless chia thể khẳng định. (Ví dụ: Unless you sign, the contract is invalid = If you don't sign...).",
+      "Có thể viết mệnh đề If đứng trước (có dấu phẩy ngăn cách) hoặc đứng sau mệnh đề chính (không cần dấu phẩy)."
+    ],
+    "tips": "Mẹo TOEIC: Nhìn vào động từ của vế đã cho. Nếu vế chính có 'will + V' -> vế If chia hiện tại đơn. Nếu vế chính có 'would + V' -> vế If chia quá khứ đơn (hoặc were)."
+  },
+  "31": {
+    "title": "Câu điều kiện loại 3 & Đảo ngữ câu điều kiện",
+    "explanation": "Câu điều kiện loại 3 (Trái thực tế quá khứ) và cấu trúc Đảo ngữ lược bỏ IF:\n\n1. Câu điều kiện loại 3 (Trái thực tế quá khứ):\n- Diễn tả giả định trái ngược với sự thật đã xảy ra trong quá khứ (tiếc nuối, trách móc).\n- Công thức: If + S + had + V3/ed, S + would/could + have + V3/ed.\n\n2. Đảo ngữ câu điều kiện (Inversion - Lược bỏ IF):\n- Loại 1: Should + S + V-bare, S + will + V-bare. (Ví dụ: Should you need help...)\n- Loại 2: Were + S + to V, S + would + V-bare. (Ví dụ: Were he to study harder...)\n- Loại 3: Had + S + V3/ed, S + would + have + V3/ed. (Ví dụ: Had we known the schedule...)",
+    "structure": "If + S + had + V3, S + would have + V3 | Had + S + V3, S + would have + V3 | Should + S + V-bare",
+    "examples": [
+      "If we had known the schedule, we would have attended the meeting. (Sự thật trong quá khứ là không biết và không dự)",
+      "Had we known the schedule, we would have attended the meeting. (Đảo ngữ loại 3)",
+      "Should you have any questions, please notify us. (Đảo ngữ loại 1 - Rất hay gặp trong email TOEIC)",
+      "Were they here, they would help us. (Đảo ngữ loại 2)"
+    ],
+    "exceptions": [
+      "Đảo ngữ loại 1 động từ phải ở nguyên thể không chia (V-bare) kể cả khi chủ ngữ số ít: Should he need... (không dùng Should he needs ❌)."
+    ],
+    "notes": [
+      "Đảo ngữ là cấu trúc cực kỳ trang trọng, thường xuất hiện ở các câu hỏi mức độ khó trong Part 5.",
+      "Đảo ngữ loại 3 đem 'Had' lên đầu câu và bỏ 'If'. Tránh nhầm với câu hỏi quá khứ hoàn thành."
+    ],
+    "tips": "Mẹo TOEIC: Khi thấy câu có 2 vế nối nhau bằng dấu phẩy, vế đầu không có liên từ nối nhưng lại bắt đầu bằng 'Should' hoặc 'Had' đứng trước chủ ngữ, đó chính là đảo ngữ câu điều kiện. Chọn động từ nguyên mẫu sau 'Should' hoặc quá khứ phân từ V3 sau 'Had'."
+  },
+  "32": {
+    "title": "Thức giả định trong TOEIC (Subjunctive Mood)",
+    "explanation": "Thức giả định dùng để nhấn mạnh tính quan trọng, khẩn cấp của một hành động được yêu cầu, khuyên bảo hay đề xuất.\n\nCấu trúc:\n- Động từ đề xuất: S1 + verb (suggest/recommend/demand/require/ask/insist/request) + THAT + S2 + V-nguyên mẫu (không chia cho mọi ngôi, không chia thì).\n- Tính từ quan trọng: It + is + adjective (important/necessary/essential/vital/crucial/mandatory) + THAT + S2 + V-nguyên mẫu.\n\nVí dụ:\n- The director recommended that he submit the report. (submit ở nguyên thể, dù chủ ngữ là 'he').\n- It is essential that all employees be on time. (be giữ nguyên thể).",
+    "structure": "S1 + recommend/require/suggest that + S2 + V-bare | It is essential/important that + S + V-bare",
+    "examples": [
+      "We recommend that the client verify the contract. (verify nguyên thể, không thêm -s)",
+      "It is mandatory that each supervisor attend the session. (attend nguyên thể, không chia)",
+      "The manager asked that the room be cleaned. (be ở dạng bị động nguyên thể, không chia is/was)",
+      "He insisted that they not sign the agreement. (phủ định dùng 'not + V-bare')"
+    ],
+    "exceptions": [
+      "Không thêm -s/-es cho động từ ở vế sau, không chia sang quá khứ kể cả khi động từ ở vế trước ở quá khứ: The doctor suggested that he take a rest. ✅ (không dùng took hoặc takes ❌)."
+    ],
+    "notes": [
+      "Cấu trúc này thực chất có từ 'should' ẩn trước động từ vế sau: S2 + (should) + V-bare. Do đó động từ luôn nguyên mẫu.",
+      "Thường gặp trong các văn bản thông báo công sở, quy chế doanh nghiệp."
+    ],
+    "tips": "Mẹo TOEIC: Thấy vế trước có các từ key: recommend, suggest, require, ask, demand, hoặc essential, important, necessary + THAT -> động từ đứng sau chủ ngữ ở vế sau LUÔN ở dạng nguyên mẫu không chia (V-bare hoặc BE)."
+  },
+  "33": {
+    "title": "Đại từ & Sở hữu (Subject, Object, Possessive, Reflexive)",
+    "explanation": "Cách phân biệt và sử dụng đúng các loại đại từ và từ sở hữu trong câu:\\n\\n<table style=\\\"width:100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; font-size: 12px; text-align: center;\\\"><thead><tr style=\\\"background-color: var(--bg-hover); border-bottom: 2px solid var(--border);\\\"><th style=\\\"padding: 6px; font-weight:700;\\\">Chủ ngữ (S)</th><th style=\\\"padding: 6px; font-weight:700;\\\">Tân ngữ (O)</th><th style=\\\"padding: 6px; font-weight:700;\\\">T.từ Sở hữu (Adj)</th><th style=\\\"padding: 6px; font-weight:700;\\\">Đ.từ Sở hữu (Pron)</th><th style=\\\"padding: 6px; font-weight:700;\\\">Phản thân (Reflex)</th></tr></thead><tbody><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 6px; font-weight: 600;\\\">I</td><td style=\\\"padding: 6px;\\\">me</td><td style=\\\"padding: 6px;\\\">my (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">mine</td><td style=\\\"padding: 6px;\\\">myself</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 6px; font-weight: 600;\\\">You</td><td style=\\\"padding: 6px;\\\">you</td><td style=\\\"padding: 6px;\\\">your (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">yours</td><td style=\\\"padding: 6px;\\\">yourself/yourselves</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 6px; font-weight: 600;\\\">He</td><td style=\\\"padding: 6px;\\\">him</td><td style=\\\"padding: 6px;\\\">his (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">his</td><td style=\\\"padding: 6px;\\\">himself</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 6px; font-weight: 600;\\\">She</td><td style=\\\"padding: 6px;\\\">her</td><td style=\\\"padding: 6px;\\\">her (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">hers</td><td style=\\\"padding: 6px;\\\">herself</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 6px; font-weight: 600;\\\">It</td><td style=\\\"padding: 6px;\\\">it</td><td style=\\\"padding: 6px;\\\">its (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">its</td><td style=\\\"padding: 6px;\\\">itself</td></tr><tr style=\\\"border-bottom: 1px solid var(--border);\\\"><td style=\\\"padding: 6px; font-weight: 600;\\\">We</td><td style=\\\"padding: 6px;\\\">us</td><td style=\\\"padding: 6px;\\\">our (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">ours</td><td style=\\\"padding: 6px;\\\">ourselves</td></tr><tr><td style=\\\"padding: 6px; font-weight: 600;\\\">They</td><td style=\\\"padding: 6px;\\\">them</td><td style=\\\"padding: 6px;\\\">their (+ N)</td><td style=\\\"padding: 6px; font-style: italic;\\\">theirs</td><td style=\\\"padding: 6px;\\\">themselves</td></tr></tbody></table>",
+    "structure": "S + V + O | Possessive Adj + Noun | Possessive Pronoun (đứng một mình) | by + Reflexive Pronoun",
+    "examples": [
+      "We completed the tasks ourselves. (Reflexive pronoun làm rõ tự tay làm)",
+      "Please send the file to me. (me = object sau giới từ to)",
+      "His budget is tight, but ours is flexible. (ours = our budget)",
+      "She wrote the email on her own. (on one's own = by oneself)"
+    ],
+    "exceptions": [
+      "Cấu trúc song song: on + tính từ sở hữu + own = by + đại từ phản thân (Ví dụ: on my own = by myself)."
+    ],
+    "notes": [
+      "Đại từ phản thân có thể đứng cuối câu hoặc đứng ngay sau chủ ngữ để nhấn mạnh: The manager himself called me.",
+      "Đại từ sở hữu có thể làm chủ ngữ hoặc tân ngữ trong câu."
+    ],
+    "tips": "Mẹo TOEIC: Nhìn từ đứng sau ô trống. Nếu có danh từ -> chọn Tính từ sở hữu. Nếu đứng sau giới từ 'by' hoặc đứng cuối câu đầy đủ thành phần -> chọn Đại từ phản thân. Nếu làm chủ ngữ hoặc tân ngữ đứng một mình để thay thế cụm sở hữu -> chọn Đại từ sở hữu."
+  },
+  "34": {
+    "title": "Từ hạn định và Lượng từ (other, others, another, few, little)",
+    "explanation": "Cách phân biệt các lượng từ chỉ số lượng đếm được và không đếm được và cách dùng nhóm từ OTHER:\n\n1. Nhóm từ OTHER (Khác):\n- another + N số ít: một cái khác (chưa xác định trong nhiều cái cùng loại).\n- other + N số nhiều / N không đếm được: những cái khác/thông tin khác.\n- others (đại từ): những cái khác (đóng vai trò danh từ, không có N đi kèm).\n- the other + N số ít (cái còn lại cuối cùng của nhóm 2 cái) hoặc the other + N số nhiều (những cái còn lại cuối cùng).\n- the others (đại từ): những cái còn lại cuối cùng (không có N đi kèm).\n\n2. Lượng từ đếm được vs không đếm được:\n- Đếm được số nhiều: many, several, few (hầu như không), a few (một vài), a number of.\n- Không đếm được: much, little (hầu như không), a little (một ít), a great deal of, an amount of.\n- Dùng cho cả hai: some, any, a lot of, plenty of.",
+    "structure": "another + N(sing) | other + N(plur) | several/a few + N(plur) | much/a little + N(uncount)",
+    "examples": [
+      "We need another printer in this office. (another + danh từ số ít)",
+      "Some employees prefer working in office, others want to work from home. (others đứng một mình)",
+      "There are only a few seats remaining. (seats đếm được số nhiều -> a few)",
+      "We have a little time left before the meeting. (time không đếm được -> a little)"
+    ],
+    "exceptions": [
+      "another + số đếm + N số nhiều: mang nghĩa 'thêm bao nhiêu nữa'. Ví dụ: another 3 days (thêm 3 ngày nữa)."
+    ],
+    "notes": [
+      "few/little mang nghĩa tiêu cực (thiếu thốn, hầu như không đủ), a few/a little mang nghĩa tích cực (đủ dùng dù số lượng ít).",
+      "Each và Every đi với danh từ đếm được số ít và động từ số ít."
+    ],
+    "tips": "Mẹo TOEIC: Bước 1 là xác định danh từ sau ô trống đếm được hay không đếm được, số ít hay số nhiều để loại trừ lượng từ sai. Đối với nhóm 'other', nhớ quy tắc vàng: others và the others không bao giờ đứng trước danh từ."
+  },
+  "35": {
+    "title": "Mệnh đề danh từ (Noun Clause)",
+    "explanation": "Mệnh đề danh từ (Noun Clauses) là mệnh đề phụ đóng vai trò như một danh từ trong câu (có thể làm chủ ngữ, tân ngữ cho động từ hoặc giới từ).\\n\\n1. Làm Chủ ngữ (Động từ chính luôn chia số ít):\\n- <b>That + S + V + V_main(sing)</b>: Việc mà... (sự thật hiển nhiên).\\nVí dụ: <i>That she succeeded surprised everyone.</i> (Việc cô ấy thành công làm mọi người ngạc nhiên).\\n- <b>Whether + S + V + V_main(sing)</b>: Liệu rằng... hay không.\\nVí dụ: <i>Whether they will invest remains unclear.</i>\\n\\n2. Làm Tân ngữ (Đứng sau động từ hoặc giới từ):\\n- <b>S1 + V1 + that/whether/how/what + S2 + V2</b>.\\nVí dụ: <i>The manager announced that the meeting was postponed.</i>",
+    "structure": "That / Whether + S + V + V(chính số ít) | S1 + V1 + that/whether/what + S2 + V2",
+    "examples": [
+      "That the budget was cut is a problem. (That + mệnh đề làm chủ ngữ)",
+      "Whether we can finish on time depends on the staff. (Whether + mệnh đề làm chủ ngữ)",
+      "She did not know what they wanted. (what làm tân ngữ sau know)",
+      "We are discussing who should run the project. (who làm tân ngữ sau giới từ discussing)"
+    ],
+    "exceptions": [
+      "Tránh nhầm lẫn <b>that</b> trong mệnh đề danh từ (dẫn một sự thật đầy đủ) với <b>that</b> đại từ quan hệ (thay cho danh từ đứng trước nó và vế sau bị khuyết S hoặc O)."
+    ],
+    "notes": [
+      "Mệnh đề danh từ làm chủ ngữ thì toàn bộ câu được coi là số ít, động từ chính theo sau bắt buộc chia số ít.",
+      "Whether thường đi kèm cụm 'or not' (whether... or not)."
+    ],
+    "tips": "Mẹo TOEIC: Nếu thấy đầu câu có chỗ trống, sau đó là một mệnh đề đầy đủ (S+V) rồi tiếp tục là một động từ chính chia số ít, hãy chọn 'That' hoặc 'Whether' để tạo mệnh đề danh từ làm chủ ngữ."
+  },
+  "36": {
+    "title": "Rút gọn mệnh đề trạng ngữ (Reduced Adverbial Clause)",
+    "explanation": "Khi hai mệnh đề trong câu ghép có cùng một chủ ngữ, ta có thể rút gọn mệnh đề trạng ngữ (vế chứa liên từ: Before, After, While, When, Once, Although...) để câu ngắn gọn hơn.\\n\\n1. Rút gọn dạng Chủ động: Lược bỏ chủ ngữ, chuyển động từ thành <b>V-ing</b>.\\n- Công thức: <b>Conjunction + V-ing, S + V_main</b>\\n- Ví dụ: <i>After reviewing the report, the manager signed it.</i> (Sau khi xem báo cáo, quản lý đã ký nó. Bản chất là: After the manager reviewed...).\\n\\n2. Rút gọn dạng Bị động: Lược bỏ chủ ngữ và to be, giữ lại <b>V-ed/V3</b>.\\n- Công thức: <b>Conjunction + V-ed/V3, S + V_main</b>\\n- Ví dụ: <i>Once approved, the policy will be implemented.</i> (Một khi được duyệt, quy chế sẽ được thực thi. Bản chất: Once it is approved...).",
+    "structure": "Conjunction + V-ing, S + V | Conjunction + V3/ed, S + V",
+    "examples": [
+      "Before submitting the application, please check the fields. (Chủ động: Before you submit...)",
+      "Although faced with difficulties, they finished the job. (Bị động: Although they were faced...)",
+      "While checking the system, he found an error. (Chủ động: While he was checking...)",
+      "When built, the facility will be the largest. (Bị động: When it is built...)"
+    ],
+    "exceptions": [
+      "Một số giới từ/liên từ chỉ đi với danh từ/V-ing chứ không đi với V3/ed rút gọn: <i>upon, despite, because of</i>. Ví dụ: Upon arriving... (không nói Upon arrived)."
+    ],
+    "notes": [
+      "Quy tắc vàng: Chỉ rút gọn được khi hai mệnh đề <b>CÙNG CHỦ NGỮ</b>. Nếu khác chủ ngữ thì không được phép rút gọn.",
+      "Nếu vế sau có chủ ngữ chỉ vật, khả năng cao vế trạng ngữ trước được rút gọn bị động (chọn V3/ed)."
+    ],
+    "tips": "Mẹo TOEIC: Khi thấy khoảng trống đứng ngay sau liên từ (Before, After, When, Once...) và trước dấu phẩy không có chủ ngữ mới: 1) Chọn V-ing nếu hành động mang nghĩa chủ động (có tân ngữ phía sau). 2) Chọn V-ed/V3 nếu hành động mang nghĩa bị động (phía sau là giới từ hoặc trạng từ)."
+  },
+  "37": {
+    "title": "Ôn tập tổng hợp ngữ pháp Phase 2",
+    "explanation": "Ôn tập tổng hợp và củng cố toàn bộ các cấu trúc ngữ pháp nâng cao và phân loại trong Giai đoạn 2:\\n- Mệnh đề quan hệ & các dạng rút gọn (V-ing / V-ed).\\n- Câu bị động ở các thì phức tạp và bị động động từ khuyết thiếu.\\n- Câu điều kiện loại 1, 2, 3 và Đảo ngữ điều kiện (Should, Were, Had).\\n- Thức giả định (recommend that S + V-bare) và các Đại từ/Lượng từ gây nhiễu.\\n- Mệnh đề danh từ (That/Whether S+V) và Rút gọn mệnh đề trạng ngữ (Before V-ing, Once V-ed).\\n\\nHãy làm bài tập tổng hợp để hoàn thiện kỹ năng làm bài Part 5 trước khi bước vào luyện đề thực chiến.",
+    "structure": "Review Phase 2.3",
+    "examples": [
+      "That he resigned (Noun Clause) surprised the board, who had recommended (Rel Clause) that he be promoted (Subjunctive)."
+    ],
+    "exceptions": [],
+    "notes": [
+      "Luôn kiểm tra xem động từ trong câu là động từ chính được chia thì hay là phân từ rút gọn.",
+      "Phân biệt kỹ bẫy đảo ngữ điều kiện và thức giả định."
+    ],
+    "tips": "Tự kiểm tra: Viết ra giấy công thức đảo ngữ của 3 loại câu điều kiện, cấu trúc thức giả định và 2 quy tắc rút gọn mệnh đề trạng ngữ trước khi làm bài tập."
+  }
+};
+
+DAYS_DATA.forEach(day => {
+  if (NEW_GRAMMAR[day.day]) {
+    day.grammar = NEW_GRAMMAR[day.day];
+  }
+});

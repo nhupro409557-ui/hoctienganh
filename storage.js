@@ -209,11 +209,60 @@ const Storage = {
   },
 
   // ============================================
+  // MASTERED WORDS (Từ đã thuộc)
+  // ============================================
+  getMasteredWords() {
+    try {
+      return JSON.parse(localStorage.getItem('eng_mastered_words')) || [];
+    } catch { return []; }
+  },
+
+  isMasteredWord(word) {
+    return this.getMasteredWords().includes(String(word).toLowerCase());
+  },
+
+  addMasteredWord(word) {
+    const mastered = this.getMasteredWords();
+    const w = String(word).toLowerCase();
+    if (!mastered.includes(w)) {
+      mastered.push(w);
+      localStorage.setItem('eng_mastered_words', JSON.stringify(mastered));
+    }
+  },
+
+  removeMasteredWord(word) {
+    const mastered = this.getMasteredWords();
+    const w = String(word).toLowerCase();
+    const filtered = mastered.filter(x => x !== w);
+    localStorage.setItem('eng_mastered_words', JSON.stringify(filtered));
+  },
+
+  // ============================================
+  // LEARNING TRACK MANAGEMENT
+  // ============================================
+  getLearningTrack() {
+    try {
+      const settings = JSON.parse(localStorage.getItem(this.KEYS.SETTINGS)) || {};
+      return settings.learningTrack || 'combo';
+    } catch { return 'combo'; }
+  },
+
+  setLearningTrack(track) {
+    try {
+      const settings = JSON.parse(localStorage.getItem(this.KEYS.SETTINGS)) || {};
+      settings.learningTrack = track;
+      localStorage.setItem(this.KEYS.SETTINGS, JSON.stringify(settings));
+    } catch {}
+  },
+
+  // ============================================
   // DAY PROGRESS
   // ============================================
   getDayProgress(day) {
+    const track = this.getLearningTrack();
+    const suffix = track === 'combo' ? '' : track + '_';
     try {
-      return JSON.parse(localStorage.getItem(this.KEYS.DAY_PROGRESS + day)) || {
+      return JSON.parse(localStorage.getItem(this.KEYS.DAY_PROGRESS + suffix + day)) || {
         completed: false,
         startedAt: null,
         completedAt: null,
@@ -224,26 +273,32 @@ const Storage = {
   },
 
   setDayStarted(day) {
+    const track = this.getLearningTrack();
+    const suffix = track === 'combo' ? '' : track + '_';
     const progress = this.getDayProgress(day);
     if (!progress.startedAt) {
       progress.startedAt = new Date().toISOString();
-      localStorage.setItem(this.KEYS.DAY_PROGRESS + day, JSON.stringify(progress));
+      localStorage.setItem(this.KEYS.DAY_PROGRESS + suffix + day, JSON.stringify(progress));
     }
   },
 
   setDayCompleted(day) {
+    const track = this.getLearningTrack();
+    const suffix = track === 'combo' ? '' : track + '_';
     const progress = this.getDayProgress(day);
     progress.completed = true;
     progress.completedAt = new Date().toISOString();
-    localStorage.setItem(this.KEYS.DAY_PROGRESS + day, JSON.stringify(progress));
+    localStorage.setItem(this.KEYS.DAY_PROGRESS + suffix + day, JSON.stringify(progress));
     this.updateStreak();
   },
 
   addTabVisited(day, tabName) {
+    const track = this.getLearningTrack();
+    const suffix = track === 'combo' ? '' : track + '_';
     const progress = this.getDayProgress(day);
     if (!progress.tabsVisited.includes(tabName)) {
       progress.tabsVisited.push(tabName);
-      localStorage.setItem(this.KEYS.DAY_PROGRESS + day, JSON.stringify(progress));
+      localStorage.setItem(this.KEYS.DAY_PROGRESS + suffix + day, JSON.stringify(progress));
     }
   },
 
@@ -290,12 +345,14 @@ const Storage = {
   },
 
   needsDifficultReview(day) {
+    if (this.getLearningTrack() === 'grammar') return false;
     const status = this.getReviewStatus(day);
     const dueWords = this.getDifficultWords().filter(w => !w.nextReview || new Date(w.nextReview) <= new Date());
     return dueWords.length > 0 && !status.difficultReviewDone;
   },
 
   needsPreviousDayReview(day) {
+    if (this.getLearningTrack() === 'grammar') return false;
     if (day <= 1) return false;
     const status = this.getReviewStatus(day);
     if (status.previousDayReviewDone) return false;
@@ -329,15 +386,19 @@ const Storage = {
   // CHECKLIST
   // ============================================
   getChecklist(day) {
+    const track = this.getLearningTrack();
+    const suffix = track === 'combo' ? '' : track + '_';
     try {
-      return JSON.parse(localStorage.getItem(this.KEYS.CHECKLIST + day)) || {};
+      return JSON.parse(localStorage.getItem(this.KEYS.CHECKLIST + suffix + day)) || {};
     } catch { return {}; }
   },
 
   toggleChecklistItem(day, itemId) {
+    const track = this.getLearningTrack();
+    const suffix = track === 'combo' ? '' : track + '_';
     const checklist = this.getChecklist(day);
     checklist[itemId] = !checklist[itemId];
-    localStorage.setItem(this.KEYS.CHECKLIST + day, JSON.stringify(checklist));
+    localStorage.setItem(this.KEYS.CHECKLIST + suffix + day, JSON.stringify(checklist));
     return checklist;
   },
 

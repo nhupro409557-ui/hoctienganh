@@ -9,7 +9,10 @@
 </head>
 <body>
   <header class="header" id="pageHeader">
-    <a href="index.html?no_redirect=true" class="back-btn">← Về lộ trình</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin: 0 auto 10px auto; padding: 0 10px;">
+      <a href="index.html?no_redirect=true" class="back-btn" style="margin-bottom: 0;">← Về lộ trình</a>
+      <div id="learnTrackBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; cursor: pointer;" onclick="toggleTrackOnLearnPage()"></div>
+    </div>
     <h1 id="dayTitle">Ngày 1</h1>
     <p id="dayTopic">Đang tải...</p>
     <div class="subtitle" id="dayPhase"></div>
@@ -55,6 +58,35 @@
         <button class="tab-btn" onclick="showTab('typeQuiz',this)">🏷️ Từ loại</button>
         <button class="tab-btn" id="grammarQuizTabBtn" onclick="showTab('grammarQuiz',this)" style="display:none">✍️ Trắc nghiệm Ngữ pháp</button>
       </div>
+
+      <!-- Study Filter Panel -->
+      <div class="study-filter-panel" style="margin: 16px 0; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-card); backdrop-filter: blur(20px);">
+        <div class="filter-info" style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 16px;">🎯</span>
+          <span style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">Chế độ học:</span>
+          <span id="studyModeStatus" style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Tất cả từ (Đang tải...)</span>
+        </div>
+        <div class="filter-buttons" style="display: flex; gap: 8px; margin: 0;">
+          <button class="btn btn-sm btn-primary" id="btnFilterAll" onclick="setStudyMode('all')" style="margin: 0; padding: 6px 12px; font-size: 12px; border-radius: var(--radius-sm); font-weight:700;">📚 Tất cả từ</button>
+          <button class="btn btn-sm btn-secondary" id="btnFilterUnmastered" onclick="setStudyMode('unmastered')" style="margin: 0; padding: 6px 12px; font-size: 12px; border-radius: var(--radius-sm); font-weight:700;">🎯 Chỉ từ chưa thuộc</button>
+        </div>
+      </div>
+
+      <!-- Tab 0A: Grammar Empty State -->
+      <section id="grammarEmptyState" class="section">
+        <div class="empty-state">
+          <div class="icon">📐</div>
+          <p id="grammarEmptyStateText">Hôm nay không có bài học ngữ pháp mới. Bạn hãy xem lại ghi chép ở các ngày trước nhé!</p>
+        </div>
+      </section>
+
+      <!-- Tab 0B: Vocab Empty State -->
+      <section id="vocabEmptyState" class="section">
+        <div class="empty-state">
+          <div class="icon">📚</div>
+          <p id="vocabEmptyStateText">Hôm nay không có từ vựng mới.</p>
+        </div>
+      </section>
 
       <!-- Tab 1: Word List -->
       <section id="list" class="section active">
@@ -221,6 +253,7 @@
   let currentDay = 1;
   let dayData = null;
   let words = [];
+  let studyMode = 'all'; // 'all' or 'unmastered'
 
   // Quiz state
   let flashIndex = 0, flashWords = [];
@@ -232,6 +265,83 @@
   let grammarQuizOk = 0;
   let grammarQuizWrong = 0;
   let grammarQuizDone = false;
+
+  // ---- STUDY FILTER HELPERS ----
+  function getActiveWords() {
+    if (studyMode === 'unmastered') {
+      return words.filter(w => !Storage.isMasteredWord(w.word));
+    }
+    return words;
+  }
+
+  function updateStudyFilters() {
+    const unmasteredCount = words.filter(w => !Storage.isMasteredWord(w.word)).length;
+    const totalCount = words.length;
+
+    // Update text
+    const statusEl = document.getElementById('studyModeStatus');
+    if (statusEl) {
+      statusEl.textContent = studyMode === 'unmastered' 
+        ? `Chỉ học từ chưa thuộc (${unmasteredCount}/${totalCount} từ)`
+        : `Tất cả từ (${totalCount} từ)`;
+    }
+
+    // Update button states
+    const btnAll = document.getElementById('btnFilterAll');
+    const btnUnmastered = document.getElementById('btnFilterUnmastered');
+    if (btnAll && btnUnmastered) {
+      if (studyMode === 'all') {
+        btnAll.className = 'btn btn-sm btn-primary';
+        btnAll.style.background = 'var(--accent-gradient)';
+        btnAll.style.color = 'white';
+        btnUnmastered.className = 'btn btn-sm btn-secondary';
+        btnUnmastered.style.background = 'var(--bg-card-solid)';
+        btnUnmastered.style.color = 'var(--text-secondary)';
+      } else {
+        btnAll.className = 'btn btn-sm btn-secondary';
+        btnAll.style.background = 'var(--bg-card-solid)';
+        btnAll.style.color = 'var(--text-secondary)';
+        btnUnmastered.className = 'btn btn-sm btn-primary';
+        btnUnmastered.style.background = 'var(--accent-gradient)';
+        btnUnmastered.style.color = 'white';
+      }
+    }
+  }
+
+  function setStudyMode(mode) {
+    studyMode = mode;
+    updateStudyFilters();
+    
+    // Re-initialize active/all quizzes with the new filtered set
+    flashWords = getActiveWords();
+    flashIndex = 0;
+    renderFlash();
+    startViToEn();
+    startEnToVi();
+    restartABCD();
+    startType();
+  }
+
+  function toggleMastered(btn, index) {
+    const w = words[index];
+    const card = btn.closest('.word-card');
+    if (Storage.isMasteredWord(w.word)) {
+      Storage.removeMasteredWord(w.word);
+      btn.classList.remove('marked');
+      btn.innerHTML = '✔️';
+      if (card) card.classList.remove('mastered');
+    } else {
+      Storage.addMasteredWord(w.word);
+      btn.classList.add('marked');
+      btn.innerHTML = '✅';
+      if (card) card.classList.add('mastered');
+      
+      btn.style.animation = 'none';
+      btn.offsetHeight;
+      btn.style.animation = 'heartBeat 0.4s ease';
+    }
+    updateStudyFilters();
+  }
 
   // ---- INIT ----
   function init() {
@@ -518,17 +628,34 @@
   function showLearning() {
     document.getElementById('gateContainer').style.display = 'none';
     document.getElementById('learningSection').style.display = 'block';
+
+    const track = Storage.getLearningTrack();
+
+    // Reset visibility of elements
     document.getElementById('grammarSection').style.display = '';
+    document.getElementById('mainTabs').style.display = '';
+    const filterPanel = document.querySelector('.study-filter-panel');
+    if (filterPanel) filterPanel.style.display = '';
+
+    // De-activate all sections
+    document.querySelectorAll('#learningSection .section').forEach(s => s.classList.remove('active'));
 
     if (words.length === 0) {
-      document.getElementById('learningSection').innerHTML = `
-        <div class="empty-state"><div class="icon">📝</div><p>Ngày ôn tập - không có từ mới</p></div>
-      `;
+      if (track === 'grammar') {
+        adjustUIForTrack();
+      } else {
+        document.getElementById('mainTabs').style.display = 'none';
+        if (filterPanel) filterPanel.style.display = 'none';
+        document.getElementById('vocabEmptyState').classList.add('active');
+        document.getElementById('vocabEmptyStateText').textContent = 'Hôm nay không có từ vựng mới.';
+        adjustUIForTrack();
+      }
       return;
     }
 
+    updateStudyFilters();
     renderList();
-    flashWords = [...words];
+    flashWords = getActiveWords();
     flashIndex = 0;
     renderFlash();
     startViToEn();
@@ -536,13 +663,133 @@
     randomABCD();
     startType();
 
-    // Show/hide grammar quiz tab button based on whether grammar exists
-    const gQuizTabBtn = document.getElementById('grammarQuizTabBtn');
-    if (dayData.grammar && dayData.grammar.title && !dayData.isReview) {
-      gQuizTabBtn.style.display = '';
-      startGrammarQuiz();
+    adjustUIForTrack();
+  }
+
+  function toggleTrackOnLearnPage() {
+    const tracks = ['combo', 'vocab', 'grammar'];
+    const current = Storage.getLearningTrack();
+    const nextIdx = (tracks.indexOf(current) + 1) % tracks.length;
+    const nextTrack = tracks[nextIdx];
+    Storage.setLearningTrack(nextTrack);
+    
+    // Refresh the view
+    renderChecklist();
+    if (dayData.isReview) {
+      handleReviewDay();
     } else {
-      gQuizTabBtn.style.display = 'none';
+      checkGates();
+    }
+  }
+
+  function updateTrackBadge() {
+    const track = Storage.getLearningTrack();
+    const badge = document.getElementById('learnTrackBadge');
+    if (badge) {
+      if (track === 'combo') {
+        badge.innerHTML = '🌟 Kết hợp 🔄';
+      } else if (track === 'vocab') {
+        badge.innerHTML = '📚 Từ vựng 🔄';
+      } else if (track === 'grammar') {
+        badge.innerHTML = '📐 Ngữ pháp 🔄';
+      }
+    }
+  }
+
+  function adjustUIForTrack() {
+    const track = Storage.getLearningTrack();
+    updateTrackBadge();
+
+    const gQuizTabBtn = document.getElementById('grammarQuizTabBtn');
+    const filterPanel = document.querySelector('.study-filter-panel');
+    const mainTabs = document.getElementById('mainTabs');
+
+    // De-activate all sections first
+    document.querySelectorAll('#learningSection .section').forEach(s => s.classList.remove('active'));
+
+    if (dayData.isReview) {
+      if (track === 'grammar') {
+        document.getElementById('reviewDaySection').style.display = 'none';
+        document.getElementById('learningSection').style.display = 'block';
+        if (mainTabs) mainTabs.style.display = 'none';
+        if (filterPanel) filterPanel.style.display = 'none';
+        document.getElementById('grammarEmptyState').classList.add('active');
+        document.getElementById('grammarEmptyStateText').textContent = 'Hôm nay là ngày ôn tập Từ vựng. Hãy xem lại ghi chép ngữ pháp của các ngày trước nhé! 💪';
+      } else {
+        document.getElementById('learningSection').style.display = 'none';
+        document.getElementById('reviewDaySection').style.display = 'block';
+      }
+      return;
+    }
+
+    if (track === 'vocab') {
+      document.getElementById('grammarSection').style.display = 'none';
+      if (gQuizTabBtn) gQuizTabBtn.style.display = 'none';
+      if (mainTabs) mainTabs.style.display = '';
+      if (filterPanel) filterPanel.style.display = '';
+      
+      if (words.length === 0) {
+        document.getElementById('vocabEmptyState').classList.add('active');
+        if (mainTabs) mainTabs.style.display = 'none';
+        if (filterPanel) filterPanel.style.display = 'none';
+      } else {
+        const activeBtn = document.querySelector('#mainTabs .tab-btn.active');
+        if (!activeBtn || activeBtn.id === 'grammarQuizTabBtn') {
+          const listBtn = document.querySelector('#mainTabs button[onclick*="list"]');
+          if (listBtn) showTab('list', listBtn);
+        } else {
+          let tabId = 'list';
+          const match = activeBtn.getAttribute('onclick').match(/'([^']+)'/);
+          if (match) tabId = match[1];
+          const targetSec = document.getElementById(tabId);
+          if (targetSec) targetSec.classList.add('active');
+        }
+      }
+    } else if (track === 'grammar') {
+      document.getElementById('grammarSection').style.display = dayData.grammar ? '' : 'none';
+      if (mainTabs) mainTabs.style.display = 'none';
+      if (filterPanel) filterPanel.style.display = 'none';
+      
+      if (!dayData.grammar || !dayData.grammar.title) {
+        document.getElementById('grammarEmptyState').classList.add('active');
+        document.getElementById('grammarEmptyStateText').textContent = 'Hôm nay không có bài học ngữ pháp mới. Hãy xem lại ghi chép ở các ngày trước nhé! 📖';
+      } else {
+        const gQuizSec = document.getElementById('grammarQuiz');
+        if (gQuizSec) {
+          gQuizSec.classList.add('active');
+          startGrammarQuiz();
+        }
+      }
+    } else { // combo
+      document.getElementById('grammarSection').style.display = dayData.grammar ? '' : 'none';
+      if (mainTabs) mainTabs.style.display = '';
+      if (filterPanel) filterPanel.style.display = '';
+      
+      if (dayData.grammar && dayData.grammar.title) {
+        if (gQuizTabBtn) gQuizTabBtn.style.display = '';
+      } else {
+        if (gQuizTabBtn) gQuizTabBtn.style.display = 'none';
+      }
+
+      if (words.length === 0) {
+        document.getElementById('vocabEmptyState').classList.add('active');
+        if (mainTabs) mainTabs.style.display = 'none';
+        if (filterPanel) filterPanel.style.display = 'none';
+      } else {
+        const activeBtn = document.querySelector('#mainTabs .tab-btn.active');
+        if (activeBtn && activeBtn.id !== 'grammarQuizTabBtn') {
+          let tabId = 'list';
+          const match = activeBtn.getAttribute('onclick').match(/'([^']+)'/);
+          if (match) tabId = match[1];
+          const targetSec = document.getElementById(tabId);
+          if (targetSec) targetSec.classList.add('active');
+        } else if (activeBtn && activeBtn.id === 'grammarQuizTabBtn' && dayData.grammar) {
+          document.getElementById('grammarQuiz').classList.add('active');
+        } else {
+          const listBtn = document.querySelector('#mainTabs button[onclick*="list"]');
+          if (listBtn) showTab('list', listBtn);
+        }
+      }
     }
   }
 
@@ -717,6 +964,7 @@
   function renderList() {
     document.getElementById('wordGrid').innerHTML = words.map((w, i) => {
       const isDiff = Storage.isDifficultWord(w.word);
+      const isMastered = Storage.isMasteredWord(w.word);
       
       // Tra cứu công thức nếu có
       const formulaObj = typeof getWordFormula !== 'undefined' ? getWordFormula(w.word, w.type, dayData ? dayData.topic : '') : null;
@@ -728,9 +976,12 @@
       ` : '';
 
       return `
-        <div class="word-card animate-fadeInUp" style="animation-delay:${i * 30}ms">
+        <div class="word-card animate-fadeInUp ${isMastered ? 'mastered' : ''}" style="animation-delay:${i * 30}ms">
           <button class="mark-difficult ${isDiff ? 'marked' : ''}" onclick="toggleDifficult(this, ${i})" title="Đánh dấu từ khó">
             ${isDiff ? '🔥' : '❤️'}
+          </button>
+          <button class="mark-mastered ${isMastered ? 'marked' : ''}" onclick="toggleMastered(this, ${i})" title="Đánh dấu đã thuộc">
+            ${isMastered ? '✅' : '✔️'}
           </button>
           <button class="speak-btn" onclick="speakWord('${w.word}')" title="Phát âm">🔊</button>
           <div class="word">${w.word} <span class="ipa" style="font-size:13px; font-weight:normal; color:var(--text-muted); margin-left:6px;">${w.ipa || ''}</span></div>
@@ -761,7 +1012,16 @@
 
   // ---- TAB 2: FLASHCARD ----
   function renderFlash() {
-    if (flashWords.length === 0) return;
+    if (flashWords.length === 0) {
+      document.getElementById('flashWord').innerHTML = `🎉 Đã thuộc hết!`;
+      document.getElementById('flashMeaning').innerHTML = `<p style="font-size:14px;color:var(--text-secondary);font-weight:normal;margin-top:12px;">Không có từ chưa thuộc nào trong ngày hôm nay để ôn tập flashcard.</p><button class="btn btn-primary btn-sm mt-sm" onclick="setStudyMode('all')" style="margin:12px auto 0;display:block;">Học chế độ Tất cả từ</button>`;
+      document.getElementById('flashInfo').innerHTML = '';
+      document.getElementById('flashMeaning').style.display = 'block';
+      document.getElementById('flashInfo').style.display = 'none';
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('flashCounter').textContent = '0 / 0';
+      return;
+    }
     const w = flashWords[flashIndex];
     document.getElementById('flashWord').innerHTML = `${w.word} <div style="font-size:18px; font-weight:normal; color:var(--text-muted); margin-top:8px;">${w.ipa || ''}</div>`;
     document.getElementById('flashMeaning').textContent = w.meaning;
@@ -773,16 +1033,19 @@
   }
 
   function showAnswer() {
+    if (flashWords.length === 0) return;
     document.getElementById('flashMeaning').style.display = 'block';
     document.getElementById('flashInfo').style.display = 'block';
   }
 
   function nextCard() {
+    if (flashWords.length === 0) return;
     flashIndex = (flashIndex + 1) % flashWords.length;
     renderFlash();
   }
 
   function prevCard() {
+    if (flashWords.length === 0) return;
     flashIndex = (flashIndex - 1 + flashWords.length) % flashWords.length;
     renderFlash();
   }
@@ -807,7 +1070,7 @@
   let viToEnIdx = 0, viToEnOk = 0, viToEnBad = [], viToEnDone = false;
 
   function startViToEn() {
-    viToEnList = shuffleArray([...words]);
+    viToEnList = shuffleArray([...getActiveWords()]);
     viToEnIdx = 0; viToEnOk = 0; viToEnBad = []; viToEnDone = false;
     renderViToEnSingle();
   }
@@ -815,6 +1078,19 @@
   function renderViToEnSingle() {
     const c = document.getElementById('viToEnContainer');
     const t = viToEnList.length;
+    if (t === 0) {
+      c.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🎉</div>
+          <p>Không có từ chưa thuộc nào trong ngày hôm nay để làm bài Việt→Anh!</p>
+          <button class="btn btn-primary btn-sm mt-sm" onclick="setStudyMode('all')" style="margin-top:12px;">Xem tất cả từ</button>
+        </div>`;
+      document.getElementById('viToEnProgress').style.width = '100%';
+      document.getElementById('viToEnCounter').textContent = '0/0';
+      document.getElementById('viToEnScoreOk').textContent = '✓ 0';
+      document.getElementById('viToEnScoreNo').textContent = '✗ 0';
+      return;
+    }
     document.getElementById('viToEnProgress').style.width = (viToEnIdx / t * 100) + '%';
     document.getElementById('viToEnCounter').textContent = `Câu ${Math.min(viToEnIdx+1,t)}/${t}`;
     document.getElementById('viToEnScoreOk').textContent = `✓ ${viToEnOk}`;
@@ -888,7 +1164,7 @@
   let enToViIdx = 0, enToViOk = 0, enToViBad = [], enToViDone = false;
 
   function startEnToVi() {
-    enToViList = shuffleArray([...words]);
+    enToViList = shuffleArray([...getActiveWords()]);
     enToViIdx = 0; enToViOk = 0; enToViBad = []; enToViDone = false;
     renderEnToViSingle();
   }
@@ -896,6 +1172,19 @@
   function renderEnToViSingle() {
     const c = document.getElementById('enToViContainer');
     const t = enToViList.length;
+    if (t === 0) {
+      c.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🎉</div>
+          <p>Không có từ chưa thuộc nào trong ngày hôm nay để làm bài Anh→Việt!</p>
+          <button class="btn btn-primary btn-sm mt-sm" onclick="setStudyMode('all')" style="margin-top:12px;">Xem tất cả từ</button>
+        </div>`;
+      document.getElementById('enToViProgress').style.width = '100%';
+      document.getElementById('enToViCounter').textContent = '0/0';
+      document.getElementById('enToViScoreOk').textContent = '✓ 0';
+      document.getElementById('enToViScoreNo').textContent = '✗ 0';
+      return;
+    }
     document.getElementById('enToViProgress').style.width = (enToViIdx / t * 100) + '%';
     document.getElementById('enToViCounter').textContent = `Câu ${Math.min(enToViIdx+1,t)}/${t}`;
     document.getElementById('enToViScoreOk').textContent = `✓ ${enToViOk}`;
@@ -1126,8 +1415,9 @@
   function getMode() { return document.querySelector('input[name="abcdMode"]:checked').value; }
 
   function buildABCD() {
+    const activeList = getActiveWords();
     const mode = getMode();
-    abcdList = words.map(w => {
+    abcdList = activeList.map(w => {
       if (mode === 'vi-en') {
         const wrong = shuffleArray(words.filter(x => x.word !== w.word)).slice(0, 3).map(x => x.word);
         return { ...w, prompt: w.meaning, answer: w.word, options: shuffleArray([w.word, ...wrong]) };
@@ -1151,6 +1441,19 @@
   function renderABCDSingle() {
     const container = document.getElementById('abcdContainer');
     const total = abcdList.length;
+    if (total === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🎉</div>
+          <p>Không có từ chưa thuộc nào trong ngày hôm nay để làm trắc nghiệm A/B/C/D!</p>
+          <button class="btn btn-primary btn-sm mt-sm" onclick="setStudyMode('all')" style="margin-top:12px;">Xem tất cả từ</button>
+        </div>`;
+      document.getElementById('abcdProgressBar').style.width = '100%';
+      document.getElementById('abcdCounter').textContent = '0/0';
+      document.getElementById('abcdScoreCorrect').textContent = '✓ 0';
+      document.getElementById('abcdScoreWrong').textContent = '✗ 0';
+      return;
+    }
 
     // Update progress
     document.getElementById('abcdProgressBar').style.width = ((abcdIndex) / total * 100) + '%';
@@ -1295,7 +1598,7 @@
   let typeList = [], typeIdx = 0, typeOk = 0, typeBad = [], typeAnswered = false;
 
   function startType() {
-    typeList = shuffleArray([...words]);
+    typeList = shuffleArray([...getActiveWords()]);
     typeIdx = 0; typeOk = 0; typeBad = []; typeAnswered = false;
     renderTypeSingle();
   }
@@ -1303,6 +1606,19 @@
   function renderTypeSingle() {
     const c = document.getElementById('typeContainer');
     const t = typeList.length;
+    if (t === 0) {
+      c.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🎉</div>
+          <p>Không có từ chưa thuộc nào trong ngày hôm nay để làm bài chọn từ loại!</p>
+          <button class="btn btn-primary btn-sm mt-sm" onclick="setStudyMode('all')" style="margin-top:12px;">Xem tất cả từ</button>
+        </div>`;
+      document.getElementById('typeProgress').style.width = '100%';
+      document.getElementById('typeCounter').textContent = '0/0';
+      document.getElementById('typeScoreOk').textContent = '✓ 0';
+      document.getElementById('typeScoreNo').textContent = '✗ 0';
+      return;
+    }
     document.getElementById('typeProgress').style.width = (typeIdx / t * 100) + '%';
     document.getElementById('typeCounter').textContent = `Câu ${Math.min(typeIdx+1,t)}/${t}`;
     document.getElementById('typeScoreOk').textContent = `✓ ${typeOk}`;
@@ -1382,23 +1698,47 @@
 
   // ---- CHECKLIST ----
   function renderChecklist() {
-    const items = [
-      { id: 'vocab', label: `Học ${words.length || '~25'} từ vựng mới` },
-      { id: 'grammar', label: `Học ngữ pháp: ${dayData.grammar ? dayData.grammar.title : 'ôn tập'}` }
-    ];
+    const track = Storage.getLearningTrack();
+    let items = [];
 
-    if (dayData.grammar && dayData.grammar.title && !dayData.isReview) {
-      items.push({ id: 'grammarQuiz', label: 'Làm bài tập trắc nghiệm Ngữ pháp (50 câu)' });
+    if (track === 'combo') {
+      items = [
+        { id: 'vocab', label: `Học ${words.length || '~25'} từ vựng mới` },
+        { id: 'grammar', label: `Học ngữ pháp: ${dayData.grammar ? dayData.grammar.title : 'ôn tập'}` }
+      ];
+      if (dayData.grammar && dayData.grammar.title && !dayData.isReview) {
+        items.push({ id: 'grammarQuiz', label: 'Làm bài tập trắc nghiệm Ngữ pháp (50 câu)' });
+      }
+      items.push(
+        { id: 'listen', label: 'Nghe 10-20 câu TOEIC ngắn' },
+        { id: 'viToEn', label: 'Làm bài Việt → Anh' },
+        { id: 'enToVi', label: 'Làm bài Anh → Việt' },
+        { id: 'abcd', label: 'Làm bài trắc nghiệm A/B/C/D' },
+        { id: 'review', label: 'Ôn lại từ cũ + ghi 5 từ khó nhất' },
+        { id: 'note', label: 'Ghi chép cuối ngày' }
+      );
+    } else if (track === 'vocab') {
+      items = [
+        { id: 'vocab', label: `Học ${words.length || '~25'} từ vựng mới` },
+        { id: 'listen', label: 'Nghe 10-20 câu TOEIC ngắn' },
+        { id: 'viToEn', label: 'Làm bài Việt → Anh' },
+        { id: 'enToVi', label: 'Làm bài Anh → Việt' },
+        { id: 'abcd', label: 'Làm bài trắc nghiệm A/B/C/D' },
+        { id: 'review', label: 'Ôn lại từ cũ + ghi 5 từ khó nhất' },
+        { id: 'note', label: 'Ghi chép cuối ngày' }
+      ];
+    } else if (track === 'grammar') {
+      items = [];
+      if (dayData.grammar && dayData.grammar.title && !dayData.isReview) {
+        items.push(
+          { id: 'grammar', label: `Học ngữ pháp: ${dayData.grammar.title}` },
+          { id: 'grammarQuiz', label: 'Làm bài tập trắc nghiệm Ngữ pháp (50 câu)' }
+        );
+      } else {
+        items.push({ id: 'grammar', label: 'Ôn tập ngữ pháp đã học' });
+      }
+      items.push({ id: 'note', label: 'Ghi chép cuối ngày' });
     }
-
-    items.push(
-      { id: 'listen', label: 'Nghe 10-20 câu TOEIC ngắn' },
-      { id: 'viToEn', label: 'Làm bài Việt → Anh' },
-      { id: 'enToVi', label: 'Làm bài Anh → Việt' },
-      { id: 'abcd', label: 'Làm bài trắc nghiệm A/B/C/D' },
-      { id: 'review', label: 'Ôn lại từ cũ + ghi 5 từ khó nhất' },
-      { id: 'note', label: 'Ghi chép cuối ngày' }
-    );
 
     const saved = Storage.getChecklist(currentDay);
     document.getElementById('checklistBox').innerHTML = items.map(item => `
@@ -1416,9 +1756,28 @@
       return;
     }
 
+    const track = Storage.getLearningTrack();
     const progress = Storage.getDayProgress(currentDay);
-    if (!dayData.isReview && progress.tabsVisited.length < 2) {
-      if (!confirm('⚠️ Bạn mới làm ' + progress.tabsVisited.length + ' tab. Bạn có chắc muốn hoàn thành ngày này?')) {
+    let completeCheckFailed = false;
+    let warningMsg = '';
+
+    if (!dayData.isReview) {
+      if (track === 'grammar') {
+        if (dayData.grammar && dayData.grammar.title && !progress.tabsVisited.includes('grammarQuiz')) {
+          completeCheckFailed = true;
+          warningMsg = '⚠️ Bạn chưa làm Bài tập trắc nghiệm Ngữ pháp. Bạn có chắc muốn hoàn thành ngày này?';
+        }
+      } else {
+        // combo or vocab
+        if (progress.tabsVisited.length < 2) {
+          completeCheckFailed = true;
+          warningMsg = '⚠️ Bạn mới học ít hơn 2 phần từ vựng. Bạn có chắc muốn hoàn thành ngày này?';
+        }
+      }
+    }
+
+    if (completeCheckFailed) {
+      if (!confirm(warningMsg)) {
         return;
       }
     }

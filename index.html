@@ -15,6 +15,19 @@
   </header>
 
   <div class="container">
+    <!-- Learning Track Selector -->
+    <div class="track-selector" style="margin-bottom: 24px; padding: 16px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; backdrop-filter: blur(20px);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🛣️</span>
+        <span style="font-weight: 700; font-size: 15px; color: var(--text-primary);">Lộ trình học đang chọn:</span>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="btn btn-sm btn-primary" id="track_combo" onclick="changeTrack('combo')" style="margin: 0; padding: 8px 16px; font-size: 13px; font-weight:700;">🌟 Kết hợp (Từ + Ngữ pháp)</button>
+        <button class="btn btn-sm btn-secondary" id="track_vocab" onclick="changeTrack('vocab')" style="margin: 0; padding: 8px 16px; font-size: 13px; font-weight:700;">📚 Chỉ học Từ vựng</button>
+        <button class="btn btn-sm btn-secondary" id="track_grammar" onclick="changeTrack('grammar')" style="margin: 0; padding: 8px 16px; font-size: 13px; font-weight:700;">📐 Chỉ học Ngữ pháp</button>
+      </div>
+    </div>
+
     <!-- Stats -->
     <div class="stats-grid" id="statsGrid"></div>
 
@@ -190,6 +203,29 @@
       return;
     }
 
+    updateTrackUI();
+    renderStats();
+    renderDifficultWords();
+    renderPhases();
+  }
+
+  function updateTrackUI() {
+    const track = Storage.getLearningTrack();
+    ['combo', 'vocab', 'grammar'].forEach(t => {
+      const btn = document.getElementById('track_' + t);
+      if (btn) {
+        if (t === track) {
+          btn.className = 'btn btn-sm btn-primary';
+        } else {
+          btn.className = 'btn btn-sm btn-secondary';
+        }
+      }
+    });
+  }
+
+  function changeTrack(track) {
+    Storage.setLearningTrack(track);
+    updateTrackUI();
     renderStats();
     renderDifficultWords();
     renderPhases();
@@ -413,6 +449,8 @@
       document.getElementById(phase.progressId).textContent = `${completed}/${total}`;
 
       const grid = document.getElementById(phase.gridId);
+      const track = Storage.getLearningTrack();
+      
       grid.innerHTML = days.map(d => {
         const isCompleted = Storage.isDayCompleted(d.day);
         const isCurrent = Storage.getCurrentDay() === d.day;
@@ -427,12 +465,21 @@
 
         const href = isAccessible ? `learn.html?day=${d.day}` : '#';
 
+        let metaLabel = '';
+        if (track === 'grammar') {
+          metaLabel = d.grammar && d.grammar.title && !d.isReview ? '<span>📐 Ngữ pháp</span>' : '<span>📝 Ôn tập</span>';
+        } else if (track === 'vocab') {
+          metaLabel = d.isReview ? '<span>📝 Ôn tập</span>' : `<span>📚 ${wordCount} từ</span>`;
+        } else {
+          metaLabel = d.isReview ? '<span>📝 Ôn tập</span>' : `<span>📚 ${wordCount} từ ${d.grammar && d.grammar.title ? '+ 📐' : ''}</span>`;
+        }
+
         return `
           <a class="${cls}" href="${href}" ${!isAccessible ? 'onclick="return false"' : ''}>
             <div class="day-number">Ngày ${d.day}</div>
             <div class="day-topic">${d.topic}</div>
             <div class="day-meta">
-              ${d.isReview ? '<span>📝 Ôn tập</span>' : `<span>📚 ${wordCount} từ</span>`}
+              ${metaLabel}
               ${isCompleted ? '<span>✅</span>' : isCurrent ? '<span>👉 Hiện tại</span>' : !isAccessible ? '<span>🔒</span>' : ''}
             </div>
           </a>

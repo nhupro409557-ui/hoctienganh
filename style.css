@@ -12,15 +12,15 @@
   --border-accent: rgba(99, 102, 241, 0.4);
 
   --text: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-secondary: #cbd5e1;
+  --text-muted: #a2b2c6;
   --text-inverse: #0f172a;
 
   --accent: #6366f1;
   --accent-hover: #818cf8;
   --accent-dark: #4f46e5;
   --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
-  --accent-gradient-wide: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+  --accent-gradient-wide: linear-gradient(135deg, #4f46e5, #7c3aed, #9333ea);
   --accent-glow: 0 4px 24px rgba(99, 102, 241, 0.3);
 
   --success: #10b981;
@@ -109,15 +109,16 @@ a:hover { color: var(--accent); }
 }
 .header p {
   font-size: clamp(14px, 3vw, 18px);
-  opacity: 0.9;
+  color: #ffffff;
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
 }
 .header .subtitle {
   font-size: clamp(12px, 2.5vw, 15px);
-  opacity: 0.75;
+  color: rgba(255, 255, 255, 0.95);
   margin-top: 4px;
   position: relative;
+  font-weight: 500;
 }
 .header-nav {
   position: relative;
@@ -516,12 +517,38 @@ a:hover { color: var(--accent); }
   color: var(--error);
   animation: heartBeat 0.4s ease;
 }
+.word-card .mark-mastered {
+  position: absolute;
+  top: 10px;
+  right: 62px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: var(--transition);
+  padding: 4px;
+  z-index: 1;
+}
+.word-card .mark-mastered:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+.word-card .mark-mastered.marked {
+  opacity: 1;
+}
+.word-card.mastered {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  background: rgba(16, 185, 129, 0.04) !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.05);
+}
 @keyframes heartBeat {
   0% { transform: scale(1); }
   30% { transform: scale(1.3); }
   60% { transform: scale(0.9); }
   100% { transform: scale(1); }
 }
+
 
 /* Speak Button (TTS) */
 .speak-btn {
@@ -770,7 +797,7 @@ input[type="text"]::placeholder {
   width: 0;
   background: var(--accent-gradient);
   border-radius: var(--radius-full);
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: none;
   position: relative;
 }
 .progress-bar::after {
@@ -1049,29 +1076,29 @@ input[type="text"]::placeholder {
 /*          NOTE / TIP            */
 /* ============================== */
 .note {
-  background: rgba(59, 130, 246, 0.08);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: #0d1726;
+  border: 1px solid #1d2c3f;
   border-radius: var(--radius);
   padding: 14px 18px;
   margin-bottom: 18px;
   font-size: 14px;
-  color: var(--info);
+  color: #93c5fd;
   line-height: 1.6;
 }
 .note.warning {
-  background: var(--warning-bg);
-  border-color: var(--warning-border);
-  color: var(--warning);
+  background: #1e160a;
+  border-color: #30230f;
+  color: #ffe0b2;
 }
 .note.success {
-  background: var(--success-bg);
-  border-color: var(--success-border);
-  color: var(--success);
+  background: #0c1e15;
+  border-color: #122e20;
+  color: #a7f3d0;
 }
 .note.error {
-  background: var(--error-bg);
-  border-color: var(--error-border);
-  color: var(--error);
+  background: #1e0f11;
+  border-color: #30161a;
+  color: #fecdd3;
 }
 
 /* ============================== */
@@ -1193,11 +1220,11 @@ input[type="text"]::placeholder {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.badge-success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
-.badge-warning { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
-.badge-error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error-border); }
-.badge-info { background: var(--info-bg); color: var(--info); }
-.badge-locked { background: var(--locked-bg); color: var(--locked); }
+.badge-success { background: #064e3b; color: #a7f3d0; border: 1px solid #047857; }
+.badge-warning { background: #451a03; color: #fde68a; border: 1px solid #78350f; }
+.badge-error { background: #4c0519; color: #fecdd3; border: 1px solid #9f1239; }
+.badge-info { background: #1e3a8a; color: #93c5fd; }
+.badge-locked { background: #1e293b; color: #94a3b8; border: 1px solid rgba(255,255,255,0.05); }
 
 /* ============================== */
 /*          MODAL                 */
@@ -1305,7 +1332,7 @@ input[type="text"]::placeholder {
 /* ============================== */
 @media (max-width: 768px) {
   .header { padding: 32px 16px 28px; }
-  .container { padding: 16px 12px; }
+  .container { padding: 16px 16px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .stat-card { padding: 16px 12px; }
   .stat-value { font-size: 24px; }

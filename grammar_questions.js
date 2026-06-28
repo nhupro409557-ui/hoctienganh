@@ -1285,3 +1285,478 @@ const GrammarQuiz = {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { GrammarQuiz };
 }
+
+// NEW TEMPLATES OVERWRITE
+(function() {
+  const oldTemplates = Object.assign({}, GrammarQuiz.TEMPLATES);
+
+  // Clear or reassign templates
+  GrammarQuiz.TEMPLATES[2] = oldTemplates[21]; // Suffixes
+  GrammarQuiz.TEMPLATES[3] = oldTemplates[22]; // Word order after articles/possessives
+  GrammarQuiz.TEMPLATES[4] = oldTemplates[23]; // Word order after very/subject
+  
+  // Day 5 remains the same
+  GrammarQuiz.TEMPLATES[5] = oldTemplates[5];
+  
+  // Day 6: Combine Adjectives (6) and Adverbs (11)
+  GrammarQuiz.TEMPLATES[6] = (oldTemplates[6] || []).concat(oldTemplates[11] || []);
+  
+  // Day 8: Combine Present Simple (2, 3, 4) and Present Continuous (8)
+  GrammarQuiz.TEMPLATES[8] = (oldTemplates[2] || [])
+    .concat(oldTemplates[3] || [])
+    .concat(oldTemplates[4] || [])
+    .concat(oldTemplates[8] || []);
+    
+  // Day 9: Combine Past Simple (9, 10) and add Past Continuous
+  GrammarQuiz.TEMPLATES[9] = (oldTemplates[9] || [])
+    .concat(oldTemplates[10] || [])
+    .concat([
+      {
+        q: "While {subject} ______ {object}, the phone rang.",
+        opts: ["was preparing", "prepared", "were preparing", "prepares"],
+        ans: 0, // was preparing
+        ansPlur: 2, // were preparing
+        exp: "Hành động đang xảy ra (chia quá khứ tiếp diễn) thì hành động khác xen vào (quá khứ đơn)."
+      },
+      {
+        q: "At 9 PM yesterday, {subject} ______ the report.",
+        opts: ["was checking", "checked", "were checking", "checks"],
+        ans: 0,
+        ansPlur: 2,
+        exp: "Thì quá khứ tiếp diễn diễn tả hành động đang diễn ra tại một thời điểm xác định trong quá khứ (At 9 PM yesterday)."
+      }
+    ]);
+
+  // Day 10: Combine Future (12) and Modals (13)
+  GrammarQuiz.TEMPLATES[10] = (oldTemplates[12] || []).concat(oldTemplates[13] || []);
+  
+  // Day 11: Sự hòa hợp Chủ ngữ - Động từ (S-V Agreement) (NEW)
+  GrammarQuiz.TEMPLATES[11] = [
+    {
+      q: "The performance of these new systems ______ outstanding.",
+      opts: ["is", "are", "be", "being"],
+      ans: 0,
+      ansPlur: 0,
+      exp: "Chủ ngữ chính là 'performance' (số ít), các từ nhiễu 'of these new systems' không làm thay đổi chủ ngữ."
+    },
+    {
+      q: "The manager and his assistant ______ the report yesterday.",
+      opts: ["signed", "signs", "signing", "to sign"],
+      ans: 0,
+      exp: "Chủ ngữ là 'The manager and his assistant' (2 người -> số nhiều). Câu diễn tả hành động trong quá khứ (yesterday) chia quá khứ đơn 'signed'."
+    },
+    {
+      q: "The quality of the office supplies ______ very high.",
+      opts: ["is", "are", "be", "being"],
+      ans: 0,
+      exp: "Chủ ngữ chính là danh từ 'quality' (số ít) đứng trước giới từ 'of'."
+    },
+    {
+      q: "Each of the candidates ______ required to submit a resume.",
+      opts: ["is", "are", "be", "being"],
+      ans: 0,
+      exp: "Each of + Danh từ số nhiều chia động từ số ít 'is'."
+    },
+    {
+      q: "A number of employees ______ attending the meeting today.",
+      opts: ["are", "is", "be", "being"],
+      ans: 0,
+      exp: "A number of + Danh từ số nhiều + Động từ số nhiều 'are'. (Phân biệt với 'The number of' đi với động từ số ít)."
+    }
+  ];
+  
+  // Day 12: Giới từ thời gian & nơi chốn (in, on, at...)
+  GrammarQuiz.TEMPLATES[12] = (oldTemplates[15] || []).concat(oldTemplates[24] || []);
+  
+  // Day 13: Wh- questions
+  GrammarQuiz.TEMPLATES[13] = oldTemplates[16];
+  
+  // Day 15: Advanced Prepositions & Collocations (25, 26)
+  GrammarQuiz.TEMPLATES[15] = (oldTemplates[25] || []).concat(oldTemplates[26] || []);
+  
+  // Day 16: Conjunctions (27, 28)
+  GrammarQuiz.TEMPLATES[16] = (oldTemplates[27] || []).concat(oldTemplates[28] || []);
+  
+  // Day 21: Mệnh đề quan hệ (Who, Whom, Which, That, Whose) (NEW)
+  GrammarQuiz.TEMPLATES[21] = [
+    {
+      q: "The representative ______ signed the contract was very professional.",
+      opts: ["who", "whom", "whose", "which"],
+      ans: 0,
+      exp: "Đại từ quan hệ 'who' thay thế cho người (representative) và làm chủ ngữ cho động từ 'signed' đứng sau."
+    },
+    {
+      q: "The client ______ we met yesterday is very satisfied.",
+      opts: ["whom", "who", "whose", "which"],
+      ans: 0,
+      exp: "Đại từ quan hệ 'whom' thay thế cho người và làm tân ngữ cho mệnh đề 'we met' đứng sau."
+    },
+    {
+      q: "The document ______ is on the desk is important.",
+      opts: ["which", "who", "whom", "whose"],
+      ans: 0,
+      exp: "Đại từ quan hệ 'which' thay thế cho vật (document) và làm chủ ngữ cho 'is'."
+    },
+    {
+      q: "The manager ______ car is parked outside has arrived.",
+      opts: ["whose", "who", "whom", "which"],
+      ans: 0,
+      exp: "Đại từ quan hệ sở hữu 'whose' đứng trước danh từ 'car' để chỉ chiếc xe của người quản lý."
+    }
+  ];
+  
+  // Day 22: Rút gọn Mệnh đề quan hệ (V-ing / V-ed) (NEW)
+  GrammarQuiz.TEMPLATES[22] = [
+    {
+      q: "The employee ______ the project was promoted.",
+      opts: ["leading", "led", "leads", "to lead"],
+      ans: 0,
+      exp: "Mệnh đề quan hệ rút gọn chủ động: who led -> leading (người đang dẫn dắt dự án)."
+    },
+    {
+      q: "The report ______ by the supervisor was very detailed.",
+      opts: ["prepared", "preparing", "prepares", "to prepare"],
+      ans: 0,
+      exp: "Mệnh đề quan hệ rút gọn bị động: which was prepared -> prepared (được chuẩn bị bởi...)."
+    },
+    {
+      q: "Anyone ______ to attend the conference should register today.",
+      opts: ["wishing", "wished", "wishes", "to wish"],
+      ans: 0,
+      exp: "Mệnh đề quan hệ rút gọn chủ động: who wishes -> wishing."
+    },
+    {
+      q: "The machines ______ in this factory are very durable.",
+      opts: ["manufactured", "manufacturing", "manufactures", "manufacture"],
+      ans: 0,
+      exp: "Mệnh đề quan hệ rút gọn bị động: which are manufactured -> manufactured."
+    }
+  ];
+  
+  // Day 23: Danh động từ & Động từ nguyên mẫu (Gerund & Infinitive) (NEW)
+  GrammarQuiz.TEMPLATES[23] = [
+    {
+      q: "{subject} decided ______ the meeting.",
+      opts: ["to postpone", "postponing", "postponed", "postpones"],
+      ans: 0,
+      exp: "Động từ 'decide' đi kèm động từ nguyên mẫu có 'to': decide + to V."
+    },
+    {
+      q: "We recommend ______ a backup of all files.",
+      opts: ["making", "to make", "made", "makes"],
+      ans: 0,
+      exp: "Động từ 'recommend' đi kèm Danh động từ: recommend + V-ing."
+    },
+    {
+      q: "The manager encouraged employees ______ the seminar.",
+      opts: ["to attend", "attending", "attended", "attend"],
+      ans: 0,
+      exp: "Cấu trúc: encourage someone + to V (khuyến khích ai làm gì)."
+    },
+    {
+      q: "{subject} is responsible for ______ the reports.",
+      opts: ["preparing", "to prepare", "prepared", "prepares"],
+      ans: 0,
+      exp: "Sau giới từ 'for' bắt buộc dùng Danh động từ (V-ing)."
+    }
+  ];
+  
+  // Day 24: Phân từ làm tính từ & Rút gọn mệnh đề trạng ngữ (NEW)
+  GrammarQuiz.TEMPLATES[24] = [
+    {
+      q: "The presentation was ______ so we felt ______.",
+      opts: ["boring / bored", "bored / boring", "boring / boring", "bored / bored"],
+      ans: 0,
+      exp: "Tính từ đuôi -ing chỉ bản chất sự vật (boring presentation), tính từ đuôi -ed chỉ cảm xúc con người (felt bored)."
+    },
+    {
+      q: "After ______ the document, the manager signed it.",
+      opts: ["reviewing", "reviewed", "reviews", "to review"],
+      ans: 0,
+      exp: "Rút gọn mệnh đề trạng ngữ chủ động sau liên từ: After + V-ing."
+    },
+    {
+      q: "We need an ______ technician to repair the server.",
+      opts: ["experienced", "experiencing", "experience", "experiences"],
+      ans: 0,
+      exp: "Dùng tính từ phân từ bị động 'experienced' (có kinh nghiệm) để bổ nghĩa cho danh từ 'technician'."
+    },
+    {
+      q: "Before ______ the office, please turn off the lights.",
+      opts: ["leaving", "left", "leaves", "to leave"],
+      ans: 0,
+      exp: "Rút gọn mệnh đề trạng ngữ chủ động sau liên từ: Before + V-ing."
+    }
+  ];
+  
+  // Day 25: Passive Voice - Basic (old 30)
+  GrammarQuiz.TEMPLATES[25] = oldTemplates[30];
+  
+  // Day 26: Passive Voice - Continuous & Perfect (old 31)
+  GrammarQuiz.TEMPLATES[26] = oldTemplates[31];
+  
+  // Day 27: Passive Voice - Modals (old 32)
+  GrammarQuiz.TEMPLATES[27] = oldTemplates[32];
+  
+  // Day 28: So sánh hơn & So sánh bằng (old 33 + Equatives)
+  GrammarQuiz.TEMPLATES[28] = (oldTemplates[33] || []).concat([
+    {
+      q: "The new system works as ______ as the old one.",
+      opts: ["efficiently", "efficient", "efficiency", "more efficiently"],
+      ans: 0,
+      exp: "So sánh bằng với động từ thường 'works' dùng trạng từ: as + Adv + as."
+    },
+    {
+      q: "The office space is as ______ as we expected.",
+      opts: ["large", "largely", "larger", "largest"],
+      ans: 0,
+      exp: "So sánh bằng với động từ liên kết 'is' dùng tính từ: as + Adj + as."
+    }
+  ]);
+  
+  // Day 29: So sánh nhất & So sánh đặc biệt (old 34 + Double)
+  GrammarQuiz.TEMPLATES[29] = (oldTemplates[34] || []).concat([
+    {
+      q: "The ______ we start, the ______ we will finish.",
+      opts: ["earlier / sooner", "early / soon", "earliest / soonest", "more early / more soon"],
+      ans: 0,
+      exp: "Cấu trúc so sánh kép (Double Comparative): The + so sánh hơn..., the + so sánh hơn..."
+    }
+  ]);
+  
+  // Day 30: Câu điều kiện loại 1 & loại 2 (If Clause) (NEW)
+  GrammarQuiz.TEMPLATES[30] = [
+    {
+      q: "If the product ______ successful, we will expand our market.",
+      opts: ["is", "will be", "was", "were"],
+      ans: 0,
+      exp: "Câu điều kiện loại 1 (có thật ở hiện tại/tương lai): If + hiện tại đơn, tương lai đơn."
+    },
+    {
+      q: "If they ______ more budget, they would hire more employees.",
+      opts: ["had", "have", "will have", "would have"],
+      ans: 0,
+      exp: "Câu điều kiện loại 2 (trái thực tế hiện tại): If + quá khứ đơn, would + V-bare."
+    },
+    {
+      q: "If I ______ the director, I would approve this proposal.",
+      opts: ["were", "was", "am", "will be"],
+      ans: 0,
+      exp: "Trong câu điều kiện loại 2, động từ 'to be' chia là 'were' cho tất cả các ngôi."
+    },
+    {
+      q: "Unless you ______ the contract, the deal will be canceled.",
+      opts: ["sign", "don't sign", "signed", "will sign"],
+      ans: 0,
+      exp: "Unless = If ... not (Trừ khi/Nếu không). Theo sau 'unless' chia mệnh đề ở thể khẳng định: unless you sign."
+    }
+  ];
+  
+  // Day 31: Câu điều kiện loại 3 & Đảo ngữ câu điều kiện (NEW)
+  GrammarQuiz.TEMPLATES[31] = [
+    {
+      q: "If we ______ the problem earlier, we would have saved a lot of money.",
+      opts: ["had resolved", "resolved", "have resolved", "would resolve"],
+      ans: 0,
+      exp: "Câu điều kiện loại 3 (trái thực tế quá khứ): If + quá khứ hoàn thành (had + V3), would + have + V3."
+    },
+    {
+      q: "______ you need any further assistance, please contact us.",
+      opts: ["Should", "Had", "Were", "If"],
+      ans: 0,
+      exp: "Đảo ngữ câu điều kiện loại 1: Should + S + V-bare... (thay thế cho 'If S + V')."
+    },
+    {
+      q: "Had we ______ the schedule, we would have attended the meeting.",
+      opts: ["known", "knew", "know", "knowing"],
+      ans: 0,
+      exp: "Đảo ngữ câu điều kiện loại 3: Had + S + V3/ed..., S + would have + V3/ed."
+    },
+    {
+      q: "Were they ______ the project on time, they would get a bonus.",
+      opts: ["to finish", "finished", "finishing", "finish"],
+      ans: 0,
+      exp: "Đảo ngữ câu điều kiện loại 2: Were + S + to V..., S + would + V-bare."
+    }
+  ];
+  
+  // Day 32: Thức giả định trong TOEIC (Subjunctive Mood) (NEW)
+  GrammarQuiz.TEMPLATES[32] = [
+    {
+      q: "The supervisor recommended that {subject} ______ the report.",
+      opts: ["submit", "submits", "submitted", "submitting"],
+      ans: 0,
+      exp: "Thức giả định sau động từ 'recommend that': chủ ngữ vế sau đi với động từ nguyên mẫu không chia 'submit'."
+    },
+    {
+      q: "It is essential that all employees ______ on time.",
+      opts: ["be", "are", "was", "been"],
+      ans: 0,
+      exp: "Thức giả định sau tính từ 'essential that': chủ ngữ vế sau đi với động từ nguyên mẫu 'be'."
+    },
+    {
+      q: "The policy requires that each candidate ______ a resume.",
+      opts: ["present", "presents", "presented", "presenting"],
+      ans: 0,
+      exp: "Thức giả định sau động từ 'require that': động từ ở vế sau luôn ở dạng nguyên mẫu không chia 'present'."
+    },
+    {
+      q: "The manager insisted that the schedule ______ changed.",
+      opts: ["not be", "is not", "was not", "not being"],
+      ans: 0,
+      exp: "Thức giả định ở thể phủ định: not + V-bare (ở đây là bị động 'not be changed')."
+    }
+  ];
+  
+  // Day 33: Đại từ & Sở hữu (Subject, Object, Possessive, Reflexive) (NEW)
+  GrammarQuiz.TEMPLATES[33] = [
+    {
+      q: "The coordinator completed the report ______.",
+      opts: ["himself", "him", "his", "he"],
+      ans: 0,
+      exp: "Dùng đại từ phản thân 'himself' để nhấn mạnh tự tay chủ ngữ làm việc đó."
+    },
+    {
+      q: "Please send the document to ______ as soon as possible.",
+      opts: ["me", "my", "mine", "myself"],
+      ans: 0,
+      exp: "Đứng sau giới từ 'to' và làm tân ngữ cho hành động gửi phải là đại từ tân ngữ 'me'."
+    },
+    {
+      q: "Their project was successful, but ______ was delayed.",
+      opts: ["ours", "our", "us", "ourselves"],
+      ans: 0,
+      exp: "Đại từ sở hữu 'ours' (our project) đóng vai trò làm chủ ngữ cho vế sau."
+    },
+    {
+      q: "She managed the campaign entirely on ______ own.",
+      opts: ["her", "hers", "herself", "she"],
+      ans: 0,
+      exp: "Cấu trúc sở hữu: on one's own (tự mình). Dùng tính từ sở hữu 'her'."
+    }
+  ];
+  
+  // Day 34: Từ hạn định và Lượng từ (other, others, another, few, little) (NEW)
+  GrammarQuiz.TEMPLATES[34] = [
+    {
+      q: "We need ______ printer in the conference room.",
+      opts: ["another", "other", "others", "the others"],
+      ans: 0,
+      exp: "Another + Danh từ số ít đếm được: một cái khác (chưa xác định)."
+    },
+    {
+      q: "Some candidates were hired, while ______ were rejected.",
+      opts: ["others", "other", "another", "the other"],
+      ans: 0,
+      exp: "Others đóng vai trò đại từ làm chủ ngữ cho vế sau (others = other candidates)."
+    },
+    {
+      q: "There are only ______ days left before the deadline.",
+      opts: ["a few", "a little", "much", "any"],
+      ans: 0,
+      exp: "Days là danh từ đếm được số nhiều -> dùng lượng từ 'a few' (một vài)."
+    },
+    {
+      q: "We have ______ money remaining in our budget.",
+      opts: ["little", "few", "many", "several"],
+      ans: 0,
+      exp: "Money là danh từ không đếm được -> dùng lượng từ 'little' (ít/hầu như không)."
+    }
+  ];
+
+  
+  // Day 35: Mệnh đề danh từ (Noun Clause) (NEW)
+  GrammarQuiz.TEMPLATES[35] = [
+    {
+      q: "______ she will attend the national conference remains uncertain.",
+      opts: ["Whether", "That", "What", "Which"],
+      ans: 0,
+      exp: "Whether + S + V + V_main(sing): Liệu rằng có... hay không (đóng vai trò làm chủ ngữ)."
+    },
+    {
+      q: "The supervisor announced ______ the project deadline had been extended.",
+      opts: ["that", "what", "which", "whether"],
+      ans: 0,
+      exp: "S + V + that + S + V: Rằng... (mệnh đề danh từ đóng vai trò tân ngữ làm rõ việc được thông báo)."
+    },
+    {
+      q: "We must decide ______ we will purchase the new machinery or repair the old one.",
+      opts: ["whether", "that", "what", "how"],
+      ans: 0,
+      exp: "Whether... or...: Liệu rằng làm cái này hay cái kia (đóng vai trò tân ngữ sau động từ decide)."
+    },
+    {
+      q: "The team is currently discussing ______ the main cause of the system failure was.",
+      opts: ["what", "that", "which", "whether"],
+      ans: 0,
+      exp: "What + S + V: Cái gì (mệnh đề danh từ đóng vai trò tân ngữ làm rõ nội dung thảo luận)."
+    }
+  ];
+
+
+  // Day 36: Rút gọn mệnh đề trạng ngữ (Reduced Adverbial Clause) (NEW)
+  GrammarQuiz.TEMPLATES[36] = [
+    {
+      q: "After ______ the contract, the director submitted it to the client.",
+      opts: ["signing", "signed", "to sign", "signs"],
+      ans: 0,
+      exp: "After + V-ing: Rút gọn chủ động của mệnh đề trạng ngữ (Sau khi tự tay ký hợp đồng...)."
+    },
+    {
+      q: "Once ______ by the board of directors, the new policy will be implemented immediately.",
+      opts: ["approved", "approving", "approve", "approves"],
+      ans: 0,
+      exp: "Once + V3/ed: Rút gọn bị động của mệnh đề trạng ngữ (Một khi được ban giám đốc phê duyệt...)."
+    },
+    {
+      q: "Although ______ with limited resources, the team completed the project on schedule.",
+      opts: ["operating", "operated", "operates", "to operate"],
+      ans: 0,
+      exp: "Although + V-ing: Rút gọn chủ động (Mặc dù hoạt động với nguồn lực hạn chế...)."
+    },
+    {
+      q: "When ______ in the city center, the regional office is easy for clients to access.",
+      opts: ["located", "locating", "locate", "locates"],
+      ans: 0,
+      exp: "When + V3/ed (be located): Rút gọn bị động của mệnh đề trạng ngữ chỉ vị trí."
+    }
+  ];
+
+
+  // Day 37: Ôn tập tổng hợp ngữ pháp Phase 2 (Phần 3) (NEW)
+  GrammarQuiz.TEMPLATES[37] = [
+    {
+      q: "The supervisor recommended that she ______ the draft before submitting it.",
+      opts: ["review", "reviews", "reviewed", "reviewing"],
+      ans: 0,
+      exp: "Thức giả định sau động từ 'recommend that': động từ vế sau luôn ở dạng nguyên mẫu không chia."
+    },
+    {
+      q: "Had we ______ the schedule in advance, we would have attended the seminar.",
+      opts: ["known", "knowing", "know", "knew"],
+      ans: 0,
+      exp: "Đảo ngữ câu điều kiện loại 3: Had + S + V3/ed, S + would have + V3/ed."
+    },
+    {
+      q: "The board decided that ______ the company will merge or remain independent is key.",
+      opts: ["whether", "that", "what", "which"],
+      ans: 0,
+      exp: "Whether + S + V: Liệu rằng làm cái này hay cái kia (mệnh đề danh từ làm chủ ngữ vế sau)."
+    },
+    {
+      q: "Once ______ by the laboratory, the results will be shared with the public.",
+      opts: ["verified", "verifying", "verify", "verifies"],
+      ans: 0,
+      exp: "Once + V3/ed: Rút gọn bị động của mệnh đề trạng ngữ (Một khi được xác thực...)."
+    }
+  ];
+
+
+  // Clean up old references from templates that we don't want to use
+  for (let key in oldTemplates) {
+    const k = parseInt(key);
+    if (k > 37 && k < 45) {
+      delete GrammarQuiz.TEMPLATES[k];
+    }
+  }
+})();
