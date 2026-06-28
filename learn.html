@@ -20,7 +20,10 @@
 
   <div class="container">
     <!-- GATE SYSTEM -->
-    <div id="gateContainer" class="gate-container" style="display:none">
+    <div id="gateContainer" class="gate-container" style="display:none; padding: 20px; border-radius: var(--radius); border: 1px solid rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); margin-bottom: 24px;">
+      <h3 style="margin-top: 0; color: var(--warning); display: flex; align-items: center; gap: 8px; font-size: 16px; margin-bottom: 16px;">
+        ⚠️ Bạn có phần ôn tập chưa hoàn thành. Hãy làm phần ôn tập dưới đây để hoàn thiện:
+      </h3>
       <div class="gate-steps" id="gateSteps"></div>
       <div id="gateContent" class="gate-content"></div>
     </div>
@@ -438,20 +441,25 @@
     checkGates();
   }
 
-  // ---- GATES ----
   function checkGates() {
     const needsDiff = Storage.needsDifficultReview(currentDay);
     const needsPrev = Storage.needsPreviousDayReview(currentDay);
 
     if (!needsDiff && !needsPrev) {
-      // Gates passed - show learning section
-      showLearning();
+      document.getElementById('gateContainer').style.display = 'none';
+      if (!dayData.isReview) {
+        showLearning();
+      }
       return;
     }
 
-    // Show gate system
+    // Always show learning section below the gate card
+    if (!dayData.isReview) {
+      showLearning();
+    }
+
+    // Show gate system as a card at the top
     document.getElementById('gateContainer').style.display = 'block';
-    document.getElementById('learningSection').style.display = 'none';
 
     renderGateSteps(needsDiff, needsPrev);
 
@@ -626,7 +634,6 @@
 
   // ---- SHOW LEARNING ----
   function showLearning() {
-    document.getElementById('gateContainer').style.display = 'none';
     document.getElementById('learningSection').style.display = 'block';
 
     const track = Storage.getLearningTrack();
