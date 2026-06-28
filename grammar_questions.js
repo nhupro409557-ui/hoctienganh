@@ -1096,6 +1096,170 @@ const GrammarQuiz = {
     ]
   },
 
+  // Từ điển dịch nghĩa & từ loại phục vụ học tích hợp từ vựng trong ngữ pháp
+  TRANSLATIONS: {
+    // Subjects
+    "the manager": { vi: "người quản lý", type: "Danh từ (Noun)" },
+    "the director": { vi: "giám đốc", type: "Danh từ (Noun)" },
+    "the supervisor": { vi: "người giám sát", type: "Danh từ (Noun)" },
+    "the coordinator": { vi: "điều phối viên", type: "Danh từ (Noun)" },
+    "the receptionist": { vi: "nhân viên lễ tân", type: "Danh từ (Noun)" },
+    "the assistant": { vi: "trợ lý", type: "Danh từ (Noun)" },
+    "the technician": { vi: "kỹ thuật viên", type: "Danh từ (Noun)" },
+    "the representative": { vi: "người đại diện", type: "Danh từ (Noun)" },
+    "the accountant": { vi: "kế toán viên", type: "Danh từ (Noun)" },
+    "the secretary": { vi: "thư ký", type: "Danh từ (Noun)" },
+    "the executive": { vi: "nhân viên điều hành", type: "Danh từ (Noun)" },
+    "the engineer": { vi: "kỹ sư", type: "Danh từ (Noun)" },
+    "the inspector": { vi: "thanh tra viên", type: "Danh từ (Noun)" },
+    "the consultant": { vi: "tư vấn viên", type: "Danh từ (Noun)" },
+    "the designer": { vi: "nhà thiết kế", type: "Danh từ (Noun)" },
+    "the specialist": { vi: "chuyên gia", type: "Danh từ (Noun)" },
+    "the administrator": { vi: "quản trị viên", type: "Danh từ (Noun)" },
+    "the operator": { vi: "người vận hành", type: "Danh từ (Noun)" },
+    "the analyst": { vi: "nhà phân tích", type: "Danh từ (Noun)" },
+    "the advisor": { vi: "cố vấn", type: "Danh từ (Noun)" },
+
+    "the managers": { vi: "các người quản lý", type: "Danh từ số nhiều (Plural Noun)" },
+    "the directors": { vi: "các giám đốc", type: "Danh từ số nhiều (Plural Noun)" },
+    "the employees": { vi: "các nhân viên", type: "Danh từ số nhiều (Plural Noun)" },
+    "the workers": { vi: "các công nhân", type: "Danh từ số nhiều (Plural Noun)" },
+    "the coordinators": { vi: "các điều phối viên", type: "Danh từ số nhiều (Plural Noun)" },
+    "the assistants": { vi: "các trợ lý", type: "Danh từ số nhiều (Plural Noun)" },
+    "the representatives": { vi: "các người đại diện", type: "Danh từ số nhiều (Plural Noun)" },
+    "the accountants": { vi: "các kế toán", type: "Danh từ số nhiều (Plural Noun)" },
+    "the engineers": { vi: "các kỹ sư", type: "Danh từ số nhiều (Plural Noun)" },
+    "the consultants": { vi: "các tư vấn viên", type: "Danh từ số nhiều (Plural Noun)" },
+    "the technicians": { vi: "các kỹ thuật viên", type: "Danh từ số nhiều (Plural Noun)" },
+    "the designers": { vi: "các nhà thiết kế", type: "Danh từ số nhiều (Plural Noun)" },
+    "the analysts": { vi: "các nhà phân tích", type: "Danh từ số nhiều (Plural Noun)" },
+    "the specialists": { vi: "các chuyên gia", type: "Danh từ số nhiều (Plural Noun)" },
+    "the administrators": { vi: "các quản trị viên", type: "Danh từ số nhiều (Plural Noun)" },
+
+    // Verbs & Objects
+    "send": { vi: "gửi", type: "Động từ (Verb)" },
+    "sends": { vi: "gửi", type: "Động từ (Verb)" },
+    "sending": { vi: "việc gửi", type: "Danh động từ (Gerund)" },
+    "sent": { vi: "đã gửi", type: "Động từ quá khứ (Past Verb)" },
+    "the email": { vi: "thư điện tử", type: "Danh từ (Noun)" },
+    "the emails": { vi: "các thư điện tử", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "check": { vi: "kiểm tra", type: "Động từ (Verb)" },
+    "checks": { vi: "kiểm tra", type: "Động từ (Verb)" },
+    "checking": { vi: "việc kiểm tra", type: "Danh động từ (Gerund)" },
+    "checked": { vi: "đã kiểm tra", type: "Động từ quá khứ (Past Verb)" },
+    "the report": { vi: "bản báo cáo", type: "Danh từ (Noun)" },
+    "the reports": { vi: "các bản báo cáo", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "prepare": { vi: "chuẩn bị", type: "Động từ (Verb)" },
+    "prepares": { vi: "chuẩn bị", type: "Động từ (Verb)" },
+    "preparing": { vi: "việc chuẩn bị", type: "Danh động từ (Gerund)" },
+    "prepared": { vi: "đã chuẩn bị", type: "Động từ quá khứ (Past Verb)" },
+    "the document": { vi: "tài liệu", type: "Danh từ (Noun)" },
+    "the documents": { vi: "các tài liệu", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "finish": { vi: "hoàn thành", type: "Động từ (Verb)" },
+    "finishes": { vi: "hoàn thành", type: "Động từ (Verb)" },
+    "finishing": { vi: "việc hoàn thành", type: "Danh động từ (Gerund)" },
+    "finished": { vi: "đã hoàn thành", type: "Động từ quá khứ (Past Verb)" },
+    "the task": { vi: "nhiệm vụ", type: "Danh từ (Noun)" },
+    "the tasks": { vi: "các nhiệm vụ", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "sign": { vi: "ký", type: "Động từ (Verb)" },
+    "signs": { vi: "ký", type: "Động từ (Verb)" },
+    "signing": { vi: "việc ký", type: "Danh động từ (Gerund)" },
+    "signed": { vi: "đã ký", type: "Động từ quá khứ (Past Verb)" },
+    "the contract": { vi: "hợp đồng", type: "Danh từ (Noun)" },
+    "the contracts": { vi: "các hợp đồng", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "review": { vi: "xem xét", type: "Động từ (Verb)" },
+    "reviews": { vi: "xem xét", type: "Động từ (Verb)" },
+    "reviewing": { vi: "việc xem xét", type: "Danh động từ (Gerund)" },
+    "reviewed": { vi: "đã xem xét", type: "Động từ quá khứ (Past Verb)" },
+    "the plan": { vi: "kế hoạch", type: "Danh từ (Noun)" },
+    "the plans": { vi: "các kế hoạch", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "update": { vi: "cập nhật", type: "Động từ (Verb)" },
+    "updates": { vi: "cập nhật", type: "Động từ (Verb)" },
+    "updating": { vi: "việc cập nhật", type: "Danh động từ (Gerund)" },
+    "updated": { vi: "đã cập nhật", type: "Động từ quá khứ (Past Verb)" },
+    "the schedule": { vi: "lịch trình", type: "Danh từ (Noun)" },
+    "the schedules": { vi: "các lịch trình", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "submit": { vi: "nộp", type: "Động từ (Verb)" },
+    "submits": { vi: "nộp", type: "Động từ (Verb)" },
+    "submitting": { vi: "việc nộp", type: "Danh động từ (Gerund)" },
+    "submitted": { vi: "đã nộp", type: "Động từ quá khứ (Past Verb)" },
+    "the proposal": { vi: "đề xuất", type: "Danh từ (Noun)" },
+    "the proposals": { vi: "các đề xuất", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "analyze": { vi: "phân tích", type: "Động từ (Verb)" },
+    "analyzes": { vi: "phân tích", type: "Động từ (Verb)" },
+    "analyzing": { vi: "việc phân tích", type: "Danh động từ (Gerund)" },
+    "analyzed": { vi: "đã phân tích", type: "Động từ quá khứ (Past Verb)" },
+    "the data": { vi: "dữ liệu", type: "Danh từ (Noun)" },
+
+    "inspect": { vi: "kiểm tra, thanh tra", type: "Động từ (Verb)" },
+    "inspects": { vi: "kiểm tra", type: "Động từ (Verb)" },
+    "inspecting": { vi: "việc kiểm tra", type: "Danh động từ (Gerund)" },
+    "inspected": { vi: "đã kiểm tra", type: "Động từ quá khứ (Past Verb)" },
+    "the facility": { vi: "cơ sở vật chất", type: "Danh từ (Noun)" },
+    "the facilities": { vi: "các cơ sở vật chất", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "organize": { vi: "tổ chức", type: "Động từ (Verb)" },
+    "organizes": { vi: "tổ chức", type: "Động từ (Verb)" },
+    "organizing": { vi: "việc tổ chức", type: "Danh động từ (Gerund)" },
+    "organized": { vi: "đã tổ chức", type: "Động từ quá khứ (Past Verb)" },
+    "the meeting": { vi: "cuộc họp", type: "Danh từ (Noun)" },
+    "the meetings": { vi: "các cuộc họp", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "discuss": { vi: "thảo luận", type: "Động từ (Verb)" },
+    "discusses": { vi: "thảo luận", type: "Động từ (Verb)" },
+    "discussing": { vi: "việc thảo luận", type: "Danh động từ (Gerund)" },
+    "discussed": { vi: "đã thảo luận", type: "Động từ quá khứ (Past Verb)" },
+    "the project": { vi: "dự án", type: "Danh từ (Noun)" },
+    "the projects": { vi: "các dự án", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "deliver": { vi: "giao", type: "Động từ (Verb)" },
+    "delivers": { vi: "giao", type: "Động từ (Verb)" },
+    "delivering": { vi: "việc giao", type: "Danh động từ (Gerund)" },
+    "delivered": { vi: "đã giao", type: "Động từ quá khứ (Past Verb)" },
+    "the package": { vi: "gói hàng, kiện hàng", type: "Danh từ (Noun)" },
+    "the packages": { vi: "các gói hàng, kiện hàng", type: "Danh từ số nhiều (Plural Noun)" },
+
+    "present": { vi: "trình bày", type: "Động từ (Verb)" },
+    "presents": { vi: "trình bày", type: "Động từ (Verb)" },
+    "presenting": { vi: "việc trình bày", type: "Danh động từ (Gerund)" },
+    "presented": { vi: "đã trình bày", type: "Động từ quá khứ (Past Verb)" },
+    "the slides": { vi: "các trang trình chiếu", type: "Danh từ số nhiều (Plural Noun)" },
+
+    // Places
+    "in the office": { vi: "trong văn phòng", type: "Cụm giới từ" },
+    "at the station": { vi: "tại nhà ga", type: "Cụm giới từ" },
+    "in the building": { vi: "trong tòa nhà", type: "Cụm giới từ" },
+    "at the airport": { vi: "tại sân bay", type: "Cụm giới từ" },
+    "in the warehouse": { vi: "trong kho hàng", type: "Cụm giới từ" },
+    "in the conference room": { vi: "trong phòng hội nghị", type: "Cụm giới từ" },
+    "at the headquarters": { vi: "tại trụ sở chính", type: "Cụm giới từ" },
+    "in the laboratory": { vi: "trong phòng thí nghiệm", type: "Cụm giới từ" },
+    "at the front desk": { vi: "tại quầy lễ tân", type: "Cụm giới từ" },
+    "in the main hall": { vi: "trong sảnh chính", type: "Cụm giới từ" },
+    "at the workshop": { vi: "tại hội thảo thực hành", type: "Cụm giới từ" },
+    "in the branch office": { vi: "trong văn phòng chi nhánh", type: "Cụm giới từ" },
+
+    // Times
+    "every morning": { vi: "mỗi buổi sáng", type: "Cụm trạng từ" },
+    "every day": { vi: "mỗi ngày", type: "Cụm trạng từ" },
+    "on mondays": { vi: "vào các ngày thứ Hai", type: "Cụm trạng từ" },
+    "this week": { vi: "tuần này", type: "Cụm trạng từ" },
+    "at 9 am": { vi: "lúc 9 giờ sáng", type: "Cụm trạng từ" },
+    "every afternoon": { vi: "mỗi buổi chiều", type: "Cụm trạng từ" },
+    "on weekdays": { vi: "vào các ngày trong tuần", type: "Cụm trạng từ" },
+    "every month": { vi: "mỗi tháng", type: "Cụm trạng từ" },
+    "each friday": { vi: "mỗi thứ Sáu", type: "Cụm trạng từ" },
+    "regularly": { vi: "một cách thường xuyên", type: "Trạng từ" }
+  },
+
   // Hàm sinh ra 50 câu hỏi trắc nghiệm ngẫu nhiên cho một ngày học
   generate(day, count = 50) {
     const templates = this.TEMPLATES[day];
@@ -1257,9 +1421,39 @@ const GrammarQuiz = {
         return `${label}: SAI. Phương án này không đáp ứng sự hòa hợp chủ-vị hoặc cấu trúc từ loại cần thiết của câu.`;
       });
 
-      // Tạo giải thích chuyên sâu (Tutor-style)
+      // Tạo dịch nghĩa và từ vựng tích hợp (NEW)
+      let actionVi = this.TRANSLATIONS[verb.base.toLowerCase()]?.vi || '';
+      let subVi = this.TRANSLATIONS[subject.toLowerCase()]?.vi || '';
+      let objVi = this.TRANSLATIONS[object.toLowerCase()]?.vi || '';
+      let placeVi = this.TRANSLATIONS[place.toLowerCase()]?.vi || '';
+      let timeVi = this.TRANSLATIONS[time.toLowerCase()]?.vi || '';
+
+      // Tự động thêm trợ động từ nếu có
+      let helper = "";
+      const qLower = questionText.toLowerCase();
+      if (qLower.includes("will")) helper = "sẽ ";
+      else if (qLower.includes("must")) helper = "phải ";
+      else if (qLower.includes("should")) helper = "nên ";
+      else if (qLower.includes("can")) helper = "có thể ";
+      else if (qLower.includes("did ") || qLower.includes("yesterday") || qLower.includes("last week") || qLower.includes("ago")) helper = "đã ";
+
+      if (subVi) subVi = subVi.charAt(0).toUpperCase() + subVi.slice(1);
+      const sentenceTranslation = `${subVi} ${helper}${actionVi} ${objVi} ${placeVi} ${timeVi}.`;
+
+      // Khởi tạo danh sách từ vựng tích hợp kèm từ loại
+      const vocabItems = [];
+      if (subject) vocabItems.push(`- <b>${subject}</b>: ${this.TRANSLATIONS[subject.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[subject.toLowerCase()]?.type || ''}</i>)`);
+      if (verb) vocabItems.push(`- <b>${verb.base}</b>: ${this.TRANSLATIONS[verb.base.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[verb.base.toLowerCase()]?.type || ''}</i>)`);
+      if (object) vocabItems.push(`- <b>${object}</b>: ${this.TRANSLATIONS[object.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[object.toLowerCase()]?.type || ''}</i>)`);
+      if (place) vocabItems.push(`- <b>${place}</b>: ${this.TRANSLATIONS[place.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[place.toLowerCase()]?.type || ''}</i>)`);
+      if (time) vocabItems.push(`- <b>${time}</b>: ${this.TRANSLATIONS[time.toLowerCase()]?.vi || ''} (<i>${this.TRANSLATIONS[time.toLowerCase()]?.type || ''}</i>)`);
+
+      // Tạo giải thích chuyên sâu (Tutor-style) với dịch nghĩa & từ loại
       let detailedExplanation = `
+        📝 <b>Dịch nghĩa câu:</b> ${sentenceTranslation}<br><br>
         💡 <b>Nguyên lý ngữ pháp:</b> ${coreExplanation}<br><br>
+        📚 <b>Học từ vựng tích hợp:</b><br>
+        ${vocabItems.join('<br>')}<br><br>
         🔍 <b>Phân tích chi tiết các đáp án:</b><br>
         ${optionExplanations.map((expLine, idx) => `${String.fromCharCode(65 + idx)}. ${expLine}`).join('<br>')}
       `;
